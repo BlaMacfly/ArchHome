@@ -22,6 +22,12 @@ marche).
 - JOUER (`--do play`) : ArchRust lancé, journal client écrit dans `Logs\client\` (rendu Vulkan, packs, AddOns,
   serveur 127.0.0.1:11002), jeu fermé avec les services.
 - Interface vérifiée en capture, en français et en anglais.
+- `Test-Offline.ps1` : réussi (écoute sur 127.0.0.1:3316, 11002, 11008 seulement, aucune connexion sortante).
+- Restauration (`--do restore`) : sauvegarde de sécurité, puis compte et personnage restaurés.
+- Composants officiels (`Get-Components.ps1 -Pin`, `Install-Components.ps1`) : MariaDB 13.0.2 (empreinte
+  figée) et HeidiSQL 12.21 ; `Test-Launcher.ps1` repassé avec eux.
+- Package `New-Package.ps1 -Zip` : 300 fichiers, 317 Mo (zip 101 Mo) ; Vérifier depuis le package : 300
+  fichiers vérifiés, 0 manquant, 0 altéré.
 
 Non testé par une personne en jeu : la partie complète dans la fenêtre d'ArchRust (connexion manuelle,
 création de personnage à l'écran), la fermeture normale du jeu suivie de la sauvegarde automatique, la

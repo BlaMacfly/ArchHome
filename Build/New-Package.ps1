@@ -65,7 +65,7 @@ Copy-Item (Join-Path $root 'LICENCE.txt') (Join-Path $lic 'HomeRPG-Licence.txt')
 Copy-Item (Join-Path $root 'Server\ArchCore\LICENSE') (Join-Path $lic 'ArchCore-GPL-3.0.txt')
 $mdbLic = Get-ChildItem (Join-Path $root 'Server\Database\mariadb') -File | Where-Object { $_.Name -match '^(COPYING|LICENSE|THIRDPARTY|README)' }
 foreach ($f in $mdbLic) { Copy-Item $f.FullName (Join-Path $lic "MariaDB-$($f.Name)") }
-foreach ($f in 'gpl.txt', 'license.txt') { $p = Join-Path $root "Tools\HeidiSQL\$f"; if (Test-Path $p) { Copy-Item $p (Join-Path $lic "HeidiSQL-$f") } }
+foreach ($f in 'gpl.txt', 'license.txt', 'LICENSE-openssl') { $p = Join-Path $root "Tools\HeidiSQL\$f"; if (Test-Path $p) { Copy-Item $p (Join-Path $lic "HeidiSQL-$f") } }
 # Licences des crates Rust (cargo metadata)
 $env:Path = "$env:USERPROFILE\.cargo\bin;$env:Path"
 $metaFile = Join-Path $env:TEMP 'homerpg-cargo-metadata.json'
