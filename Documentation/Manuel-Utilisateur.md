@@ -39,7 +39,12 @@ portable et un launcher qui s'occupe de tout. Vous jouez avec le client ArchRust
 1. Décompressez l'archive dans un dossier de votre disque, par exemple `C:\Jeux\HomeRPG ArchLord\` (pas dans
    Program Files, pas dans un dossier synchronisé en nuage).
 2. Copiez votre client ArchRust dans `Client\`, ou laissez-le où il est et indiquez son dossier dans
-   **Paramètres** (le bouton « Rechercher les clients » le trouve s'il est près du dossier d'installation).
+   **Paramètres** : « Rechercher les clients » cherche ArchRust.exe autour du dossier d'installation, dans le
+   Bureau, les Documents, les Téléchargements et à la racine des disques ; « Utiliser » choisit un client trouvé.
+   Si les données du jeu sont dans un autre dossier qu'ArchRust.exe (par exemple le dossier `Game` d'une
+   installation d'ArchLord), indiquez-le dans « Données du jeu » : ArchRust est alors lancé avec `--game`.
+   Attention : le dossier des **sources** d'ArchRust (`Cargo.toml`, `crates`, `target`) n'est pas un client
+   prêt à jouer.
 3. Facultatif : copiez les tables du serveur d'origine dans `Server\Data\server-ini\`, ou indiquez leur dossier
    dans **Paramètres**.
 4. Ouvrez `HomeRPG ArchLord.exe`. Si Windows affiche « Windows a protégé votre ordinateur » : « Informations
@@ -141,7 +146,8 @@ connecté.
 - **Langue du launcher** : automatique (langue de Windows), français ou anglais. Le changement est immédiat.
 - **Langue du jeu** : textes envoyés par le serveur (titres des PNJ) et langue d'ArchRust, au prochain
   démarrage.
-- **Dossier du client ArchRust**, **tables du serveur d'origine**, **ports** (11002 / 11008 par défaut :
+- **Dossier du client ArchRust**, **données du jeu** (facultatif, si elles ne sont pas à côté d'ArchRust.exe),
+  **tables du serveur d'origine**, **ports** (11002 / 11008 par défaut :
   changez-les si un autre serveur ArchCore tourne sur ce PC).
 - **Sauvegardes automatiques** : activées ou non, nombre conservé.
 - **Journaux** : journal détaillé du serveur (chaque paquet, pour un rapport de bug), niveau du journal

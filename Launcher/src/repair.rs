@@ -114,15 +114,15 @@ pub fn export_diagnostic(layout: &Layout, settings: &crate::settings::Settings, 
     if let Ok(t) = std::fs::read(layout.settings_file()) {
         add("config/settings.json", &t)?;
     }
-    let client = crate::server::client_dir(layout, settings);
-    let info = crate::client::inspect(&client);
+    let info = crate::client::from_settings(layout, settings);
     let mut state_txt = format!(
-        "HomeRPG ArchLord {}\nracine : {}\nétat : {state}\nclient : {} (ArchRust.exe {}, {}, manquant : {})\n",
+        "HomeRPG ArchLord {}\nracine : {}\nétat : {state}\nclient : {} (ArchRust.exe {}, {}), données du jeu : {} (manquant : {})\n",
         Layout::version(),
         layout.root.display(),
-        client.display(),
+        info.dir.display(),
         if info.exe_present { "présent" } else { "absent" },
         info.exe_info,
+        info.game_dir.display(),
         info.missing.join(", ")
     );
     for (n, ok) in layout.components_present() {

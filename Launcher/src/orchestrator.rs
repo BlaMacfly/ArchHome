@@ -281,8 +281,14 @@ impl Orchestrator {
         false
     }
 
+    /// Dossier d'ArchRust.exe (packs, AddOns, realmlist.wtf).
     fn client_dir(&self) -> PathBuf {
-        server::client_dir(&self.layout, &self.settings)
+        client::exe_dir(&self.layout, &self.settings)
+    }
+
+    /// Client selon les réglages, données du jeu comprises.
+    fn client(&self) -> ClientInfo {
+        client::from_settings(&self.layout, &self.settings)
     }
 
     fn server_tables_dir(&self) -> PathBuf {
@@ -728,11 +734,11 @@ impl Orchestrator {
             self.shared.lock().unwrap().world = Some(status);
             return Ok(());
         }
-        let client = client::inspect(&self.client_dir());
+        let client = self.client();
         if !client.is_ok() {
             return Err(t::MSG_CLIENT_NEEDED.s().into());
         }
-        let ini = client.dir.join("ini");
+        let ini = client.game_dir.join("ini");
         let out = self.layout.client_ini();
         std::fs::create_dir_all(&out).map_err(|e| e.to_string())?;
         self.set(State::ImportingWorld, t::MSG_DECRYPT.s(), 0.4);
@@ -804,7 +810,7 @@ impl Orchestrator {
     fn verify(&mut self, full: bool) {
         let prev = self.state();
         let components = self.layout.components_present();
-        let info = client::inspect(&self.client_dir());
+        let info = self.client();
         let all = components.iter().all(|(_, ok)| *ok);
         let tables = repair::server_tables_present(&self.server_tables_dir());
         let version = std::fs::read_to_string(self.layout.archcore_dir().join("VERSION.txt")).map(|v| v.trim().to_string()).unwrap_or_default();
@@ -813,7 +819,7 @@ impl Orchestrator {
             "check: components {}, client {} ({}){}",
             if all { "OK" } else { t::INCOMPLETE.s() },
             if info.is_ok() { "OK" } else { t::INCOMPLETE.s() },
-            info.dir.display(),
+            if info.separate_data() { format!("{} + {}", info.dir.display(), info.game_dir.display()) } else { info.dir.display().to_string() },
             if info.missing.is_empty() { String::new() } else { format!(" — {}", info.missing.join(", ")) }
         ));
         {
@@ -884,7 +890,7 @@ impl Orchestrator {
             }
             None => report.notes.push(t::RPT_MANIFEST_MISSING.s().into()),
         }
-        let client = client::inspect(&self.client_dir());
+        let client = self.client();
         report.data = vec![
             (t::RPT_CLIENT.s().to_string(), client.is_ok()),
             (t::RPT_CLIENT_INI.s().to_string(), repair::client_ini_present(&self.layout)),
@@ -1160,7 +1166,7 @@ impl Orchestrator {
     }
 
     fn play(&mut self) {
-        let info = client::inspect(&self.client_dir());
+        let info = self.client();
         if !info.is_ok() {
             self.fail(t::CTX_CLIENT.s(), tf!("{} ({})", "{} ({})", t::MSG_CLIENT_NEEDED.s(), info.dir.display()));
             return;

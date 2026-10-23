@@ -2,6 +2,15 @@
 
 ## 0.1.0 — 23 octobre 2026
 
+Correctif avant diffusion / Fix before release :
+
+- Recherche des clients : elle ne regardait que le dossier `Client` et le dossier parent de l'installation ;
+  elle parcourt maintenant aussi les dossiers parents, le Bureau, les Documents, les Téléchargements et la racine
+  des disques fixes, en arrière-plan (l'interface ne se fige plus), signale les dossiers sans données du jeu
+  (dont le dossier des sources d'ArchRust) et enregistre aussitôt le client choisi.
+- Nouveau réglage « Données du jeu » : données d'ArchLord dans un autre dossier qu'ArchRust.exe (lancement avec
+  `--game`), avec recherche automatique aux emplacements d'ArchRust (`assets-archonia`, `../client/ArchLord/Game`).
+
 Première version : l'équivalent de HomeCraft Edition Vanilla pour ArchLord.
 First version: the ArchLord counterpart of HomeCraft Edition Vanilla.
 

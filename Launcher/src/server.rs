@@ -35,9 +35,9 @@ fn database_keys(lines: &mut Vec<String>, creds: &DbCredentials) {
     set_conf_value(lines, "Database.Password", &quoted(&creds.password));
 }
 
-/// Dossier du client lu par les outils d'import (tables `ini/`, relief `world/`).
-pub fn client_dir(layout: &Layout, settings: &Settings) -> std::path::PathBuf {
-    if settings.client_dir.trim().is_empty() { layout.default_client_dir() } else { std::path::PathBuf::from(settings.client_dir.trim()) }
+/// Dossier des données du jeu lu par les outils d'import (tables `ini/`, relief `world/`).
+pub fn game_dir(layout: &Layout, settings: &Settings) -> std::path::PathBuf {
+    crate::client::from_settings(layout, settings).game_dir
 }
 
 /// Les .conf sont régénérés à chaque démarrage depuis les modèles d'ArchCore : les clés gérées (écoute sur
@@ -63,7 +63,7 @@ pub fn generate_configs(layout: &Layout, creds: &DbCredentials, settings: &Setti
     set_conf_value(&mut w, "WorldServer.Group", &quoted(WORLD_NAME));
     set_conf_value(&mut w, "WorldServer.PublicAddress", "\"127.0.0.1\"");
     database_keys(&mut w, creds);
-    set_conf_value(&mut w, "Client.DataDir", &Layout::conf_path(&client_dir(layout, settings)));
+    set_conf_value(&mut w, "Client.DataDir", &Layout::conf_path(&game_dir(layout, settings)));
     set_conf_value(&mut w, "World.Language", &quoted(settings.game_language.code()));
     for opt in crate::conf_catalog::WORLD_OPTIONS {
         let v = crate::conf_catalog::value(&settings.conf, opt);

@@ -76,6 +76,8 @@ pub struct App {
     // Paramètres : client détecté dans le dossier saisi (recalculé quand le chemin change), clients trouvés à proximité
     client_probe: Option<(String, crate::client::ClientInfo)>,
     discovered: Option<Vec<crate::client::ClientInfo>>,
+    /// Recherche des clients en cours (fil séparé)
+    discover_rx: Option<std::sync::mpsc::Receiver<Vec<crate::client::ClientInfo>>>,
 }
 
 impl App {
@@ -135,6 +137,7 @@ impl App {
             log_problems_only: false,
             client_probe: None,
             discovered: None,
+            discover_rx: None,
         }
     }
 
@@ -1190,10 +1193,20 @@ impl App {
                 }
             });
             ui.small(t::SET_CLIENT_HINT.s());
-            let typed = self.settings.client_dir.trim().to_string();
+            ui.label(t::SET_GAME_DIR.s());
+            ui.horizontal(|ui| {
+                ui.add(egui::TextEdit::singleline(&mut self.settings.game_dir).desired_width(480.0).hint_text(t::SET_GAME_DIR_AUTO.s()));
+                if ui.button(t::BROWSE.s()).clicked() {
+                    if let Some(dir) = rfd::FileDialog::new().set_title(t::SET_GAME_DIR.s()).pick_folder() {
+                        self.settings.game_dir = dir.to_string_lossy().into_owned();
+                    }
+                }
+            });
+            ui.small(t::SET_GAME_DIR_HINT.s());
+            // Client détecté dans les dossiers saisis (recalculé quand l'un des deux change).
+            let typed = format!("{}|{}", self.settings.client_dir.trim(), self.settings.game_dir.trim());
             if self.client_probe.as_ref().map(|(p, _)| p != &typed).unwrap_or(true) {
-                let dir = if typed.is_empty() { self.layout.default_client_dir() } else { PathBuf::from(&typed) };
-                self.client_probe = Some((typed.clone(), crate::client::inspect(&dir)));
+                self.client_probe = Some((typed.clone(), crate::client::from_settings(&self.layout, &self.settings)));
             }
             let probe = self.client_probe.as_ref().map(|(_, i)| i.clone()).unwrap_or_default();
             ui.horizontal_wrapped(|ui| {
@@ -1207,19 +1220,67 @@ impl App {
                 };
                 ui.label(RichText::new(txt).color(status_color(probe.is_ok(), false)).strong());
             });
-            if ui.button(t::SET_CLIENT_SCAN.s()).on_hover_text(t::SET_CLIENT_SCAN_HINT.s()).clicked() || self.discovered.is_none() {
-                self.discovered = Some(crate::client::discover(&self.layout.root));
+            if probe.is_ok() && probe.separate_data() {
+                ui.small(format!("{} {}", t::SET_GAME_DIR_USED.s(), probe.game_dir.display()));
             }
-            if let Some(found) = self.discovered.clone() {
-                for c in found.iter() {
-                    let path = c.dir.to_string_lossy().into_owned();
-                    let current = probe.dir == c.dir;
-                    ui.horizontal(|ui| {
-                        if ui.add_enabled(!current, egui::Button::new(if current { t::SET_CLIENT_IN_USE.s() } else { t::SET_CLIENT_USE.s() })).clicked() {
-                            self.settings.client_dir = if c.dir == self.layout.default_client_dir() { String::new() } else { path.clone() };
-                        }
-                        ui.small(&path);
+            if !probe.is_ok() && (probe.exe_present || probe.source_tree) {
+                ui.colored_label(WARN, if probe.source_tree { t::CLIENT_SOURCE_TREE.s() } else { t::CLIENT_NO_DATA_HINT.s() });
+            }
+            // Recherche hors du fil de l'interface (elle parcourt aussi les disques) ; lancée seule à la première
+            // ouverture de l'onglet, puis par le bouton.
+            if let Some(rx) = &self.discover_rx {
+                if let Ok(found) = rx.try_recv() {
+                    self.discovered = Some(found);
+                    self.discover_rx = None;
+                }
+            }
+            let searching = self.discover_rx.is_some();
+            ui.horizontal(|ui| {
+                let clicked = ui.add_enabled(!searching, egui::Button::new(t::SET_CLIENT_SCAN.s())).on_hover_text(t::SET_CLIENT_SCAN_HINT.s()).clicked();
+                if (clicked || self.discovered.is_none()) && !searching {
+                    let (tx, rx) = std::sync::mpsc::channel();
+                    let root = self.layout.root.clone();
+                    let ctx = ui.ctx().clone();
+                    std::thread::spawn(move || {
+                        let _ = tx.send(crate::client::discover(&root));
+                        ctx.request_repaint();
                     });
+                    self.discover_rx = Some(rx);
+                    self.discovered = Some(Vec::new());
+                }
+                if searching {
+                    ui.spinner();
+                    ui.label(t::SET_CLIENT_SEARCHING.s());
+                }
+            });
+            if let Some(found) = self.discovered.clone() {
+                if found.is_empty() && !searching {
+                    ui.colored_label(WARN, t::SET_CLIENT_NONE_FOUND.s());
+                }
+                let mut chosen: Option<PathBuf> = None;
+                for c in found.iter() {
+                    let path = c.dir.display().to_string();
+                    let current = crate::client::same_dir(&probe.dir, &c.dir);
+                    ui.horizontal(|ui| {
+                        let label = if current { t::SET_CLIENT_IN_USE.s() } else { t::SET_CLIENT_USE.s() };
+                        if ui.add_enabled(!current && c.is_ok(), egui::Button::new(label)).clicked() {
+                            chosen = Some(c.dir.clone());
+                        }
+                        if c.is_ok() {
+                            ui.label(&path);
+                        } else {
+                            ui.label(RichText::new(&path).color(Color32::from_gray(150)));
+                            let why = if c.source_tree { t::CLIENT_SOURCE_TREE_SHORT.s().to_string() } else { format!("{} {}", t::CLIENT_MISSING_DATA.s(), c.missing.join(", ")) };
+                            ui.small(RichText::new(why).color(WARN));
+                        }
+                    });
+                }
+                // Choix enregistré tout de suite : le client sert dès le prochain JOUER.
+                if let Some(dir) = chosen {
+                    self.settings.client_dir = if crate::client::same_dir(&dir, &self.layout.default_client_dir()) { String::new() } else { dir.display().to_string() };
+                    // Données du jeu retrouvées automatiquement pour ce client.
+                    self.settings.game_dir.clear();
+                    self.save_settings();
                 }
             }
 

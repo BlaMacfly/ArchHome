@@ -21,8 +21,11 @@ and a launcher that handles everything. You play with the ArchRust client.
 
 1. Unzip the archive into a folder on your disk, e.g. `C:\Games\HomeRPG ArchLord\` (not Program Files, not a
    cloud-synced folder).
-2. Copy your ArchRust client into `Client\`, or leave it where it is and set its folder in **Settings** ("Find
-   clients" finds it if it is near the installation folder).
+2. Copy your ArchRust client into `Client\`, or leave it where it is and set its folder in **Settings**: "Find
+   clients" looks for ArchRust.exe around the installation folder, in Desktop, Documents, Downloads and at the
+   root of the drives; "Use" picks a found client. If the game data is in another folder than ArchRust.exe (for
+   example the `Game` folder of an ArchLord installation), set it in "Game data": ArchRust is then started with
+   `--game`. Note: ArchRust's **source** folder (`Cargo.toml`, `crates`, `target`) is not a ready-to-play client.
 3. Optional: copy the original server tables into `Server\Data\server-ini\`, or set their folder in
    **Settings**.
 4. Open `HomeRPG ArchLord.exe`. If Windows shows "Windows protected your PC": "More info", then "Run anyway".
@@ -53,7 +56,7 @@ Before logging in, create your account in the **Accounts** tab (the server does 
 | Packs & AddOns | ArchRust resource packs (official `free-assets`, community packs in `patches`: enable, disable, add `.ahp` or folder, remove — same `packs.toml` as the in-game Options) and Lua AddOns (install from zip, disable, remove) |
 | Database | Explorer for the four databases (data with filter, sort, edit, insert, delete; structure; SQL with write confirmation); Open in HeidiSQL |
 | Backups | Back up now, restore (with a safety backup first), delete, export a diagnostic; automatic backup when the game closes |
-| Settings | Launcher language (automatic, French, English — applied immediately), game language, client folder, server tables folder, ports, automatic backups, log options |
+| Settings | Launcher language (automatic, French, English — applied immediately), game language, client folder, game data folder (optional), server tables folder, ports, automatic backups, log options |
 | Logs | Launcher, Server and Client views, text filter, warnings-and-errors filter, open the folder or current file |
 | GM help | ArchCore GM commands and ArchRust shortcuts |
 

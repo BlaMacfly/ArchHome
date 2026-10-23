@@ -14,6 +14,9 @@ pub struct Settings {
     pub game_language: Lang,
     /// Dossier du client ArchRust avec les données du jeu (vide = Client/ à la racine)
     pub client_dir: String,
+    /// Dossier des données du jeu ArchLord (Game), s'il n'est pas à côté d'ArchRust.exe (vide = recherche
+    /// automatique : à côté de l'exécutable, puis aux emplacements par défaut d'ArchRust)
+    pub game_dir: String,
     /// Dossier des tables du serveur d'origine (vide = Server/Data/server-ini)
     pub server_tables_dir: String,
     pub login_port: u16,
@@ -36,6 +39,7 @@ impl Default for Settings {
             ui_language: None,
             game_language: crate::i18n::system_lang(),
             client_dir: String::new(),
+            game_dir: String::new(),
             server_tables_dir: String::new(),
             login_port: DEFAULT_LOGIN_PORT,
             world_port: DEFAULT_WORLD_PORT,

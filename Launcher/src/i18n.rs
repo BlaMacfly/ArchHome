@@ -415,9 +415,33 @@ pub const SET_CLIENT_HINT: T = T(
     "Dossier contenant ArchRust.exe et les données du jeu ArchLord (character, ini, world…). Vide : dossier Client du launcher.",
     "Folder holding ArchRust.exe and the ArchLord game data (character, ini, world…). Empty: the launcher's Client folder.",
 );
+pub const SET_GAME_DIR: T = T("Données du jeu ArchLord (facultatif)", "ArchLord game data (optional)");
+pub const SET_GAME_DIR_AUTO: T = T("automatique : à côté d'ArchRust.exe", "automatic: next to ArchRust.exe");
+pub const SET_GAME_DIR_HINT: T = T(
+    "Seulement si les données du jeu (character, ini, world…) sont dans un autre dossier qu'ArchRust.exe, par exemple le dossier Game d'une installation d'ArchLord. ArchRust est alors lancé avec --game.",
+    "Only if the game data (character, ini, world…) is in another folder than ArchRust.exe, for example the Game folder of an ArchLord installation. ArchRust is then started with --game.",
+);
+pub const SET_GAME_DIR_USED: T = T("Données du jeu utilisées :", "Game data used:");
+pub const CLIENT_NO_DATA_HINT: T = T(
+    "ArchRust.exe est là, mais pas les données du jeu : indiquez leur dossier dans « Données du jeu », ou choisissez un client complet ci-dessous.",
+    "ArchRust.exe is here, but not the game data: set their folder in \"Game data\", or pick a complete client below.",
+);
+pub const CLIENT_SOURCE_TREE: T = T(
+    "Ce dossier est celui des sources d'ArchRust (Cargo.toml, crates, target), pas un client prêt à jouer : il ne contient pas les données du jeu. Choisissez le dossier de jeu (ArchRust.exe avec character, ini, world…), ou indiquez les données du jeu ci-dessus.",
+    "This is ArchRust's source folder (Cargo.toml, crates, target), not a ready-to-play client: it holds no game data. Pick the game folder (ArchRust.exe with character, ini, world…), or set the game data above.",
+);
+pub const CLIENT_SOURCE_TREE_SHORT: T = T("dossier des sources d'ArchRust, sans données du jeu", "ArchRust source folder, no game data");
 pub const SET_CLIENT_DETECTED: T = T("Client détecté :", "Detected client:");
 pub const SET_CLIENT_SCAN: T = T("Rechercher les clients", "Find clients");
-pub const SET_CLIENT_SCAN_HINT: T = T("Cherche ArchRust.exe avec ses données autour du dossier d'installation.", "Looks for ArchRust.exe with its data around the installation folder.");
+pub const SET_CLIENT_SCAN_HINT: T = T(
+    "Cherche ArchRust.exe autour du dossier d'installation, dans le Bureau, les Documents, les Téléchargements et à la racine des disques.",
+    "Looks for ArchRust.exe around the installation folder, in Desktop, Documents, Downloads and at the root of the drives.",
+);
+pub const SET_CLIENT_SEARCHING: T = T("Recherche des clients ArchRust…", "Searching for ArchRust clients…");
+pub const SET_CLIENT_NONE_FOUND: T = T(
+    "Aucun ArchRust.exe trouvé. Indiquez son dossier avec « Parcourir… » (ArchRust.exe et les données du jeu dans le même dossier).",
+    "No ArchRust.exe found. Set its folder with \"Browse…\" (ArchRust.exe and the game data in the same folder).",
+);
 pub const SET_CLIENT_USE: T = T("Utiliser", "Use");
 pub const SET_CLIENT_IN_USE: T = T("Utilisé", "In use");
 pub const SET_TABLES_DIR: T = T("Tables du serveur d'origine (facultatif)", "Original server tables (optional)");
