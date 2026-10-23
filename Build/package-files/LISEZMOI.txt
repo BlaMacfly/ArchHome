@@ -1,0 +1,24 @@
+HomeRPG ArchLord — ArchLord en solo, hors ligne, en français
+==============================================================
+
+(English: see README.txt)
+
+1. Placez votre client ArchRust dans le dossier Client\ : ArchRust.exe et, à côté,
+   les données du jeu ArchLord 64 bits (character\, ini\, world\, texture\…).
+   Ou indiquez son emplacement dans Paramètres. Le client n'est pas fourni.
+
+2. Facultatif : tables du serveur ArchLord d'origine (apparitions des monstres, butin)
+   dans Server\Data\server-ini\. Sans elles, le monde n'a ni monstres ni butin.
+
+3. Ouvrez « HomeRPG ArchLord.exe » et cliquez sur JOUER.
+   Le premier démarrage importe le monde depuis votre client (quelques minutes, une fois).
+
+4. Créez votre compte dans l'onglet Comptes (niveau MJ 3 pour toutes les commandes),
+   puis connectez-vous dans ArchRust.
+
+Tout fonctionne sur ce PC (127.0.0.1), sans connexion Internet.
+Vos comptes, personnages, réglages et sauvegardes sont dans UserData\ : conservez ce dossier.
+Journaux : Logs\ (launcher, serveur, client), et onglet Journaux du launcher.
+
+Manuel complet : Documentation\Manuel-Utilisateur.md
+Licence : LICENCE.txt ; composants tiers : LICENCES\

@@ -1,0 +1,7 @@
+Placez ici votre client ArchRust : ArchRust.exe et les données du jeu ArchLord 64 bits
+(dossiers character, ini, world, texture, object, effect, sound…). Ou indiquez un autre
+dossier dans Paramètres du launcher.
+
+Put your ArchRust client here: ArchRust.exe and the 64-bit ArchLord game data
+(character, ini, world, texture, object, effect, sound… folders). Or set another folder
+in the launcher's Settings.

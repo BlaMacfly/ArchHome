@@ -1,0 +1,26 @@
+# ---- Jamais versionné : données du jeu ArchLord et données personnelles
+/Client/
+/Server/Data/
+/UserData/
+/Logs/
+
+# ---- Composants : compilés (Build-ArchCore.ps1) ou téléchargés (Get-Components.ps1, manifest.json fait foi)
+/Build/downloads/
+/Build/tmp/
+/Server/ArchCore/
+/Server/Database/mariadb/
+/Tools/HeidiSQL/
+
+# ---- Généré
+/Server/Config/*.conf
+/Server/Config/my.ini
+/Build/package/
+/Build/files-manifest.json
+/Launcher/target/
+/HomeRPG ArchLord.exe
+*.orig
+
+# ---- Divers
+Thumbs.db
+desktop.ini
+*.log

@@ -1,0 +1,11 @@
+Facultatif : tables du serveur ArchLord d'origine, qui ne sont pas dans le client et que
+HomeRPG ne fournit pas : spawndatatable.txt, spawninstancetable.txt, itemdroptable.txt,
+groupdroprate.txt, droprankrate.txt (et world\node_data pour la carte du serveur).
+Sans elles, le monde n'a ni monstres ni butin. Après les avoir ajoutées :
+onglet Monde > Réimporter la base monde.
+
+Optional: the original ArchLord server tables, which are not in the client and that HomeRPG
+does not provide: spawndatatable.txt, spawninstancetable.txt, itemdroptable.txt,
+groupdroprate.txt, droprankrate.txt (and world\node_data for the server map).
+Without them, the world has no monsters or loot. After adding them:
+World tab > Reimport the world database.
