@@ -39,8 +39,8 @@ portable et un launcher qui s'occupe de tout. Vous jouez avec le client ArchRust
 1. Décompressez l'archive dans un dossier de votre disque, par exemple `C:\Jeux\HomeRPG ArchLord\` (pas dans
    Program Files, pas dans un dossier synchronisé en nuage).
 2. Copiez votre client ArchRust dans `Client\`, ou laissez-le où il est et indiquez son dossier dans
-   **Paramètres** : « Rechercher les clients » cherche ArchRust.exe autour du dossier d'installation, dans le
-   Bureau, les Documents, les Téléchargements et à la racine des disques ; « Utiliser » choisit un client trouvé.
+   **Paramètres** avec « Parcourir… ». « Rechercher les clients » ne sonde que le dossier du launcher et ses
+   sous-dossiers (par exemple `Client\`) ; « Utiliser » choisit un client trouvé.
    Si les données du jeu sont dans un autre dossier qu'ArchRust.exe (par exemple le dossier `Game` d'une
    installation d'ArchLord), indiquez-le dans « Données du jeu » : ArchRust est alors lancé avec `--game`.
    Attention : le dossier des **sources** d'ArchRust (`Cargo.toml`, `crates`, `target`) n'est pas un client

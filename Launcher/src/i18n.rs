@@ -434,13 +434,13 @@ pub const CLIENT_SOURCE_TREE_SHORT: T = T("dossier des sources d'ArchRust, sans 
 pub const SET_CLIENT_DETECTED: T = T("Client détecté :", "Detected client:");
 pub const SET_CLIENT_SCAN: T = T("Rechercher les clients", "Find clients");
 pub const SET_CLIENT_SCAN_HINT: T = T(
-    "Cherche ArchRust.exe autour du dossier d'installation, dans le Bureau, les Documents, les Téléchargements et à la racine des disques.",
-    "Looks for ArchRust.exe around the installation folder, in Desktop, Documents, Downloads and at the root of the drives.",
+    "Cherche ArchRust.exe dans le dossier du launcher et ses sous-dossiers seulement (par exemple Client). Un client placé ailleurs s'indique avec « Parcourir… ».",
+    "Looks for ArchRust.exe in the launcher's folder and its subfolders only (for example Client). A client placed elsewhere is set with \"Browse…\".",
 );
 pub const SET_CLIENT_SEARCHING: T = T("Recherche des clients ArchRust…", "Searching for ArchRust clients…");
 pub const SET_CLIENT_NONE_FOUND: T = T(
-    "Aucun ArchRust.exe trouvé. Indiquez son dossier avec « Parcourir… » (ArchRust.exe et les données du jeu dans le même dossier).",
-    "No ArchRust.exe found. Set its folder with \"Browse…\" (ArchRust.exe and the game data in the same folder).",
+    "Aucun ArchRust.exe dans le dossier du launcher. Placez votre client dans le dossier Client, ou indiquez son dossier avec « Parcourir… ».",
+    "No ArchRust.exe in the launcher's folder. Put your client in the Client folder, or set its folder with \"Browse…\".",
 );
 pub const SET_CLIENT_USE: T = T("Utiliser", "Use");
 pub const SET_CLIENT_IN_USE: T = T("Utilisé", "In use");

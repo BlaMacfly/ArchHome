@@ -16,6 +16,7 @@ serveur ArchCore local + MariaDB portable + launcher Rust à un seul bouton.
 - **Journaux côté serveur et côté client** (`Logs/server`, `Logs/client`, onglet Journaux).
 
 ## Règles
+- La recherche des clients ne sonde que le dossier du launcher et ses sous-dossiers (décision du 2026-10-23).
 - Toute chaîne affichée passe par `Launcher/src/i18n.rs` (`T("fr", "en")` ou `tf!`), dans les deux langues.
 - Ne jamais redistribuer ni committer : `Client/`, `Server/Data/` (tables du client déchiffrées, tables du serveur
   d'origine), `UserData/`, `Logs/`. Aucune donnée du client ArchLord dans le dépôt ou le package.

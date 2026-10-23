@@ -50,7 +50,7 @@ pub fn data_missing(game: &Path) -> Vec<String> {
 }
 
 /// Client du dossier `dir`. Données du jeu : `game` s'il est donné, sinon à côté d'ArchRust.exe, sinon aux
-/// emplacements qu'ArchRust essaie lui-même (`assets-archonia/Game`, `assets-archonia`, `../client/ArchLord/Game`).
+/// emplacements qu'ArchRust essaie lui-même dans son dossier (`assets-archonia/Game`, `assets-archonia`).
 pub fn inspect(dir: &Path, game: Option<&Path>) -> ClientInfo {
     let exe = dir.join("ArchRust.exe");
     let exe_info = std::fs::metadata(&exe)
@@ -62,10 +62,8 @@ pub fn inspect(dir: &Path, game: Option<&Path>) -> ClientInfo {
     let game_dir = match game {
         Some(g) => g.to_path_buf(),
         None => {
-            let mut candidates = vec![dir.to_path_buf(), dir.join("assets-archonia").join("Game"), dir.join("assets-archonia")];
-            if let Some(parent) = dir.parent() {
-                candidates.push(parent.join("client").join("ArchLord").join("Game"));
-            }
+            // Seulement dans le dossier du client : jamais au-dessus de lui.
+            let candidates = [dir.to_path_buf(), dir.join("assets-archonia").join("Game"), dir.join("assets-archonia")];
             candidates.into_iter().find(|c| data_missing(c).is_empty()).unwrap_or_else(|| dir.to_path_buf())
         }
     };
@@ -91,50 +89,21 @@ pub fn same_dir(a: &Path, b: &Path) -> bool {
     norm(a) == norm(b)
 }
 
-/// Dossiers non parcourus : système, données du jeu (des milliers de fichiers), dépôts et compilations.
-const SKIP_DIRS: [&str; 14] = ["windows", "$recycle.bin", "system volume information", "programdata", "appdata", "recovery", "perflogs", "node_modules", "target", "userdata", "winsxs", "msocache", "$windows.~bt", "$windows.~ws"];
+/// Dossiers du launcher non parcourus (programme, données personnelles, documentation), données du jeu (des
+/// milliers de fichiers) et compilations.
+const SKIP_DIRS: [&str; 11] = ["server", "userdata", "logs", "build", "sources", "documentation", "licences", "tools", "target", "node_modules", "$recycle.bin"];
 
-/// Dossiers parcourus au plus par une recherche (garde-fou sur les disques très remplis).
-const MAX_VISITED: usize = 60_000;
+/// Profondeur de la recherche sous le dossier du launcher (`Client\…\ArchRust.exe` à trois niveaux).
+const SEARCH_DEPTH: usize = 4;
 
-/// Cherche les dossiers contenant ArchRust.exe : autour de l'installation (dossier `Client`, dossiers parents
-/// et voisins), dans le Bureau, les Documents, les Téléchargements et le dossier de l'utilisateur, puis à la
-/// racine des disques fixes (`C:\Jeux\…`, `D:\ArchLord\…`, Program Files). Les clients aux données incomplètes
-/// sont rendus aussi, pour l'expliquer à l'utilisateur. Peut prendre quelques secondes : à lancer hors du fil
-/// de l'interface.
+/// Cherche les dossiers contenant ArchRust.exe dans le dossier d'installation du launcher et ses sous-dossiers
+/// (`Client\`, `Client\ArchRust\`…) : par décision de l'utilisateur (2026-10-23), la recherche ne sonde rien
+/// d'autre que ce dossier. Un client placé ailleurs s'indique avec « Parcourir… ». Les clients aux données
+/// incomplètes sont rendus aussi, pour l'expliquer à l'utilisateur.
 pub fn discover(root: &Path) -> Vec<ClientInfo> {
-    let mut starts: Vec<(PathBuf, usize)> = vec![(root.join("Client"), 2)];
-    let mut anc = root.parent();
-    for depth in [3, 3] {
-        if let Some(a) = anc {
-            starts.push((a.to_path_buf(), depth));
-            anc = a.parent();
-        }
-    }
-    if let Some(home) = std::env::var_os("USERPROFILE").map(PathBuf::from) {
-        for (sub, depth) in [("Desktop", 4), ("Bureau", 4), ("OneDrive\\Desktop", 4), ("OneDrive\\Bureau", 4), ("Documents", 3), ("Downloads", 3), ("", 2)] {
-            starts.push((if sub.is_empty() { home.clone() } else { home.join(sub) }, depth));
-        }
-    }
-    for drive in fixed_drives() {
-        starts.push((drive, 3));
-    }
-
     let mut out: Vec<ClientInfo> = Vec::new();
-    let mut visited: std::collections::HashMap<String, usize> = std::collections::HashMap::new();
-    fn walk(d: &Path, depth: usize, visited: &mut std::collections::HashMap<String, usize>, out: &mut Vec<ClientInfo>) {
-        // Dossier déjà parcouru au moins aussi profondément : rien de plus à y trouver.
-        let key = d.to_string_lossy().replace('/', "\\").trim_end_matches('\\').to_lowercase();
-        let first = match visited.get(&key) {
-            Some(&done) if done >= depth => return,
-            Some(_) => false,
-            None => true,
-        };
-        if first && visited.len() >= MAX_VISITED {
-            return;
-        }
-        visited.insert(key, depth);
-        if first && d.join("ArchRust.exe").is_file() {
+    fn walk(d: &Path, depth: usize, out: &mut Vec<ClientInfo>) {
+        if d.join("ArchRust.exe").is_file() {
             out.push(inspect(d, None));
         }
         if depth == 0 {
@@ -143,7 +112,7 @@ pub fn discover(root: &Path) -> Vec<ClientInfo> {
         let Ok(rd) = std::fs::read_dir(d) else { return };
         for e in rd.flatten() {
             let Ok(ft) = e.file_type() else { continue };
-            // Pas de lien symbolique ni de jonction (boucles, « Mes documents » → Documents…).
+            // Pas de lien symbolique ni de jonction : ils mèneraient hors du dossier du launcher.
             if !ft.is_dir() || ft.is_symlink() {
                 continue;
             }
@@ -151,33 +120,13 @@ pub fn discover(root: &Path) -> Vec<ClientInfo> {
             if DATA_DIRS.contains(&name.as_str()) || SKIP_DIRS.contains(&name.as_str()) || name.starts_with('.') {
                 continue;
             }
-            walk(&e.path(), depth - 1, visited, out);
+            walk(&e.path(), depth - 1, out);
         }
     }
-    for (dir, depth) in starts {
-        if dir.is_dir() {
-            walk(&dir, depth, &mut visited, &mut out);
-        }
-    }
+    walk(root, SEARCH_DEPTH, &mut out);
     // Clients complets d'abord.
     out.sort_by_key(|c| !c.is_ok());
     out
-}
-
-/// Racines des disques fixes (C:\, D:\…), sans les lecteurs réseau, amovibles ou optiques.
-fn fixed_drives() -> Vec<PathBuf> {
-    use windows_sys::Win32::Storage::FileSystem::{GetDriveTypeW, GetLogicalDrives};
-    const DRIVE_FIXED: u32 = 3;
-    let mask = unsafe { GetLogicalDrives() };
-    (0..26u8)
-        .filter(|i| mask & (1 << i) != 0)
-        .map(|i| format!("{}:\\", (b'A' + i) as char))
-        .filter(|root| {
-            let wide: Vec<u16> = root.encode_utf16().chain(std::iter::once(0)).collect();
-            unsafe { GetDriveTypeW(wide.as_ptr()) == DRIVE_FIXED }
-        })
-        .map(PathBuf::from)
-        .collect()
 }
 
 /// Prépare ArchRust : adresse du serveur (realmlist.wtf, lu à côté de l'exécutable) et langue

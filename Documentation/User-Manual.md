@@ -21,9 +21,9 @@ and a launcher that handles everything. You play with the ArchRust client.
 
 1. Unzip the archive into a folder on your disk, e.g. `C:\Games\HomeRPG ArchLord\` (not Program Files, not a
    cloud-synced folder).
-2. Copy your ArchRust client into `Client\`, or leave it where it is and set its folder in **Settings**: "Find
-   clients" looks for ArchRust.exe around the installation folder, in Desktop, Documents, Downloads and at the
-   root of the drives; "Use" picks a found client. If the game data is in another folder than ArchRust.exe (for
+2. Copy your ArchRust client into `Client\`, or leave it where it is and set its folder in **Settings** with
+   "Browse…". "Find clients" only looks in the launcher's folder and its subfolders (for example `Client\`);
+   "Use" picks a found client. If the game data is in another folder than ArchRust.exe (for
    example the `Game` folder of an ArchLord installation), set it in "Game data": ArchRust is then started with
    `--game`. Note: ArchRust's **source** folder (`Cargo.toml`, `crates`, `target`) is not a ready-to-play client.
 3. Optional: copy the original server tables into `Server\Data\server-ini\`, or set their folder in
