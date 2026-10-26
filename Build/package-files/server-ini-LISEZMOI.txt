@@ -1,11 +1,15 @@
-Facultatif : tables du serveur ArchLord d'origine, qui ne sont pas dans le client et que
-HomeRPG ne fournit pas : spawndatatable.txt, spawninstancetable.txt, itemdroptable.txt,
-groupdroprate.txt, droprankrate.txt (et world\node_data pour la carte du serveur).
-Sans elles, le monde n'a ni monstres ni butin. Après les avoir ajoutées :
-onglet Monde > Réimporter la base monde.
+Conseillé : tables du serveur ArchLord d'origine, qui ne sont pas dans le client et que
+HomeRPG ne fournit pas : spawndatatable.txt et spawninstancetable.txt (apparitions des
+monstres, indispensables), itemdroptable.txt, groupdroprate.txt, droprankrate.txt (butin),
+aidatatable.txt (compétences des monstres), optionnumdroprate.txt, socketnumdroprate.txt,
+refineryrecipetable.txt (options, sockets, raffinage), et world\node_data (carte du serveur).
+Sans elles, le monde n'a NI MONSTRES NI BUTIN. Placez-les ici : si le monde a déjà été
+importé sans elles, il est réimporté au démarrage suivant (comptes et personnages conservés).
 
-Optional: the original ArchLord server tables, which are not in the client and that HomeRPG
-does not provide: spawndatatable.txt, spawninstancetable.txt, itemdroptable.txt,
-groupdroprate.txt, droprankrate.txt (and world\node_data for the server map).
-Without them, the world has no monsters or loot. After adding them:
-World tab > Reimport the world database.
+Recommended: the original ArchLord server tables, which are not in the client and that
+HomeRPG does not provide: spawndatatable.txt and spawninstancetable.txt (monster spawns,
+required), itemdroptable.txt, groupdroprate.txt, droprankrate.txt (loot), aidatatable.txt
+(monster skills), optionnumdroprate.txt, socketnumdroprate.txt, refineryrecipetable.txt
+(options, sockets, refining), and world\node_data (server map).
+Without them, the world has NO MONSTERS OR LOOT. Put them here: if the world was already
+imported without them, it is reimported on the next start (accounts and characters kept).

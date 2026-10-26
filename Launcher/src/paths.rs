@@ -60,6 +60,8 @@ impl Layout {
     pub fn credentials_file(&self) -> PathBuf { self.user_data().join("db-credentials.json") }
     pub fn settings_file(&self) -> PathBuf { self.user_data().join("settings.json") }
     pub fn backups(&self) -> PathBuf { self.user_data().join("Sauvegardes") }
+    /// Version d'ArchCore (VERSION.txt) qui a importé le monde : une autre version le réimporte au démarrage
+    pub fn world_import_marker(&self) -> PathBuf { self.user_data().join("monde-importe-par.txt") }
 
     // Journaux
     pub fn logs(&self) -> PathBuf { self.root.join("Logs") }

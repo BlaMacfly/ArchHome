@@ -722,19 +722,67 @@ impl Orchestrator {
     /// il n'ajoute que ce qui manque). Le serveur refuse de démarrer sur une base en retard.
     fn schema(&mut self, db: &MariaDb) -> Result<(), String> {
         db.ensure_user()?;
+        match db.drop_host_accounts() {
+            Ok(dropped) if !dropped.is_empty() => self.log(tf!(
+                "comptes MariaDB inutiles supprimés : {} (la base n'écoute que 127.0.0.1)",
+                "unneeded MariaDB accounts removed: {} (the database only listens on 127.0.0.1)",
+                dropped.join(", ")
+            )),
+            Ok(_) => {}
+            Err(e) => self.log(format!("MariaDB root@<PC> : {e}")),
+        }
         server::generate_configs(&self.layout, db.creds(), &self.settings)?;
         self.tool(&["db-init"])
     }
 
+    /// Version d'ArchCore installée (VERSION.txt), vide si absente.
+    fn archcore_version(&self) -> String {
+        std::fs::read_to_string(self.layout.archcore_dir().join("VERSION.txt")).map(|v| v.trim().to_string()).unwrap_or_default()
+    }
+
+    /// Raison de réimporter un monde déjà importé : ArchCore mis à jour depuis l'import (ses nouvelles tables du
+    /// monde sont vides tant qu'`archcore import` ne les a pas remplies), ou tables du serveur d'origine ajoutées
+    /// après un import sans monstres.
+    fn reimport_reason(&self, status: &crate::db::WorldStatus) -> Option<String> {
+        let current = self.archcore_version();
+        let imported_by = std::fs::read_to_string(self.layout.world_import_marker()).map(|v| v.trim().to_string()).unwrap_or_default();
+        if imported_by != current {
+            let before = if imported_by.is_empty() { t::UNKNOWN_VERSION.s().to_string() } else { imported_by };
+            return Some(tf!(
+                "ArchCore mis à jour ({before} → {current}) : réimport du monde pour remplir ses nouvelles tables (personnages et comptes conservés)",
+                "ArchCore updated ({before} → {current}): reimporting the world to fill its new tables (characters and accounts kept)"
+            ));
+        }
+        if status.monsters == 0 && repair::server_tables_present(&self.server_tables_dir()) {
+            return Some(tf!(
+                "tables du serveur d'origine ajoutées depuis l'import : réimport du monde (personnages et comptes conservés)",
+                "original server tables added since the import: reimporting the world (characters and accounts kept)"
+            ));
+        }
+        None
+    }
+
     /// Monde : tables du client déchiffrées, importées dans `archcore_world` (avec les tables du serveur
-    /// d'origine si elles sont fournies), titres de PNJ traduits. Seulement si le monde est vide, ou si `force`.
+    /// d'origine si elles sont fournies), titres de PNJ traduits. Si le monde est vide, s'il a été importé par une
+    /// autre version d'ArchCore ou sans les tables du serveur désormais présentes, ou si `force`.
     fn prepare_world(&mut self, db: &MariaDb, force: bool) -> Result<(), String> {
         let status = db.world_status();
-        if status.imported() && !force {
-            self.shared.lock().unwrap().world = Some(status);
-            return Ok(());
-        }
         let client = self.client();
+        if status.imported() && !force {
+            match self.reimport_reason(&status) {
+                None => {
+                    self.shared.lock().unwrap().world = Some(status);
+                    return Ok(());
+                }
+                // Sans client, le monde déjà importé reste utilisable : le serveur démarre, le réimport attendra.
+                Some(why) if !client.is_ok() => {
+                    self.log(tf!("{why} — reporté : {}", "{why} — postponed: {}", t::MSG_CLIENT_NEEDED.s()));
+                    self.shared.lock().unwrap().world = Some(status);
+                    return Ok(());
+                }
+                Some(why) => self.log(why),
+            }
+        }
         if !client.is_ok() {
             return Err(t::MSG_CLIENT_NEEDED.s().into());
         }
@@ -747,15 +795,17 @@ impl Orchestrator {
         let tables = self.server_tables_dir();
         let out_s = out.to_string_lossy().to_string();
         let tables_s = tables.to_string_lossy().to_string();
-        if repair::server_tables_present(&tables) {
+        let with_tables = repair::server_tables_present(&tables);
+        if with_tables {
             self.log(tf!("import avec les tables du serveur d'origine : {}", "import with the original server tables: {}", tables.display()));
             self.tool(&["import", &out_s, "--server", &tables_s])?;
         } else {
             self.log(tf!(
-                "tables du serveur d'origine absentes ({}) : monde importé sans monstres ni butin",
-                "original server tables missing ({}): world imported without monsters or loot",
+                "ATTENTION : tables du serveur d'origine absentes ({}, spawndatatable.txt et spawninstancetable.txt attendus) : monde importé SANS MONSTRES NI BUTIN",
+                "WARNING: original server tables missing ({}, spawndatatable.txt and spawninstancetable.txt expected): world imported WITHOUT MONSTERS OR LOOT",
                 tables.display()
             ));
+            self.notice(t::IMPORT_NO_TABLES.s());
             self.tool(&["import", &out_s])?;
         }
         self.set(State::ImportingWorld, t::MSG_I18N.s(), 0.7);
@@ -775,6 +825,13 @@ impl Orchestrator {
         self.shared.lock().unwrap().world = Some(status.clone());
         if !status.imported() {
             return Err(t::MSG_IMPORT_EMPTY.s().into());
+        }
+        if with_tables && status.monsters == 0 {
+            self.log(t::IMPORT_NO_MONSTERS.s());
+            self.notice(t::IMPORT_NO_MONSTERS.s());
+        }
+        if let Err(e) = std::fs::write(self.layout.world_import_marker(), self.archcore_version()) {
+            self.log(format!("{} : {e}", self.layout.world_import_marker().display()));
         }
         Ok(())
     }
@@ -813,7 +870,7 @@ impl Orchestrator {
         let info = self.client();
         let all = components.iter().all(|(_, ok)| *ok);
         let tables = repair::server_tables_present(&self.server_tables_dir());
-        let version = std::fs::read_to_string(self.layout.archcore_dir().join("VERSION.txt")).map(|v| v.trim().to_string()).unwrap_or_default();
+        let version = self.archcore_version();
         self.log(tf!(
             "vérification : composants {}, client {} ({}){}",
             "check: components {}, client {} ({}){}",
@@ -856,6 +913,15 @@ impl Orchestrator {
                 report.missing.len(),
                 report.altered.len()
             ));
+            // Chaque fichier en cause est nommé : le joueur sait quoi remplacer, et le diagnostic le montre.
+            for (what, list) in [(t::RPT_MISSING.s(), &report.missing), (t::RPT_ALTERED.s(), &report.altered)] {
+                for f in list.iter().take(20) {
+                    self.log(format!("  {what} : {f}"));
+                }
+                if list.len() > 20 {
+                    self.log(tf!("  … et {} autre(s)", "  … and {} more", list.len() - 20));
+                }
+            }
             let mut s = self.shared.lock().unwrap();
             s.report = Some(report);
             s.report_fresh = true;

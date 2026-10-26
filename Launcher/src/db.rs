@@ -121,9 +121,12 @@ impl MariaDb {
         self.layout.server_config().join("my.ini")
     }
 
-    /// my.ini géré : régénéré à chaque démarrage, aucune donnée personnelle dedans.
+    /// my.ini géré : régénéré à chaque démarrage, aucune donnée personnelle dedans. Chemins avec des « / » : dans
+    /// un fichier d'options, MariaDB lit `\s`, `\t`, `\n`, `\r`, `\b` comme des échappements (un dossier
+    /// « …\test\… » ou « …\scratch\… » empêcherait le démarrage).
     pub fn write_my_ini(&self) -> Result<(), String> {
         let l = &self.layout;
+        let p = |p: std::path::PathBuf| p.display().to_string().replace('\\', "/");
         std::fs::create_dir_all(l.db_data()).map_err(|e| e.to_string())?;
         std::fs::create_dir_all(l.logs()).map_err(|e| e.to_string())?;
         std::fs::create_dir_all(l.server_config()).map_err(|e| e.to_string())?;
@@ -131,11 +134,11 @@ impl MariaDb {
             "[mysqld]\nbasedir={base}\ndatadir={data}\nport={port}\nbind-address=127.0.0.1\nskip-name-resolve\n\
 max_allowed_packet=256M\ncharacter-set-server=utf8mb4\ncollation-server=utf8mb4_general_ci\n\
 innodb_buffer_pool_size=256M\ninnodb_flush_log_at_trx_commit=2\nlog_error={log}\npid-file={pid}\n\n[client]\nport={port}\ndefault-character-set=utf8mb4\n",
-            base = l.mariadb_dir().display(),
-            data = l.db_data().display(),
+            base = p(l.mariadb_dir()),
+            data = p(l.db_data()),
             port = MARIADB_PORT,
-            log = l.logs().join("mariadb-error.log").display(),
-            pid = l.db_data().join("mariadb.pid").display(),
+            log = p(l.logs().join("mariadb-error.log")),
+            pid = p(l.db_data().join("mariadb.pid")),
         );
         std::fs::write(self.ini_path(), ini).map_err(|e| e.to_string())
     }
@@ -183,11 +186,10 @@ innodb_buffer_pool_size=256M\ninnodb_flush_log_at_trx_commit=2\nlog_error={log}\
         Conn::new(self.opts(true, db)).map_err(|e| format!("SQL : {e}"))
     }
 
-    /// Santé réelle : port ouvert ET requête aboutie.
+    /// Santé réelle : connexion authentifiée ET requête aboutie. Pas de sondage du port : une connexion TCP fermée
+    /// avant l'authentification est notée « Aborted connection » dans le journal de MariaDB (une par seconde en jeu).
+    /// La connexion est refermée par COM_QUIT (fin de `Conn`).
     pub fn ping(&self) -> bool {
-        if !port_open(MARIADB_PORT) {
-            return false;
-        }
         match self.root_conn() {
             Ok(mut c) => c.query_first::<u64, _>("SELECT 1").map(|v| v == Some(1)).unwrap_or(false),
             Err(_) => false,
@@ -225,17 +227,22 @@ innodb_buffer_pool_size=256M\ninnodb_flush_log_at_trx_commit=2\nlog_error={log}\
         Err(crate::i18n::DB_TIMEOUT.s().into())
     }
 
-    /// Arrêt propre par la commande SQL SHUTDOWN (jamais de kill).
+    /// Arrêt propre par la commande SQL SHUTDOWN (jamais de kill). La fin est guettée par la disparition du fichier
+    /// pid (MariaDB l'efface en dernier), pas en sondant le port.
     pub fn shutdown(&self, timeout: Duration) -> Result<(), String> {
-        if !port_open(MARIADB_PORT) {
-            return Ok(());
-        }
-        let mut c = self.root_conn()?;
+        let mut c = match self.root_conn() {
+            Ok(c) => c,
+            Err(_) if !port_open(MARIADB_PORT) => return Ok(()),
+            Err(e) => return Err(e),
+        };
+        let pid = self.layout.db_data().join("mariadb.pid");
+        let watch_pid = pid.exists();
         let _ = c.query_drop("SHUTDOWN");
         drop(c);
         let start = Instant::now();
         while start.elapsed() < timeout {
-            if !port_open(MARIADB_PORT) {
+            let stopped = if watch_pid { !pid.exists() } else { self.root_conn().is_err() };
+            if stopped {
                 return Ok(());
             }
             std::thread::sleep(Duration::from_millis(300));
@@ -255,6 +262,27 @@ innodb_buffer_pool_size=256M\ninnodb_flush_log_at_trx_commit=2\nlog_error={log}\
         }
         c.query_drop("FLUSH PRIVILEGES").map_err(|e| e.to_string())?;
         Ok(())
+    }
+
+    /// Comptes créés par mariadb-install-db pour le nom du PC (`root@<nom du PC>`, et l'anonyme s'il existe) :
+    /// inutiles sur une base qui n'écoute que 127.0.0.1, et signalés à chaque démarrage (skip-name-resolve).
+    /// Rend les comptes supprimés.
+    pub fn drop_host_accounts(&self) -> Result<Vec<String>, String> {
+        let mut c = self.root_conn()?;
+        let rows: Vec<(String, String)> = c
+            .query("SELECT User, Host FROM mysql.user WHERE (User = 'root' OR User = '') AND Host NOT IN ('localhost', '127.0.0.1', '::1')")
+            .map_err(|e| e.to_string())?;
+        let mut dropped = Vec::new();
+        for (user, host) in rows {
+            let esc = |s: &str| s.replace('\\', "\\\\").replace('\'', "\\'");
+            c.query_drop(format!("DROP USER IF EXISTS '{}'@'{}'", esc(&user), esc(&host))).map_err(|e| e.to_string())?;
+            c.query_drop(format!("DELETE FROM mysql.proxies_priv WHERE User = '{}' AND Host = '{}'", esc(&user), esc(&host))).map_err(|e| e.to_string())?;
+            dropped.push(format!("{user}@{host}"));
+        }
+        if !dropped.is_empty() {
+            c.query_drop("FLUSH PRIVILEGES").map_err(|e| e.to_string())?;
+        }
+        Ok(dropped)
     }
 
     /// Bases absentes parmi les quatre d'ArchCore.

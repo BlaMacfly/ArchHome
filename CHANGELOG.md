@@ -1,5 +1,32 @@
 # Journal des versions / Changelog
 
+## 0.2.0 — 26 octobre 2026
+
+Version pour les testeurs / Tester build. ArchCore 7403088 (branche Core), ArchRust 2e41983 (branche client).
+
+- ArchCore 7403088 : guildes complètes (second, passation, agrandissement, liste, emblèmes, combats de guildes,
+  alliances et hostilités, entrepôt de guilde), zones de combat des portails, reconnexion automatique, compétences
+  et objets d'Archonia, raffinage, conversion des objets, potions automatiques, refus d'échange, de groupe et de
+  guilde, niveaux des monstres et réapparition des boss d'Archonia. Nouvelles migrations des quatre bases.
+- Package : inclut ArchRust.exe (commit indiqué dans `Build/manifest.json`) et ses AddOns dans `Client/addons`
+  (ArchAce, HelloArch, ArchCore Admin 1.2.0), hors du contrôle des fichiers ; les données du jeu restent fournies
+  par le joueur. `LISEZMOI-TESTEURS.txt` (installation, comptes de test, nouveautés à essayer, journaux).
+- Mise à jour d'une installation : `archcore db-init` à chaque démarrage (migrations), puis réimport automatique
+  du monde quand la version d'ArchCore diffère de celle qui l'a importé (`UserData/monde-importe-par.txt`) ou
+  quand les tables du serveur d'origine apparaissent après un import sans monstres. Personnages et comptes
+  conservés ; sans client, le réimport est reporté et le serveur démarre sur le monde existant.
+- Import sans les tables du serveur d'origine : avertissement visible sur l'accueil et dans le journal (le monde
+  n'aura ni monstres ni butin) ; avertissement aussi si l'import ne place aucun monstre malgré elles.
+- Contrôle des fichiers : chaque fichier manquant ou altéré est nommé dans le journal du launcher.
+- MariaDB ne démarrait pas si le dossier d'installation contenait un dossier commençant par `s`, `t`, `n`, `r` ou
+  `b` (`my.ini` lisait `\s`, `\t`… comme des échappements) : chemins écrits avec des `/`.
+- MariaDB : la santé est vérifiée par une connexion authentifiée (fermée par COM_QUIT) au lieu d'un sondage du
+  port, qui laissait un « Aborted connection » par seconde dans `mariadb-error.log` ; l'arrêt est suivi par le
+  fichier pid. Le compte `root@<nom du PC>` créé par mariadb-install-db est supprimé à l'initialisation (et sur
+  les installations existantes).
+- Recherche des clients : inspecte aussi le chemin configuré, dossier ou `ArchRust.exe`, même hors du launcher.
+- Build : `New-Package.ps1 -ArchRustExe <exe> -Addons <dossiers>`.
+
 ## 0.1.0 — 23 octobre 2026
 
 Correctif avant diffusion / Fix before release :

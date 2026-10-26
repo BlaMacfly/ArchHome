@@ -10,8 +10,8 @@ change et pourquoi.
 |---|---|---|
 | Serveur | VMaNGOS : realmd + mangosd, binaires officiels | ArchCore : un seul `archcore.exe` (`all` = connexion + monde), compilé depuis ses sources |
 | Base | MariaDB portable, 127.0.0.1:3315 | MariaDB portable 13.0.2, 127.0.0.1:3316 |
-| Monde | dumps SQL de VMaNGOS | importé du client au premier démarrage (`archcore decrypt` puis `import`) |
-| Client | WoW.exe 1.12.1 ou Benilla | ArchRust uniquement (décision du 2026-10-23 : pas de client d'origine) |
+| Monde | dumps SQL de VMaNGOS | importé du client au premier démarrage (`archcore decrypt` puis `import`), réimporté après une mise à jour d'ArchCore |
+| Client | WoW.exe 1.12.1 ou Benilla | exécutable ArchRust inclus ; données du jeu fournies par le joueur (pas de client d'origine) |
 | Compagnons | PartyBots | aucun : ArchCore n'a pas de bots |
 | Patchs client | archives MPQ | packs de ressources d'ArchRust (`patches/`, `packs.toml`) |
 | AddOns | `Interface\AddOns` | `addons/` d'ArchRust (Lua) |
@@ -69,6 +69,6 @@ fichiers par sorte. ArchRust est lancé avec `RUST_LOG` réglable ; ArchCore ave
 
 ## Données jamais redistribuées
 
-`Client/`, `Server/Data/` (tables du client déchiffrées, tables du serveur d'origine), `UserData/`, `Logs/`.
-Le package ne contient que des programmes libres (ArchCore, MariaDB, HeidiSQL), le launcher et la
-documentation.
+Les données du jeu dans `Client/`, `Server/Data/` (tables du client déchiffrées, tables du serveur d'origine),
+`UserData/` et `Logs/`. Le package contient l'exécutable ArchRust sous GPL, ArchCore, MariaDB, HeidiSQL, le
+launcher et la documentation ; aucune donnée du jeu n'est fournie.

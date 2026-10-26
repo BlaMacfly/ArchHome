@@ -25,9 +25,9 @@ portable et un launcher qui s'occupe de tout. Vous jouez avec le client ArchRust
 ## 1. Prérequis
 
 - Windows 10 ou 11, 64 bits, 8 Go de mémoire.
-- Le **client ArchRust** : `ArchRust.exe` et, dans le même dossier, les données du client ArchLord 64 bits
-  (`character\`, `ini\`, `world\`, `texture\`, `object\`, `effect\`, `sound\`…). HomeRPG ne fournit aucune
-  donnée du jeu. Le client d'origine n'est pas pris en charge.
+- L'exécutable **ArchRust** (`Client\ArchRust.exe`, fourni dans le package) et les données du client ArchLord
+  64 bits (`character\`, `ini\`, `world\`, `texture\`, `object\`, `effect\`, `sound\`…), que vous fournissez.
+  HomeRPG ne distribue aucune donnée du jeu. Le client d'origine n'est pas pris en charge.
 - Facultatif : les **tables du serveur ArchLord d'origine** (`spawndatatable.txt`, `spawninstancetable.txt`,
   `itemdroptable.txt`, `groupdroprate.txt`, `droprankrate.txt`, `world\node_data`). Elles décrivent les
   apparitions de monstres et le butin ; elles ne sont pas dans le client. Sans elles, le monde a ses PNJ, ses
@@ -38,11 +38,10 @@ portable et un launcher qui s'occupe de tout. Vous jouez avec le client ArchRust
 
 1. Décompressez l'archive dans un dossier de votre disque, par exemple `C:\Jeux\HomeRPG ArchLord\` (pas dans
    Program Files, pas dans un dossier synchronisé en nuage).
-2. Copiez votre client ArchRust dans `Client\`, ou laissez-le où il est et indiquez son dossier dans
-   **Paramètres** avec « Parcourir… ». « Rechercher les clients » ne sonde que le dossier du launcher et ses
-   sous-dossiers (par exemple `Client\`) ; « Utiliser » choisit un client trouvé.
-   Si les données du jeu sont dans un autre dossier qu'ArchRust.exe (par exemple le dossier `Game` d'une
-   installation d'ArchLord), indiquez-le dans « Données du jeu » : ArchRust est alors lancé avec `--game`.
+2. Placez vos données du jeu dans `Client\` à côté d'`ArchRust.exe`, ou indiquez leur dossier dans
+   **Paramètres** > « Données du jeu ». Le launcher détecte l'exécutable fourni dans `Client\`.
+   Si les données sont dans un autre dossier (par exemple le dossier `Game` d'une installation d'ArchLord),
+   ArchRust est lancé avec `--game`.
    Attention : le dossier des **sources** d'ArchRust (`Cargo.toml`, `crates`, `target`) n'est pas un client
    prêt à jouer.
 3. Facultatif : copiez les tables du serveur d'origine dans `Server\Data\server-ini\`, ou indiquez leur dossier
@@ -61,9 +60,12 @@ Cliquez sur **JOUER**. Le launcher enchaîne :
 2. **Schéma** : `archcore db-init` crée les quatre bases (`archcore_auth`, `archcore_characters`,
    `archcore_world`, `archcore_logs`) et applique les migrations. Cette étape se refait à chaque démarrage :
    après une mise à jour d'ArchCore, le schéma suit tout seul.
-3. **Monde** (une seule fois) : les tables du client sont déchiffrées dans `Server\Data\client-ini`, puis
+3. **Monde** (au premier démarrage) : les tables du client sont déchiffrées dans `Server\Data\client-ini`, puis
    importées dans la base monde avec le relief du terrain et, si vous les avez fournies, les tables du serveur
-   d'origine ; les titres de PNJ sont traduits. Compter une à quelques minutes.
+   d'origine ; les titres de PNJ sont traduits. Compter une à quelques minutes. Sans les tables du serveur
+   d'origine, un avertissement le signale : le monde n'aura ni monstres ni butin. L'import se refait seul après
+   une mise à jour d'ArchCore, et quand les tables du serveur d'origine apparaissent après un import sans
+   monstres ; comptes et personnages sont conservés.
 4. **ArchCore** : connexion sur 127.0.0.1:11002, monde sur 127.0.0.1:11008. Le monde se charge en quelques
    secondes (36 000 monstres environ avec les tables du serveur).
 5. **ArchRust** : `realmlist.wtf` pointe sur le serveur local, la langue du jeu est appliquée, puis le jeu
@@ -118,8 +120,9 @@ dossier) et les supprimer. Le launcher écrit le même fichier que la fenêtre O
 (`saved-variables\packs.toml`) ; les changements valent au prochain lancement du jeu.
 
 **AddOns Lua** : installés depuis une archive zip (le ou les dossiers contenant un `.toc` sont reconnus),
-désactivés par renommage `.off`, supprimés. Ils sont dans le dossier `addons` du client. L'AddOn
-[ArchCoreAdmin](https://github.com/BlaMacfly/ArchCoreAdmin) ajoute un panneau MJ en jeu.
+désactivés par renommage `.off`, supprimés. Ils sont dans le dossier `addons` du client. Le package fournit
+ArchAce (cadres d'unité et options, `/options`), HelloArch (exemple) et
+[ArchCore Admin](https://github.com/BlaMacfly/ArchCoreAdmin), qui ajoute un panneau MJ en jeu (`/aca`).
 
 Fermez le jeu avant de changer ses packs ou ses AddOns.
 
@@ -183,15 +186,18 @@ raccourcis d'ArchRust. Exemples : `/additem <TID> [n]`, `/level 50`, `/money 100
 | `Server\Database\mariadb` | MariaDB | non (programme) |
 | `UserData` | base de données, réglages, identifiants SQL, sauvegardes | **oui** |
 | `Logs` | journaux | au besoin |
-| `Client` | votre client ArchRust (si vous l'y avez mis) | oui |
+| `Client` | exécutable ArchRust fourni ; données du jeu à ajouter par vous | oui |
 
-Mise à jour : remplacez tout sauf `UserData` (et `Client`, `Server\Data\server-ini`).
+Mise à jour : décompressez la nouvelle version dans un nouveau dossier, puis, launcher fermé, copiez-y
+`UserData` ainsi que vos données du jeu (si elles étaient dans `Client`) et `Server\Data\server-ini`. Gardez
+l'`ArchRust.exe` et les AddOns de la nouvelle version. Au premier JOUER, les bases sont mises à jour et le monde
+est réimporté.
 
 ## 14. Dépannage
 
 | Symptôme | Que faire |
 |---|---|
-| « client ArchRust introuvable ou incomplet » | Paramètres > dossier du client : il doit contenir `ArchRust.exe` et `character\Reference.Dat` |
+| « client ArchRust introuvable ou incomplet » | le package doit contenir `Client\ArchRust.exe` ; indiquez vos données du jeu dans Paramètres, avec `character\Reference.Dat` |
 | « le port 11002 est déjà utilisé » | un autre serveur ArchCore tourne : arrêtez-le, ou changez les ports dans Paramètres |
 | Aucun monstre | tables du serveur d'origine absentes : ajoutez-les, puis Monde > Réimporter la base monde |
 | ArchRust ne se connecte pas | vérifiez que le serveur est « En service » ; regardez Journaux > Client puis Serveur |

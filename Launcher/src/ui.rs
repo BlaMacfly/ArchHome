@@ -1226,8 +1226,7 @@ impl App {
             if !probe.is_ok() && (probe.exe_present || probe.source_tree) {
                 ui.colored_label(WARN, if probe.source_tree { t::CLIENT_SOURCE_TREE.s() } else { t::CLIENT_NO_DATA_HINT.s() });
             }
-            // Recherche hors du fil de l'interface (elle parcourt aussi les disques) ; lancée seule à la première
-            // ouverture de l'onglet, puis par le bouton.
+            // Recherche hors du fil de l'interface ; parcourt le launcher et vérifie aussi le chemin configuré.
             if let Some(rx) = &self.discover_rx {
                 if let Ok(found) = rx.try_recv() {
                     self.discovered = Some(found);
@@ -1240,9 +1239,10 @@ impl App {
                 if (clicked || self.discovered.is_none()) && !searching {
                     let (tx, rx) = std::sync::mpsc::channel();
                     let root = self.layout.root.clone();
+                    let configured = crate::client::exe_dir(&self.layout, &self.settings);
                     let ctx = ui.ctx().clone();
                     std::thread::spawn(move || {
-                        let _ = tx.send(crate::client::discover(&root));
+                        let _ = tx.send(crate::client::discover_with_configured(&root, &configured));
                         ctx.request_repaint();
                     });
                     self.discover_rx = Some(rx);

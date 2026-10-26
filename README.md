@@ -29,10 +29,10 @@ en ligne, sans rien installer dans Windows. Tout tient dans un dossier :
 | [ArchCore](https://github.com/BlaMacfly/ArchCore) | serveur ArchLord (connexion + monde) en Rust, sur 127.0.0.1 uniquement |
 | MariaDB portable | comptes, personnages et monde importé, sur 127.0.0.1:3316 |
 | Launcher HomeRPG (Rust, egui) | démarre tout dans le bon ordre, importe le monde au premier lancement, configure ArchRust, crée les comptes, sauvegarde, répare, et expose les réglages dans des onglets |
-| [ArchRust](https://github.com/BlaMacfly/ArchCore/tree/client) | le client ArchLord réécrit en Rust, fourni par le joueur avec ses données du jeu |
+| [ArchRust](https://github.com/BlaMacfly/ArchCore/tree/client) | le client ArchLord réécrit en Rust, inclus dans le package ; le joueur fournit les données du jeu |
 
-Le joueur fournit son propre client ArchRust avec les données d'ArchLord ; le serveur en importe le monde au
-premier démarrage. Le client d'origine n'est pas pris en charge : HomeRPG joue avec ArchRust.
+Le package fournit l'exécutable ArchRust et ses AddOns ; le joueur fournit les données du jeu ArchLord. Le serveur en importe
+le monde au premier démarrage. Le client d'origine n'est pas pris en charge : HomeRPG joue avec ArchRust.
 
 ### Fonctionnalités
 
@@ -41,8 +41,10 @@ premier démarrage. Le client d'origine n'est pas pris en charge : HomeRPG joue 
 - Un bouton **JOUER** : base de données → schéma (`archcore db-init`) → monde → ArchCore → configuration
   d'ArchRust (`realmlist.wtf`, langue) → lancement du jeu.
 - Premier démarrage automatique : tables du client déchiffrées, monde importé (PNJ, objets, quêtes,
-  compétences, relief), titres de PNJ traduits — environ une minute, une seule fois.
-- Monstres et butin si vous fournissez les tables du serveur d'origine (non incluses).
+  compétences, relief), titres de PNJ traduits — environ une minute ; refait seul après une mise à jour
+  d'ArchCore (personnages conservés).
+- Monstres et butin si vous fournissez les tables du serveur d'origine (non incluses) ; sans elles, un
+  avertissement le dit, et le monde est réimporté dès qu'elles sont ajoutées.
 
 **Régler**
 
@@ -75,13 +77,13 @@ premier démarrage. Le client d'origine n'est pas pris en charge : HomeRPG joue 
 | Système | Windows 10 ou 11, 64 bits |
 | Mémoire | 8 Go |
 | Espace disque | ≈ 1 Go pour HomeRPG, en plus du client |
-| Client | ArchRust (`ArchRust.exe`) avec les données du client ArchLord 64 bits, fourni par vous |
+| Client | ArchRust (`Client\ArchRust.exe`, inclus) et données du jeu ArchLord 64 bits fournies par vous |
 | Réseau | aucun : tout fonctionne hors ligne |
 
 ### Installation
 
 1. Décompressez l'archive dans un dossier de votre disque (pas dans Program Files).
-2. Placez votre client ArchRust dans `Client\`, ou indiquez son dossier dans **Paramètres**.
+2. Placez les données du jeu ArchLord 64 bits dans `Client\` à côté d'`ArchRust.exe`, ou indiquez leur dossier dans **Paramètres**.
 3. Facultatif : tables du serveur d'origine dans `Server\Data\server-ini\`.
 4. Ouvrez `HomeRPG ArchLord.exe`, créez votre compte dans **Comptes**, puis cliquez sur **JOUER**.
 
@@ -90,11 +92,12 @@ Le [manuel d'utilisation](Documentation/Manuel-Utilisateur.md) détaille chaque 
 ### Ce dépôt et ce qu'il ne contient pas
 
 Ce dépôt contient le code source du launcher, les scripts de construction, de test et d'exploitation, la
-documentation. Il ne contient pas :
+documentation. L'archive générée inclut aussi l'exécutable ArchRust sous GPL, issu du commit noté dans
+`Build/manifest.json`, avec son lien vers le code source. Le dépôt et le package ne contiennent pas :
 
-- les données du jeu ArchLord ni rien qui en dérive (`Client/`, `Server/Data/`), ni les tables du serveur
-  d'origine : jamais redistribuées ;
-- les binaires des composants : ArchCore est compilé depuis ses sources au commit figé dans
+- les données du jeu ArchLord ni rien qui en dérive (`Client/` hors `ArchRust.exe`, `Server/Data/`), ni les
+  tables du serveur d'origine : jamais redistribuées ;
+- les binaires des composants autres qu'ArchRust : ArchCore est compilé depuis ses sources au commit figé dans
   `Build/manifest.json` (`Build/Build-ArchCore.ps1`) ; MariaDB et HeidiSQL sont figés par URL et empreinte
   SHA-256 (`Build/Get-Components.ps1`, `Build/Install-Components.ps1`) ;
 - les données personnelles (`UserData/`, `Logs/`).
@@ -113,7 +116,7 @@ powershell -ExecutionPolicy Bypass -File Build\Install-Components.ps1
 # 3. Launcher
 cd Launcher; cargo build --release; cd ..
 # 4. Package portable (dossier + zip)
-powershell -ExecutionPolicy Bypass -File Build\New-Package.ps1 -Zip
+powershell -ExecutionPolicy Bypass -File Build\New-Package.ps1 -Zip -ArchRustExe <ArchRust.exe> -Addons <dossiers d'AddOns>
 ```
 
 Détails : [Documentation/02-Construction.md](Documentation/02-Construction.md).
@@ -164,8 +167,8 @@ online account, nothing installed into Windows. Everything lives in one folder: 
 [ArchCore](https://github.com/BlaMacfly/ArchCore) server (login + world, Rust) bound to 127.0.0.1, a portable
 MariaDB, and a one-button Rust launcher that starts everything in order, imports the world on first start,
 configures [ArchRust](https://github.com/BlaMacfly/ArchCore/tree/client), creates accounts, backs up and
-repairs. You provide your own ArchRust client with the ArchLord game data; the original client is not
-supported.
+repairs. The package includes the ArchRust executable; you provide the ArchLord game data. The original client
+is not supported.
 
 **Highlights**
 

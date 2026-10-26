@@ -1,0 +1,159 @@
+HomeRPG ArchLord v0.2.0 — LISEZMOI pour les testeurs
+====================================================
+
+Merci de tester ! HomeRPG ArchLord fait tourner ArchLord en solo, hors ligne, sur votre PC :
+un serveur ArchCore local, sa propre base MariaDB et le client ArchRust, lancés par un seul
+bouton JOUER. Rien ne sort de votre PC (tout écoute sur 127.0.0.1).
+
+Cette version : ArchCore 7403088 (branche Core du 26 octobre 2026) et ArchRust 2e41983
+(branche client du 26 octobre 2026).
+
+
+1. CE QU'IL VOUS FAUT
+---------------------
+
+* Windows 10 ou 11, 64 bits, environ 2 Go libres (plus vos données du jeu).
+* Les données du jeu ArchLord 64 bits (dossiers character, ini, world, texture, object,
+  effect, sound…). Elles NE SONT PAS fournies : prenez-les dans votre propre client ArchLord.
+* Conseillé : les tables du serveur ArchLord d'origine (apparitions des monstres, butin, IA
+  des monstres, raffinage). Elles ne sont pas fournies non plus. Sans elles, le monde n'a
+  NI MONSTRES NI BUTIN : le launcher l'affiche en rouge et le dit au premier import.
+* Les ports 3316, 11002 et 11008 doivent être libres (un autre serveur ArchLord éteint).
+
+
+2. INSTALLATION
+---------------
+
+1. Décompressez le dossier HomeRPG-ArchLord-v0.2.0 dans un dossier où vous pouvez écrire
+   (par exemple C:\Jeux\). Évitez « Program Files ».
+2. Données du jeu, au choix :
+   - copiez-les dans Client\, à côté d'ArchRust.exe ;
+   - ou laissez-les où elles sont et indiquez leur dossier dans le launcher :
+     Paramètres > « Données du jeu ArchLord ».
+3. Tables du serveur d'origine (si vous les avez) : copiez-les dans Server\Data\server-ini\
+   (liste des fichiers dans le LISEZMOI de ce dossier), ou indiquez leur dossier dans
+   Paramètres > « Tables du serveur d'origine ».
+4. Ouvrez « HomeRPG ArchLord.exe ». Le launcher n'est pas signé : si Windows affiche
+   « Windows a protégé votre ordinateur », cliquez sur « Informations complémentaires »
+   puis « Exécuter quand même ».
+
+
+3. PREMIER LANCEMENT
+--------------------
+
+Cliquez sur JOUER. Le launcher enchaîne, en affichant chaque étape :
+  1. démarrage de MariaDB (création de la base la première fois) ;
+  2. mise à jour du schéma des bases (archcore db-init) ;
+  3. import du monde depuis vos données du jeu (archcore import) : quelques minutes, une
+     seule fois (et de nouveau après une mise à jour d'ArchCore) ;
+  4. démarrage du serveur ArchCore ;
+  5. ouverture d'ArchRust, déjà réglé sur le serveur local et dans la langue choisie.
+Fermer ArchRust arrête aussi le serveur et la base, et fait une sauvegarde automatique de
+vos personnages.
+
+
+4. COMPTES DE TEST
+------------------
+
+Aucun compte n'existe au départ. Dans l'onglet Comptes du launcher, créez par exemple :
+  * testeur  / test1234  niveau MJ 3 : toutes les commandes de maître du jeu, et le
+    panneau ArchCore Admin dans le jeu (/aca) ;
+  * joueur   / test1234  niveau MJ 0 : un joueur normal, pour vérifier ce qu'un joueur
+    sans droits peut faire.
+Identifiant : 1 à 16 lettres ou chiffres ; mot de passe : 4 à 16 caractères sans espace.
+Connectez-vous dans ArchRust avec l'un d'eux et créez un personnage. Les commandes MJ sont
+listées dans l'onglet « Aide MJ » du launcher.
+
+
+5. VOUS AVIEZ LA v0.1.0 ?
+-------------------------
+
+Launcher fermé, copiez le dossier UserData\ de l'ancienne version dans la nouvelle
+(comptes, personnages, réglages, sauvegardes). Copiez aussi vos données du jeu (Client\) et
+les tables du serveur (Server\Data\server-ini\) si vous les aviez mises là.
+Au premier JOUER, le launcher applique les nouvelles migrations des bases puis réimporte le
+monde (ArchCore a de nouvelles tables) ; vos comptes et personnages sont conservés.
+
+
+6. NOUVEAUTÉS DEPUIS LA v0.1.0 — CE QU'IL FAUT ESSAYER
+------------------------------------------------------
+
+Guildes complètes (touche G, registraire de guilde au niveau 20)
+  * second de guilde, passation de la direction, agrandissement, liste des guildes ;
+  * emblèmes de guilde ;
+  * combats de guildes (défi, compte à rebours, résultat) ;
+  * alliances et hostilités entre guildes ;
+  * entrepôt de guilde, chez un gardien de banque.
+Zones de combat des portails
+  * les destinations de combat entre joueurs demandent une confirmation ; le portail est
+    refusé en combat ; « Retour » ramène au point de départ.
+Reconnexion automatique
+  * si la connexion est coupée, ArchRust se reconnecte seul ; le personnage reste 60 s dans
+    le monde en l'attendant. Pour l'essayer : /coupure dans la discussion.
+Compétences et objets d'Archonia
+  * compétences supérieures et héroïques (maîtrises, points héroïques, charisme), partage
+    des dégâts, purges, défense ignorée, compétences des monstres ;
+  * options des objets, runes et options liées des objets uniques.
+Raffinage
+  * chez le PNJ de raffinage ; commande MJ /last_refine (dernière recette).
+Conversion des objets
+  * conversion et dégâts élémentaires.
+Potions automatiques
+  * potions de la barre de raccourcis, prise automatique.
+Options d'Archonia (touche Échap > Options)
+  * onglets GFX, Affichage et Fonction, gardés d'une session à l'autre.
+Langue
+  * français ou anglais : launcher (Paramètres) et jeu (textes du serveur et d'ArchRust).
+AddOns
+  * fournis dans Client\addons : ArchAce (cadres et options, /options), ArchCore Admin
+    (panneau MJ, /aca), HelloArch (exemple). Onglet « Packs et AddOns » du launcher pour
+    les activer, les désactiver ou en ajouter (fichier .zip).
+Refus d'échange, de groupe et de guilde
+  * Options > Fonction : cochez un refus, puis demandez un échange, un groupe ou une
+    invitation de guilde avec un autre personnage : la demande doit être refusée.
+Monde plus proche d'Archonia
+  * niveaux des monstres, réapparition des boss en 30 à 45 minutes, vitesse de déplacement.
+
+Le launcher aussi a changé :
+  * ArchRust et ses AddOns sont fournis (seules les données du jeu restent à vous) ;
+  * avertissement clair quand les tables du serveur d'origine manquent (sinon : aucun
+    monstre), et réimport automatique dès qu'elles sont ajoutées ;
+  * réimport automatique du monde après une mise à jour d'ArchCore ;
+  * le contrôle des fichiers (onglet Accueil > Vérifier) nomme chaque fichier altéré
+    ou manquant, aussi dans le journal ;
+  * connexions à MariaDB fermées proprement (plus de « Aborted connection » à chaque
+    seconde dans Logs\mariadb-error.log) ;
+  * le compte MariaDB root@<nom du PC>, inutile, est supprimé après l'initialisation.
+
+Deux personnages en même temps (groupe, échange, guilde) : pendant que le jeu tourne, vous
+pouvez ouvrir une seconde fois Client\ArchRust.exe et vous connecter avec l'autre compte.
+
+
+7. LES JOURNAUX À NOUS RENVOYER
+-------------------------------
+
+Le plus simple : onglet Sauvegardes > « Exporter un diagnostic ». Le launcher crée
+UserData\diagnostic-<date>.zip (journaux récents du launcher, du serveur, du client et de
+MariaDB, configurations, mots de passe masqués) et ouvre son dossier. Envoyez ce fichier.
+
+Sinon, les journaux sont dans Logs\ :
+  * Logs\launcher.log            le launcher (étapes, erreurs) ;
+  * Logs\server\archcore-*.log   le serveur ArchCore, un fichier par démarrage ;
+  * Logs\server\outils-*.log     l'initialisation et l'import du monde ;
+  * Logs\client\archrust-*.log   le client ArchRust, un fichier par partie ;
+  * Logs\mariadb-error.log       la base de données.
+Ils sont aussi visibles dans l'onglet Journaux du launcher.
+
+Avec les journaux, dites-nous : ce que vous faisiez, ce que vous attendiez, ce qui s'est
+passé, l'heure approximative et le nom du personnage. Une capture d'écran aide beaucoup.
+
+
+8. BON À SAVOIR
+---------------
+
+* Tout reste dans le dossier : supprimez-le pour tout désinstaller. Gardez UserData\ si
+  vous voulez garder vos personnages.
+* Onglet Sauvegardes : sauvegarder et restaurer vos personnages.
+* Un souci de démarrage ? Onglet Accueil > Vérifier, puis Réparer.
+* Onglet Monde > « Réimporter la base monde » : refait l'import (comptes et personnages
+  conservés).

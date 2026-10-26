@@ -1,24 +1,26 @@
 HomeRPG ArchLord — ArchLord en solo, hors ligne, en français
 ==============================================================
 
-(English: see README.txt)
+(English: see README.txt — Testeurs : lisez LISEZMOI-TESTEURS.txt)
 
-1. Placez votre client ArchRust dans le dossier Client\ : ArchRust.exe et, à côté,
-   les données du jeu ArchLord 64 bits (character\, ini\, world\, texture\…).
-   Ou indiquez son emplacement dans Paramètres. Le client n'est pas fourni.
+1. ArchRust.exe et ses AddOns sont fournis dans Client\. Placez à côté vos données du jeu
+   ArchLord 64 bits (character\, ini\, world\, texture\…) ou indiquez leur dossier dans
+   Paramètres. Les données du jeu ne sont pas fournies.
 
-2. Facultatif : tables du serveur ArchLord d'origine (apparitions des monstres, butin)
+2. Conseillé : tables du serveur ArchLord d'origine (apparitions des monstres, butin)
    dans Server\Data\server-ini\. Sans elles, le monde n'a ni monstres ni butin.
 
 3. Ouvrez « HomeRPG ArchLord.exe » et cliquez sur JOUER.
-   Le premier démarrage importe le monde depuis votre client (quelques minutes, une fois).
+   Le premier démarrage importe le monde depuis votre client (quelques minutes, une fois,
+   puis de nouveau après une mise à jour d'ArchCore).
 
 4. Créez votre compte dans l'onglet Comptes (niveau MJ 3 pour toutes les commandes),
    puis connectez-vous dans ArchRust.
 
 Tout fonctionne sur ce PC (127.0.0.1), sans connexion Internet.
-Vos comptes, personnages, réglages et sauvegardes sont dans UserData\ : conservez ce dossier.
+Vos comptes, personnages, réglages et sauvegardes sont dans UserData\ : conservez ce dossier
+(pour passer à une nouvelle version, copiez-le dans le nouveau dossier).
 Journaux : Logs\ (launcher, serveur, client), et onglet Journaux du launcher.
 
-Manuel complet : Documentation\Manuel-Utilisateur.md
+Manuel complet : Documentation\Manuel-Utilisateur.md ; nouveautés : Documentation\CHANGELOG.md
 Licence : LICENCE.txt ; composants tiers : LICENCES\

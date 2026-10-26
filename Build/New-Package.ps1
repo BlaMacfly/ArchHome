@@ -3,10 +3,16 @@
     Construit la version portable distribuable dans Build/package/HomeRPG-ArchLord-v<version>/ : launcher, ArchCore,
     MariaDB allégée, HeidiSQL (s'il est installé), documentation, licences et sources, manifeste de fichiers
     (empreintes) et SHA256SUMS.txt. Avec -Zip, produit aussi l'archive .zip.
-    Jamais inclus : Client/, Server/Data/ (données dérivées du client), UserData/, Logs/, Build/downloads/.
+    Client/ reçoit ArchRust.exe (-ArchRustExe) et les AddOns donnés par -Addons (dossiers d'AddOn, hors manifeste de
+    fichiers : le joueur peut les désactiver ou les retirer).
+    Jamais inclus : les données de jeu sous Client/ et Server/Data/, UserData/, Logs/, Build/downloads/.
 #>
 [CmdletBinding()]
-param([switch]$Zip)
+param(
+    [switch]$Zip,
+    [Parameter(Mandatory=$true)][string]$ArchRustExe,
+    [string[]]$Addons = @()
+)
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 $cargo = Get-Content (Join-Path $root 'Launcher\Cargo.toml') -Raw
@@ -16,6 +22,8 @@ $out = Join-Path $PSScriptRoot "package\$name"
 $launcher = Join-Path $root 'Launcher\target\release\homerpg-archlord-launcher.exe'
 if (-not (Test-Path $launcher)) { throw "Launcher non compilé : $launcher" }
 if (-not (Test-Path (Join-Path $root 'Server\ArchCore\archcore.exe'))) { throw "ArchCore absent : Build\Build-ArchCore.ps1" }
+if (-not (Test-Path -LiteralPath $ArchRustExe -PathType Leaf)) { throw "ArchRust.exe absent : $ArchRustExe" }
+foreach ($a in $Addons) { if (-not (Test-Path -LiteralPath (Join-Path $a "$(Split-Path -Leaf $a).toc"))) { throw "Ce n'est pas un dossier d'AddOn (.toc absent) : $a" } }
 if (-not (Test-Path (Join-Path $root 'Server\Database\mariadb\bin\mariadbd.exe'))) { throw "MariaDB absente : Build\Get-Components.ps1 puis Build\Install-Components.ps1" }
 $sig = Get-AuthenticodeSignature $launcher
 if (-not $sig.SignerCertificate) { Write-Warning "Launcher non signé (Build\Sign-Launcher.ps1) : Windows affichera « éditeur inconnu »." }
@@ -40,6 +48,8 @@ Copy-Item $launcher (Join-Path $out 'HomeRPG ArchLord.exe')
 Step "ArchCore (programme, schéma, couche de contenu, traductions, modèles de configuration)"
 CopyTree (Join-Path $root 'Server\ArchCore') (Join-Path $out 'Server\ArchCore')
 New-Item -ItemType Directory -Force (Join-Path $out 'Server\Config'), (Join-Path $out 'Server\Data\server-ini'), (Join-Path $out 'Client') | Out-Null
+Copy-Item -LiteralPath $ArchRustExe -Destination (Join-Path $out 'Client\ArchRust.exe')
+foreach ($a in $Addons) { CopyTree (Resolve-Path -LiteralPath $a).Path (Join-Path $out "Client\addons\$(Split-Path -Leaf $a)") }
 Copy-Item (Join-Path $PSScriptRoot 'package-files\Client-LISEZMOI.txt') (Join-Path $out 'Client\LISEZMOI.txt')
 Copy-Item (Join-Path $PSScriptRoot 'package-files\server-ini-LISEZMOI.txt') (Join-Path $out 'Server\Data\server-ini\LISEZMOI.txt')
 
@@ -54,6 +64,8 @@ CopyTree (Join-Path $root 'Documentation') (Join-Path $out 'Documentation')
 Copy-Item (Join-Path $root 'README.md') (Join-Path $out 'Documentation\00-README-projet.md')
 Copy-Item (Join-Path $PSScriptRoot 'package-files\LISEZMOI.txt') (Join-Path $out 'LISEZMOI.txt')
 Copy-Item (Join-Path $PSScriptRoot 'package-files\README.txt') (Join-Path $out 'README.txt')
+Copy-Item (Join-Path $PSScriptRoot 'package-files\LISEZMOI-TESTEURS.txt') (Join-Path $out 'LISEZMOI-TESTEURS.txt')
+Copy-Item (Join-Path $root 'CHANGELOG.md') (Join-Path $out 'Documentation\CHANGELOG.md')
 New-Item -ItemType Directory -Force (Join-Path $out 'Build') | Out-Null
 Copy-Item (Join-Path $PSScriptRoot 'manifest.json') (Join-Path $out 'Build\manifest.json')
 
@@ -78,11 +90,13 @@ $m = Get-Content (Join-Path $PSScriptRoot 'manifest.json') -Raw -Encoding UTF8 |
 $archcoreVersion = (Get-Content (Join-Path $root 'Server\ArchCore\VERSION.txt') -Raw).Trim()
 $sources = @("# Sources et licences", "", "Package HomeRPG ArchLord v$version généré le $(Get-Date -Format 'yyyy-MM-dd HH:mm').", "",
     "## Composants", "", "| Composant | Version / commit | Source | Licence |", "|---|---|---|---|",
-    "| ArchCore (Server\ArchCore) | $archcoreVersion | $($m.archcore.source) (branche $($m.archcore.branch)) | $($m.archcore.license) |")
+    "| ArchCore (Server\ArchCore) | $archcoreVersion | $($m.archcore.source) (branche $($m.archcore.branch)) | $($m.archcore.license) |",
+    "| ArchRust (Client\ArchRust.exe) | $($m.archrust.commit) | $($m.archrust.source) (branche $($m.archrust.branch)) | $($m.archrust.license) |")
 foreach ($c in $m.components) { $sources += "| $($c.id) | $($c.commit) | $($c.source) | $($c.license) |" }
+foreach ($a in $m.addons) { if (Test-Path (Join-Path $out "Client\addons\$($a.id)")) { $sources += "| AddOn $($a.id) (Client\addons\$($a.id)) | $($a.commit) | $($a.source) | $($a.license) |" } }
 $sources += @("| HomeRPG ArchLord (launcher, scripts, documentation, identité visuelle) | v$version | Sources\Launcher, Sources\Build, Tools\Scripts (ce package) | Propriétaire : LICENCE.txt |", "",
-    "Les licences des composants tiers ci-dessus s'appliquent uniquement à ces composants ; la licence HomeRPG ne les restreint pas. ArchCore est un programme distinct, lancé par le launcher comme processus séparé, et livré sans modification depuis le commit indiqué.", "",
-    "Le code source complet d'ArchCore, MariaDB et HeidiSQL est disponible aux adresses ci-dessus pour les versions exactes indiquées. Sur demande, l'éditeur de ce package en fournit une copie.", "",
+    "Les licences des composants tiers ci-dessus s'appliquent uniquement à ces composants ; la licence HomeRPG ne les restreint pas. ArchCore, ArchRust et les AddOns sont des programmes distincts, livrés sans modification depuis les commits indiqués.", "",
+    "Le code source correspondant d'ArchCore, d'ArchRust et des AddOns est disponible aux adresses ci-dessus, branche et commit indiqués. Les sources de MariaDB et HeidiSQL correspondent aux versions listées.", "",
     "## Bibliothèques Rust du launcher (licences déclarées par les auteurs)", "", "| Crate | Version | Licence |", "|---|---|---|") + $crates
 [System.IO.File]::WriteAllText((Join-Path $lic 'SOURCES.md'), ($sources -join "`r`n"), (New-Object System.Text.UTF8Encoding $false))
 $src = Join-Path $out 'Sources\Launcher'
@@ -98,8 +112,10 @@ Get-ChildItem $out -Recurse -File | Sort-Object FullName | ForEach-Object {
     $rel = $_.FullName.Substring($out.Length + 1)
     if ($rel -in 'Build\files-manifest.json', 'SHA256SUMS.txt') { return }
     $h = (Get-FileHash -Algorithm SHA256 $_.FullName).Hash.ToLowerInvariant()
-    $files.Add([pscustomobject]@{ path = $rel; size = $_.Length; sha256 = $h })
     $sums.Add("$h  $($rel -replace '\\','/')")
+    # AddOns : le joueur peut les désactiver (renommage) ou les retirer, ils ne font pas partie des fichiers vérifiés.
+    if ($rel -like 'Client\addons\*') { return }
+    $files.Add([pscustomobject]@{ path = $rel; size = $_.Length; sha256 = $h })
 }
 $manifest = [pscustomobject]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm:ss'); version = $version; files = $files }
 [System.IO.File]::WriteAllText((Join-Path $out 'Build\files-manifest.json'), ($manifest | ConvertTo-Json -Depth 4), (New-Object System.Text.UTF8Encoding $false))

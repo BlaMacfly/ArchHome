@@ -1,14 +1,14 @@
 ﻿<#
 .SYNOPSIS
     Génère Build/files-manifest.json dans le dossier de développement : liste (chemin relatif, taille, SHA-256) des
-    fichiers gérés par le launcher (ArchCore, MariaDB, HeidiSQL, launcher). Le launcher s'en sert pour VÉRIFIER.
-    New-Package.ps1 produit le sien pour le package. Jamais : Client/, Server/Data/, UserData/, Logs/.
+    fichiers gérés par le launcher (ArchCore, ArchRust, MariaDB, HeidiSQL). Le launcher s'en sert pour VÉRIFIER.
+    New-Package.ps1 produit le sien pour le package. Jamais : données de jeu sous Client/ et Server/Data/, UserData/, Logs/.
 #>
 [CmdletBinding()]
 param()
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
-$roots = @('Server\ArchCore', 'Server\Database\mariadb', 'Tools\HeidiSQL', 'Build\manifest.json')
+$roots = @('Server\ArchCore', 'Client\ArchRust.exe', 'Server\Database\mariadb', 'Tools\HeidiSQL', 'Build\manifest.json')
 $files = New-Object System.Collections.Generic.List[object]
 foreach ($r in $roots) {
     $p = Join-Path $root $r

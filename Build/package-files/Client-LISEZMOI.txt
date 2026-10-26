@@ -1,7 +1,9 @@
-Placez ici votre client ArchRust : ArchRust.exe et les données du jeu ArchLord 64 bits
-(dossiers character, ini, world, texture, object, effect, sound…). Ou indiquez un autre
-dossier dans Paramètres du launcher.
+ArchRust.exe (client ArchLord en Rust) et ses AddOns (dossier addons : ArchAce,
+ArchCore Admin, HelloArch) sont fournis ici. Placez à côté les données du jeu ArchLord
+64 bits (dossiers character, ini, world, texture, object, effect, sound…), ou indiquez leur
+dossier dans Paramètres du launcher. Les données du jeu ne sont pas fournies.
 
-Put your ArchRust client here: ArchRust.exe and the 64-bit ArchLord game data
-(character, ini, world, texture, object, effect, sound… folders). Or set another folder
-in the launcher's Settings.
+ArchRust.exe (the ArchLord client in Rust) and its AddOns (addons folder: ArchAce,
+ArchCore Admin, HelloArch) are included here. Put the 64-bit ArchLord game data next to it
+(character, ini, world, texture, object, effect, sound… folders), or set the data folder
+in the launcher's Settings. The game data is not included.

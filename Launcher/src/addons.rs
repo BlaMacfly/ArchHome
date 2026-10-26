@@ -1,7 +1,7 @@
 //! Gestionnaire d'AddOns Lua d'ArchRust (dossier `addons/` du client) : liste (lecture des .toc), ajout depuis
 //! une archive zip (détection automatique du ou des dossiers d'AddOn), désactivation par renommage `.off` (ArchRust
-//! ne charge un dossier que s'il contient `<dossier>.toc`), suppression. Le launcher ne fournit ni ne télécharge
-//! aucun AddOn.
+//! ne charge un dossier que s'il contient `<dossier>.toc`), suppression. Le package livre les AddOns
+//! d'ArchRust et ArchCore Admin dans `Client/addons` ; le launcher n'en télécharge aucun.
 
 use std::io::Read;
 use std::path::{Path, PathBuf};

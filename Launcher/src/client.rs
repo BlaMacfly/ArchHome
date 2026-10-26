@@ -52,6 +52,8 @@ pub fn data_missing(game: &Path) -> Vec<String> {
 /// Client du dossier `dir`. Données du jeu : `game` s'il est donné, sinon à côté d'ArchRust.exe, sinon aux
 /// emplacements qu'ArchRust essaie lui-même dans son dossier (`assets-archonia/Game`, `assets-archonia`).
 pub fn inspect(dir: &Path, game: Option<&Path>) -> ClientInfo {
+    // Le réglage peut contenir soit le dossier, soit directement ArchRust.exe.
+    let dir = if dir.file_name().is_some_and(|n| n.to_string_lossy().eq_ignore_ascii_case("ArchRust.exe")) { dir.parent().unwrap_or(dir) } else { dir };
     let exe = dir.join("ArchRust.exe");
     let exe_info = std::fs::metadata(&exe)
         .map(|m| {
@@ -74,7 +76,16 @@ pub fn inspect(dir: &Path, game: Option<&Path>) -> ClientInfo {
 
 /// Dossier d'ArchRust.exe selon les réglages (vide = Client/ à la racine).
 pub fn exe_dir(layout: &Layout, settings: &Settings) -> PathBuf {
-    if settings.client_dir.trim().is_empty() { layout.default_client_dir() } else { PathBuf::from(settings.client_dir.trim()) }
+    if settings.client_dir.trim().is_empty() {
+        layout.default_client_dir()
+    } else {
+        let path = PathBuf::from(settings.client_dir.trim());
+        if path.file_name().is_some_and(|n| n.to_string_lossy().eq_ignore_ascii_case("ArchRust.exe")) {
+            path.parent().unwrap_or(&path).to_path_buf()
+        } else {
+            path
+        }
+    }
 }
 
 /// Client selon les réglages : dossier d'ArchRust.exe et, s'il est indiqué, dossier des données du jeu.
@@ -127,6 +138,19 @@ pub fn discover(root: &Path) -> Vec<ClientInfo> {
     // Clients complets d'abord.
     out.sort_by_key(|c| !c.is_ok());
     out
+}
+
+/// Recherche dans l'installation et inspecte aussi le chemin client saisi, même s'il est ailleurs.
+pub fn discover_with_configured(root: &Path, configured: &Path) -> Vec<ClientInfo> {
+    let mut found = discover(root);
+    if !configured.as_os_str().is_empty() {
+        let candidate = inspect(configured, None);
+        if candidate.exe_present && !found.iter().any(|c| same_dir(&c.dir, &candidate.dir)) {
+            found.push(candidate);
+        }
+    }
+    found.sort_by_key(|c| !c.is_ok());
+    found
 }
 
 /// Prépare ArchRust : adresse du serveur (realmlist.wtf, lu à côté de l'exécutable) et langue

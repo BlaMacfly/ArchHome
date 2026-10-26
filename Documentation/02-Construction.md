@@ -18,7 +18,7 @@
 | `Server/ArchCore/` | ArchCore compilé (`Build-ArchCore.ps1`) | non |
 | `Server/Database/mariadb/`, `Tools/HeidiSQL/` | composants tiers (`Install-Components.ps1`) | non |
 | `Server/Config/` | configurations générées | non (sauf README) |
-| `Server/Data/`, `Client/`, `UserData/`, `Logs/` | données du jeu, données personnelles | jamais |
+| données de jeu sous `Server/Data/` et `Client/`, `UserData/`, `Logs/` | données du jeu, données personnelles | jamais |
 
 ## Étapes
 
@@ -41,11 +41,14 @@ cd Launcher; cargo build --release; cargo test --release; cd ..
 
 # Signature (facultative, certificat de signature de code) et package
 powershell -ExecutionPolicy Bypass -File Build\Sign-Launcher.ps1 -Thumbprint <empreinte>
-powershell -ExecutionPolicy Bypass -File Build\New-Package.ps1 -Zip
+powershell -ExecutionPolicy Bypass -File Build\New-Package.ps1 -Zip -ArchRustExe "C:\…\Client ArchRust\ArchRust.exe" `
+    -Addons "C:\…\ArchCore\ArchRust\addons\ArchAce","C:\…\ArchCore\ArchRust\addons\HelloArch","C:\…\ArchCore Admin\ArchCoreAdmin"
 ```
 
 `New-Package.ps1` produit `Build\package\HomeRPG-ArchLord-v<version>\` : `HomeRPG ArchLord.exe`, `Server\`
-(ArchCore, MariaDB allégée, dossiers vides `Config`, `Data\server-ini` avec un LISEZMOI), `Client\` (LISEZMOI),
+(ArchCore, MariaDB allégée, dossiers vides `Config`, `Data\server-ini` avec un LISEZMOI), `Client\` (`ArchRust.exe`,
+les AddOns de `-Addons` dans `addons\`, hors du contrôle des fichiers, et un LISEZMOI, sans données du jeu),
+`LISEZMOI-TESTEURS.txt`, `Documentation\CHANGELOG.md`,
 `Tools\Scripts`, `Documentation`, `LICENCES` (dont `SOURCES.md` : versions, commits, licences, crates Rust),
 `Sources` (launcher et scripts), `Build\files-manifest.json` (empreintes utilisées par Vérifier) et
 `SHA256SUMS.txt`.
@@ -54,7 +57,15 @@ powershell -ExecutionPolicy Bypass -File Build\New-Package.ps1 -Zip
 
 1. Changer `archcore.commit` dans `Build/manifest.json`.
 2. `Build-ArchCore.ps1`, puis `Tests/Test-Launcher.ps1` et `Tests/Test-Integration.ps1`.
-3. Les migrations s'appliquent seules au démarrage suivant (`archcore db-init`), chez l'utilisateur aussi.
+3. Les migrations s'appliquent seules au démarrage suivant (`archcore db-init`), chez l'utilisateur aussi ; le
+   monde est réimporté une fois, car `UserData\monde-importe-par.txt` ne correspond plus à `Server\ArchCore\VERSION.txt`.
+
+`rustc` plante parfois sur ce PC (STATUS_ACCESS_VIOLATION) : compiler avec `$env:RUSTUP_TOOLCHAIN='1.98.1'` et relancer
+en cas de plantage.
+
+Pour ArchRust, le packageur copie l'exécutable release donné par `-ArchRustExe`. Mettre à jour le commit
+`archrust.commit` du manifeste au commit source correspondant, ainsi que la liste `addons` (source et commit de
+chaque AddOn) ; les données du jeu ne sont jamais copiées.
 
 ## Lancer le launcher en développement
 

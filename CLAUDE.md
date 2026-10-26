@@ -16,10 +16,14 @@ serveur ArchCore local + MariaDB portable + launcher Rust à un seul bouton.
 - **Journaux côté serveur et côté client** (`Logs/server`, `Logs/client`, onglet Journaux).
 
 ## Règles
-- La recherche des clients ne sonde que le dossier du launcher et ses sous-dossiers (décision du 2026-10-23).
+- La recherche des clients parcourt le dossier du launcher et ses sous-dossiers, et inspecte aussi le chemin
+  client explicitement configuré, même s'il est ailleurs. Accepter un chemin vers le dossier ou directement
+  vers `ArchRust.exe` ; ne pas lancer de recherche générale sur les disques.
 - Toute chaîne affichée passe par `Launcher/src/i18n.rs` (`T("fr", "en")` ou `tf!`), dans les deux langues.
-- Ne jamais redistribuer ni committer : `Client/`, `Server/Data/` (tables du client déchiffrées, tables du serveur
-  d'origine), `UserData/`, `Logs/`. Aucune donnée du client ArchLord dans le dépôt ou le package.
+- Ne jamais redistribuer ni committer les données de jeu de `Client/`, `Server/Data/` (tables du client
+  déchiffrées, tables du serveur d'origine), `UserData/` ou `Logs/`. Le package peut contenir uniquement
+  `Client/ArchRust.exe` sous GPL, avec le commit source indiqué dans `Build/manifest.json` ; aucune donnée du
+  client ArchLord dans le dépôt ou le package.
 - Les émulateurs de `../HomeRPG ArchLord/references/` ne sont jamais nommés ni copiés (même règle qu'ArchCore).
   Les tables du serveur d'origine se décrivent comme « tables du serveur ArchLord d'origine ».
 - ArchCore n'est pas modifié ici : il est compilé tel quel par `Build/Build-ArchCore.ps1` (target-dir séparé,

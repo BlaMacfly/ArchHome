@@ -1,6 +1,6 @@
 [package]
 name = "homerpg-archlord-launcher"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2024"
 license-file = "../LICENCE.txt"
 description = "HomeRPG ArchLord — launcher du serveur local ArchCore (ArchLord en solo) / local ArchCore server launcher (single-player ArchLord)"

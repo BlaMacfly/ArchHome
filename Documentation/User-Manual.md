@@ -8,9 +8,9 @@ and a launcher that handles everything. You play with the ArchRust client.
 ## 1. Requirements
 
 - Windows 10 or 11, 64-bit, 8 GB of memory.
-- The **ArchRust client**: `ArchRust.exe` and, in the same folder, the 64-bit ArchLord client data
-  (`character\`, `ini\`, `world\`, `texture\`, `object\`, `effect\`, `sound\`…). HomeRPG provides no game data.
-  The original client is not supported.
+- The **ArchRust executable** (`Client\ArchRust.exe`, included in the package) and the 64-bit ArchLord game
+  data (`character\`, `ini\`, `world\`, `texture\`, `object\`, `effect\`, `sound\`…), which you provide.
+  HomeRPG distributes no game data. The original client is not supported.
 - Optional: the **original ArchLord server tables** (`spawndatatable.txt`, `spawninstancetable.txt`,
   `itemdroptable.txt`, `groupdroprate.txt`, `droprankrate.txt`, `world\node_data`). They describe monster
   spawns and loot and are not in the client. Without them the world has its NPCs, shops and quests, but no
@@ -21,11 +21,9 @@ and a launcher that handles everything. You play with the ArchRust client.
 
 1. Unzip the archive into a folder on your disk, e.g. `C:\Games\HomeRPG ArchLord\` (not Program Files, not a
    cloud-synced folder).
-2. Copy your ArchRust client into `Client\`, or leave it where it is and set its folder in **Settings** with
-   "Browse…". "Find clients" only looks in the launcher's folder and its subfolders (for example `Client\`);
-   "Use" picks a found client. If the game data is in another folder than ArchRust.exe (for
-   example the `Game` folder of an ArchLord installation), set it in "Game data": ArchRust is then started with
-   `--game`. Note: ArchRust's **source** folder (`Cargo.toml`, `crates`, `target`) is not a ready-to-play client.
+2. Put your game data in `Client\` next to `ArchRust.exe`, or set its folder in **Settings** > "Game data".
+   The launcher detects the included executable in `Client\`. If the game data is elsewhere (for example the
+   `Game` folder of an ArchLord installation), ArchRust is started with `--game`.
 3. Optional: copy the original server tables into `Server\Data\server-ini\`, or set their folder in
    **Settings**.
 4. Open `HomeRPG ArchLord.exe`. If Windows shows "Windows protected your PC": "More info", then "Run anyway".
@@ -38,7 +36,8 @@ Click **PLAY**. The launcher goes through:
    `UserData\db-credentials.json`), started on 127.0.0.1:3316.
 2. **Schema**: `archcore db-init` creates the four databases and applies migrations (on every start, so the
    schema follows ArchCore updates).
-3. **World** (once): the client tables are decrypted into `Server\Data\client-ini`, then imported into the
+3. **World** (on the first start, again after an ArchCore update or once the original server tables are added
+   to a world imported without monsters; accounts and characters are kept): the client tables are decrypted into `Server\Data\client-ini`, then imported into the
    world database with the terrain height and, if provided, the original server tables; NPC titles are
    translated. One to a few minutes.
 4. **ArchCore**: login on 127.0.0.1:11002, world on 127.0.0.1:11008.
@@ -79,9 +78,11 @@ set ArchRust's log level (`error`, `warn`, `info`, `debug`).
 | `Server\Data` | decrypted client tables, original server tables | regenerated |
 | `UserData` | database, settings, SQL credentials, backups | **yes** |
 | `Logs` | logs | if needed |
-| `Client` | your ArchRust client (if you put it there) | yes |
+| `Client` | ArchRust.exe and its AddOns (included); your game data if you put it there | yes |
 
-To update, replace everything except `UserData` (and `Client`, `Server\Data\server-ini`).
+To update, unzip the new version into a new folder, then, with the launcher closed, copy `UserData` into it, along
+with your game data (if it was in `Client`) and `Server\Data\server-ini`. Keep the new version's `ArchRust.exe` and
+AddOns. On the first PLAY, the databases are updated and the world is reimported.
 
 ## 7. Troubleshooting
 

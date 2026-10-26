@@ -145,10 +145,19 @@ pub const MSG_VERIFY: T = T("Vérification des composants…", "Checking compone
 pub const MSG_VERIFYING_FILES: T = T("Vérification des fichiers", "Checking files");
 pub const MSG_DB: T = T("Démarrage de MariaDB…", "Starting MariaDB…");
 pub const MSG_SCHEMA: T = T("Mise à jour du schéma des bases (archcore db-init)…", "Updating the database schema (archcore db-init)…");
-pub const MSG_DECRYPT: T = T("Premier démarrage : lecture des tables du client…", "First start: reading the client tables…");
-pub const MSG_IMPORT: T = T("Premier démarrage : import du monde (quelques minutes, une seule fois)…", "First start: importing the world (a few minutes, only once)…");
-pub const MSG_I18N: T = T("Premier démarrage : textes traduits…", "First start: translated texts…");
+pub const MSG_DECRYPT: T = T("Import du monde : lecture des tables du client…", "World import: reading the client tables…");
+pub const MSG_IMPORT: T = T("Import du monde (quelques minutes, au premier démarrage et après une mise à jour)…", "Importing the world (a few minutes, on first start and after an update)…");
+pub const MSG_I18N: T = T("Import du monde : textes traduits…", "World import: translated texts…");
 pub const MSG_IMPORT_EMPTY: T = T("l'import n'a rempli aucune table du monde : voir le journal du serveur", "the import filled no world table: see the server log");
+pub const UNKNOWN_VERSION: T = T("version inconnue", "unknown version");
+pub const IMPORT_NO_TABLES: T = T(
+    "ATTENTION : tables du serveur ArchLord d'origine introuvables. Le monde est importé SANS MONSTRES NI BUTIN. Placez-les dans Server\\Data\\server-ini (voir le LISEZMOI de ce dossier) ou indiquez leur dossier dans Paramètres : le monde sera réimporté au démarrage suivant.",
+    "WARNING: original ArchLord server tables not found. The world is imported WITHOUT MONSTERS OR LOOT. Put them in Server\\Data\\server-ini (see the README in that folder) or set their folder in Settings: the world is reimported on the next start.",
+);
+pub const IMPORT_NO_MONSTERS: T = T(
+    "ATTENTION : l'import n'a placé aucun monstre malgré les tables du serveur d'origine. Vérifiez spawndatatable.txt et spawninstancetable.txt (journal du serveur, outils-*.log).",
+    "WARNING: the import placed no monsters despite the original server tables. Check spawndatatable.txt and spawninstancetable.txt (server log, outils-*.log).",
+);
 pub const MSG_SERVER: T = T("Démarrage d'ArchCore et chargement du monde…", "Starting ArchCore and loading the world…");
 pub const MSG_READY: T = T("Serveur prêt. Cliquez sur JOUER.", "Server ready. Click PLAY.");
 pub const MSG_PLAYING: T = T("Bon jeu ! La sauvegarde automatique se fera à la fermeture du jeu.", "Have fun! The automatic backup runs when the game closes.");
@@ -446,8 +455,8 @@ pub const SET_CLIENT_USE: T = T("Utiliser", "Use");
 pub const SET_CLIENT_IN_USE: T = T("Utilisé", "In use");
 pub const SET_TABLES_DIR: T = T("Tables du serveur d'origine (facultatif)", "Original server tables (optional)");
 pub const SET_TABLES_HINT: T = T(
-    "Apparitions des monstres, butin et carte du serveur ArchLord d'origine (spawndatatable.txt, spawninstancetable.txt, itemdroptable.txt…). Elles ne sont pas dans le client et HomeRPG ne les fournit pas. Après les avoir ajoutées : Monde > Réimporter la base monde.",
-    "Monster spawns, loot and map of the original ArchLord server (spawndatatable.txt, spawninstancetable.txt, itemdroptable.txt…). They are not in the client and HomeRPG does not provide them. After adding them: World > Reimport the world database.",
+    "Apparitions des monstres, butin et carte du serveur ArchLord d'origine (spawndatatable.txt, spawninstancetable.txt, itemdroptable.txt, aidatatable.txt…). Elles ne sont pas dans le client et HomeRPG ne les fournit pas. Un monde importé sans elles est réimporté au démarrage suivant leur ajout.",
+    "Monster spawns, loot and map of the original ArchLord server (spawndatatable.txt, spawninstancetable.txt, itemdroptable.txt, aidatatable.txt…). They are not in the client and HomeRPG does not provide them. A world imported without them is reimported on the first start after they are added.",
 );
 pub const SET_PORTS: T = T("Ports du serveur", "Server ports");
 pub const SET_PORTS_HINT: T = T(
