@@ -41,7 +41,7 @@
   "user_provided": [
     {
       "id": "server-tables",
-      "description": "Facultatif : tables du serveur ArchLord d'origine (spawndatatable.txt, spawninstancetable.txt, itemdroptable.txt, groupdroprate.txt, droprankrate.txt, aidatatable.txt, optionnumdroprate.txt, socketnumdroprate.txt, refineryrecipetable.txt, world/node_data). Sans elles, le monde n'a ni monstres ni butin. Jamais redistribuées.",
+      "description": "Incluses dans le package (New-Package.ps1 -ServerTables), jamais dans le dépôt : tables du serveur ArchLord d'origine (spawndatatable.txt, spawninstancetable.txt, itemdroptable.txt, groupdroprate.txt, droprankrate.txt, aidatatable.txt, optionnumdroprate.txt, socketnumdroprate.txt, refineryrecipetable.txt, world/node_data). Sans elles, le monde n'a ni monstres ni butin.",
       "default_location": "Server/Data/server-ini"
     },
     {

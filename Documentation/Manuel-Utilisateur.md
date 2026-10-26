@@ -28,10 +28,9 @@ portable et un launcher qui s'occupe de tout. Vous jouez avec le client ArchRust
 - L'exécutable **ArchRust** (`Client\ArchRust.exe`, fourni dans le package) et les données du client ArchLord
   64 bits (`character\`, `ini\`, `world\`, `texture\`, `object\`, `effect\`, `sound\`…), que vous fournissez.
   HomeRPG ne distribue aucune donnée du jeu. Le client d'origine n'est pas pris en charge.
-- Facultatif : les **tables du serveur ArchLord d'origine** (`spawndatatable.txt`, `spawninstancetable.txt`,
-  `itemdroptable.txt`, `groupdroprate.txt`, `droprankrate.txt`, `world\node_data`). Elles décrivent les
-  apparitions de monstres et le butin ; elles ne sont pas dans le client. Sans elles, le monde a ses PNJ, ses
-  boutiques et ses quêtes, mais aucun monstre.
+- Les **tables du serveur ArchLord d'origine** (apparitions des monstres, butin, IA des monstres, raffinage,
+  `world\node_data`) sont incluses dans `Server\Data\server-ini\`. Sans elles, le monde aurait ses PNJ, ses
+  boutiques et ses quêtes, mais aucun monstre : ne supprimez pas ce dossier.
 - Aucune connexion Internet : tout fonctionne sur 127.0.0.1.
 
 ## 2. Installation
@@ -44,8 +43,8 @@ portable et un launcher qui s'occupe de tout. Vous jouez avec le client ArchRust
    ArchRust est lancé avec `--game`.
    Attention : le dossier des **sources** d'ArchRust (`Cargo.toml`, `crates`, `target`) n'est pas un client
    prêt à jouer.
-3. Facultatif : copiez les tables du serveur d'origine dans `Server\Data\server-ini\`, ou indiquez leur dossier
-   dans **Paramètres**.
+3. Les tables du serveur d'origine sont déjà dans `Server\Data\server-ini\` ; **Paramètres** permet d'en indiquer
+   d'autres.
 4. Ouvrez `HomeRPG ArchLord.exe`. Si Windows affiche « Windows a protégé votre ordinateur » : « Informations
    complémentaires » puis « Exécuter quand même ».
 
@@ -61,7 +60,7 @@ Cliquez sur **JOUER**. Le launcher enchaîne :
    `archcore_world`, `archcore_logs`) et applique les migrations. Cette étape se refait à chaque démarrage :
    après une mise à jour d'ArchCore, le schéma suit tout seul.
 3. **Monde** (au premier démarrage) : les tables du client sont déchiffrées dans `Server\Data\client-ini`, puis
-   importées dans la base monde avec le relief du terrain et, si vous les avez fournies, les tables du serveur
+   importées dans la base monde avec le relief du terrain et les tables du serveur
    d'origine ; les titres de PNJ sont traduits. Compter une à quelques minutes. Sans les tables du serveur
    d'origine, un avertissement le signale : le monde n'aura ni monstres ni butin. L'import se refait seul après
    une mise à jour d'ArchCore, et quand les tables du serveur d'origine apparaissent après un import sans
@@ -199,7 +198,7 @@ est réimporté.
 |---|---|
 | « client ArchRust introuvable ou incomplet » | le package doit contenir `Client\ArchRust.exe` ; indiquez vos données du jeu dans Paramètres, avec `character\Reference.Dat` |
 | « le port 11002 est déjà utilisé » | un autre serveur ArchCore tourne : arrêtez-le, ou changez les ports dans Paramètres |
-| Aucun monstre | tables du serveur d'origine absentes : ajoutez-les, puis Monde > Réimporter la base monde |
+| Aucun monstre | tables du serveur d'origine absentes de `Server\Data\server-ini` : remettez-les depuis le package ; le monde est réimporté au démarrage suivant |
 | ArchRust ne se connecte pas | vérifiez que le serveur est « En service » ; regardez Journaux > Client puis Serveur |
 | Le jeu se ferme sur une erreur | Journaux > Client (niveau `debug` dans Paramètres pour plus de détails) |
 | Le serveur s'arrête au démarrage | Journaux > Serveur ; essayez Réparer |

@@ -18,7 +18,7 @@
 | `Server/ArchCore/` | ArchCore compilé (`Build-ArchCore.ps1`) | non |
 | `Server/Database/mariadb/`, `Tools/HeidiSQL/` | composants tiers (`Install-Components.ps1`) | non |
 | `Server/Config/` | configurations générées | non (sauf README) |
-| données de jeu sous `Server/Data/` et `Client/`, `UserData/`, `Logs/` | données du jeu, données personnelles | jamais |
+| données de jeu sous `Server/Data/` et `Client/`, `UserData/`, `Logs/` | données du jeu, données personnelles | jamais (le package reçoit `Server/Data/server-ini` par `-ServerTables`) |
 
 ## Étapes
 
@@ -42,13 +42,15 @@ cd Launcher; cargo build --release; cargo test --release; cd ..
 # Signature (facultative, certificat de signature de code) et package
 powershell -ExecutionPolicy Bypass -File Build\Sign-Launcher.ps1 -Thumbprint <empreinte>
 powershell -ExecutionPolicy Bypass -File Build\New-Package.ps1 -Zip -ArchRustExe "C:\…\Client ArchRust\ArchRust.exe" `
-    -Addons "C:\…\ArchCore\ArchRust\addons\ArchAce","C:\…\ArchCore\ArchRust\addons\HelloArch","C:\…\ArchCore Admin\ArchCoreAdmin"
+    -Addons "C:\…\ArchCore\ArchRust\addons\ArchAce","C:\…\ArchCore\ArchRust\addons\HelloArch","C:\…\ArchCore Admin\ArchCoreAdmin" `
+    -ServerTables "C:\…\server\ini"
 ```
 
 `New-Package.ps1` produit `Build\package\HomeRPG-ArchLord-v<version>\` : `HomeRPG ArchLord.exe`, `Server\`
 (ArchCore, MariaDB allégée, dossiers vides `Config`, `Data\server-ini` avec un LISEZMOI), `Client\` (`ArchRust.exe`,
 les AddOns de `-Addons` dans `addons\`, hors du contrôle des fichiers, et un LISEZMOI, sans données du jeu),
-`LISEZMOI-TESTEURS.txt`, `Documentation\CHANGELOG.md`,
+`Data\server-ini` (les tables du serveur d'origine lues par `archcore import --server`, et `world\node_data`),
+`LISEZMOI-TESTEURS.txt`, `README-TESTERS.txt`, `Documentation\CHANGELOG.md`,
 `Tools\Scripts`, `Documentation`, `LICENCES` (dont `SOURCES.md` : versions, commits, licences, crates Rust),
 `Sources` (launcher et scripts), `Build\files-manifest.json` (empreintes utilisées par Vérifier) et
 `SHA256SUMS.txt`.

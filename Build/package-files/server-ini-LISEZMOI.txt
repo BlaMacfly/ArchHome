@@ -1,15 +1,15 @@
-Conseillé : tables du serveur ArchLord d'origine, qui ne sont pas dans le client et que
-HomeRPG ne fournit pas : spawndatatable.txt et spawninstancetable.txt (apparitions des
-monstres, indispensables), itemdroptable.txt, groupdroprate.txt, droprankrate.txt (butin),
+Tables du serveur ArchLord d'origine, incluses : spawndatatable.txt et spawninstancetable.txt
+(apparitions des monstres), itemdroptable.txt, groupdroprate.txt, droprankrate.txt (butin),
 aidatatable.txt (compétences des monstres), optionnumdroprate.txt, socketnumdroprate.txt,
-refineryrecipetable.txt (options, sockets, raffinage), et world\node_data (carte du serveur).
-Sans elles, le monde n'a NI MONSTRES NI BUTIN. Placez-les ici : si le monde a déjà été
-importé sans elles, il est réimporté au démarrage suivant (comptes et personnages conservés).
+refineryrecipetable.txt (options, sockets, raffinage) et world\node_data (carte du serveur).
+Elles sont importées dans la base monde au premier lancement. Ne les supprimez pas : sans
+elles, le monde n'a NI MONSTRES NI BUTIN. Si elles ont manqué lors d'un import, le monde est
+réimporté au démarrage suivant leur retour (comptes et personnages conservés).
 
-Recommended: the original ArchLord server tables, which are not in the client and that
-HomeRPG does not provide: spawndatatable.txt and spawninstancetable.txt (monster spawns,
-required), itemdroptable.txt, groupdroprate.txt, droprankrate.txt (loot), aidatatable.txt
-(monster skills), optionnumdroprate.txt, socketnumdroprate.txt, refineryrecipetable.txt
-(options, sockets, refining), and world\node_data (server map).
-Without them, the world has NO MONSTERS OR LOOT. Put them here: if the world was already
-imported without them, it is reimported on the next start (accounts and characters kept).
+Original ArchLord server tables, included: spawndatatable.txt and spawninstancetable.txt
+(monster spawns), itemdroptable.txt, groupdroprate.txt, droprankrate.txt (loot),
+aidatatable.txt (monster skills), optionnumdroprate.txt, socketnumdroprate.txt,
+refineryrecipetable.txt (options, sockets, refining) and world\node_data (server map).
+They are imported into the world database on the first start. Do not delete them: without
+them, the world has NO MONSTERS OR LOOT. If they were missing during an import, the world is
+reimported on the first start after they are back (accounts and characters kept).

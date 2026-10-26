@@ -5,14 +5,22 @@
     (empreintes) et SHA256SUMS.txt. Avec -Zip, produit aussi l'archive .zip.
     Client/ reçoit ArchRust.exe (-ArchRustExe) et les AddOns donnés par -Addons (dossiers d'AddOn, hors manifeste de
     fichiers : le joueur peut les désactiver ou les retirer).
-    Jamais inclus : les données de jeu sous Client/ et Server/Data/, UserData/, Logs/, Build/downloads/.
+    Server/Data/server-ini/ reçoit, depuis -ServerTables, les seules tables du serveur ArchLord d'origine lues par
+    `archcore import --server` (décision de l'utilisateur du 2026-10-26 : monstres et butin dès le premier lancement).
+    Elles vont dans le package seulement, jamais dans le dépôt (.gitignore : /Server/Data/, /Build/package/).
+    Jamais inclus : les données du client sous Client/ et Server/Data/client-ini, UserData/, Logs/, Build/downloads/.
 #>
 [CmdletBinding()]
 param(
     [switch]$Zip,
     [Parameter(Mandatory=$true)][string]$ArchRustExe,
-    [string[]]$Addons = @()
+    [string[]]$Addons = @(),
+    # Dossier des tables du serveur d'origine (spawndatatable.txt…) ; node_data est cherché comme le fait l'import.
+    [Parameter(Mandatory=$true)][string]$ServerTables
 )
+# Fichiers lus par `archcore import --server` (crates/archcore/src/tools/import.rs).
+$serverTableFiles = @('spawndatatable.txt', 'spawninstancetable.txt', 'itemdroptable.txt', 'groupdroprate.txt', 'droprankrate.txt',
+    'aidatatable.txt', 'optionnumdroprate.txt', 'socketnumdroprate.txt', 'refineryrecipetable.txt')
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 $cargo = Get-Content (Join-Path $root 'Launcher\Cargo.toml') -Raw
@@ -24,6 +32,9 @@ if (-not (Test-Path $launcher)) { throw "Launcher non compilé : $launcher" }
 if (-not (Test-Path (Join-Path $root 'Server\ArchCore\archcore.exe'))) { throw "ArchCore absent : Build\Build-ArchCore.ps1" }
 if (-not (Test-Path -LiteralPath $ArchRustExe -PathType Leaf)) { throw "ArchRust.exe absent : $ArchRustExe" }
 foreach ($a in $Addons) { if (-not (Test-Path -LiteralPath (Join-Path $a "$(Split-Path -Leaf $a).toc"))) { throw "Ce n'est pas un dossier d'AddOn (.toc absent) : $a" } }
+foreach ($f in $serverTableFiles) { if (-not (Test-Path -LiteralPath (Join-Path $ServerTables $f) -PathType Leaf)) { throw "Table du serveur absente : $(Join-Path $ServerTables $f)" } }
+$nodeData = @((Join-Path $ServerTables 'node_data'), (Join-Path $ServerTables 'world\node_data'), (Join-Path $ServerTables '..\world\node_data')) | Where-Object { Test-Path -LiteralPath $_ -PathType Leaf } | Select-Object -First 1
+if (-not $nodeData) { throw "node_data introuvable près de $ServerTables" }
 if (-not (Test-Path (Join-Path $root 'Server\Database\mariadb\bin\mariadbd.exe'))) { throw "MariaDB absente : Build\Get-Components.ps1 puis Build\Install-Components.ps1" }
 $sig = Get-AuthenticodeSignature $launcher
 if (-not $sig.SignerCertificate) { Write-Warning "Launcher non signé (Build\Sign-Launcher.ps1) : Windows affichera « éditeur inconnu »." }
@@ -53,6 +64,11 @@ foreach ($a in $Addons) { CopyTree (Resolve-Path -LiteralPath $a).Path (Join-Pat
 Copy-Item (Join-Path $PSScriptRoot 'package-files\Client-LISEZMOI.txt') (Join-Path $out 'Client\LISEZMOI.txt')
 Copy-Item (Join-Path $PSScriptRoot 'package-files\server-ini-LISEZMOI.txt') (Join-Path $out 'Server\Data\server-ini\LISEZMOI.txt')
 
+Step "Tables du serveur d'origine (Server\Data\server-ini : $($serverTableFiles.Count) tables et world\node_data)"
+foreach ($f in $serverTableFiles) { Copy-Item -LiteralPath (Join-Path $ServerTables $f) -Destination (Join-Path $out "Server\Data\server-ini\$f") }
+New-Item -ItemType Directory -Force (Join-Path $out 'Server\Data\server-ini\world') | Out-Null
+Copy-Item -LiteralPath $nodeData -Destination (Join-Path $out 'Server\Data\server-ini\world\node_data')
+
 Step "MariaDB allégée (sans symboles de débogage, en-têtes, bibliothèques de liaison ni tests)"
 CopyTree (Join-Path $root 'Server\Database\mariadb') (Join-Path $out 'Server\Database\mariadb') -Exclude @('*.pdb', 'include\*', 'lib\*.lib', 'lib\*.pdb', 'mysql-test\*', 'sql-bench\*', 'bin\mariadb-test*.exe', 'bin\*.pdb', 'data\*')
 
@@ -65,6 +81,7 @@ Copy-Item (Join-Path $root 'README.md') (Join-Path $out 'Documentation\00-README
 Copy-Item (Join-Path $PSScriptRoot 'package-files\LISEZMOI.txt') (Join-Path $out 'LISEZMOI.txt')
 Copy-Item (Join-Path $PSScriptRoot 'package-files\README.txt') (Join-Path $out 'README.txt')
 Copy-Item (Join-Path $PSScriptRoot 'package-files\LISEZMOI-TESTEURS.txt') (Join-Path $out 'LISEZMOI-TESTEURS.txt')
+Copy-Item (Join-Path $PSScriptRoot 'package-files\README-TESTERS.txt') (Join-Path $out 'README-TESTERS.txt')
 Copy-Item (Join-Path $root 'CHANGELOG.md') (Join-Path $out 'Documentation\CHANGELOG.md')
 New-Item -ItemType Directory -Force (Join-Path $out 'Build') | Out-Null
 Copy-Item (Join-Path $PSScriptRoot 'manifest.json') (Join-Path $out 'Build\manifest.json')

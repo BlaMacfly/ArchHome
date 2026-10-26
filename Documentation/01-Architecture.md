@@ -69,6 +69,7 @@ fichiers par sorte. ArchRust est lancé avec `RUST_LOG` réglable ; ArchCore ave
 
 ## Données jamais redistribuées
 
-Les données du jeu dans `Client/`, `Server/Data/` (tables du client déchiffrées, tables du serveur d'origine),
-`UserData/` et `Logs/`. Le package contient l'exécutable ArchRust sous GPL, ArchCore, MariaDB, HeidiSQL, le
-launcher et la documentation ; aucune donnée du jeu n'est fournie.
+Les données du jeu dans `Client/` et `Server/Data/client-ini` (tables du client déchiffrées), `UserData/` et
+`Logs/`. Le package contient l'exécutable ArchRust et ses AddOns sous GPL, ArchCore, MariaDB, HeidiSQL, le
+launcher, la documentation et les tables du serveur d'origine (`Server/Data/server-ini`, jamais dans le dépôt) ;
+aucune donnée du client n'est fournie.

@@ -1,14 +1,14 @@
 HomeRPG ArchLord — single-player, offline ArchLord
 ===================================================
 
-(Français : voir LISEZMOI.txt — testeurs : LISEZMOI-TESTEURS.txt)
+(Français : voir LISEZMOI.txt — testers: read README-TESTERS.txt)
 
 1. ArchRust.exe and its AddOns are included in Client\. Put your 64-bit ArchLord game data
    (character\, ini\, world\, texture\…) next to it, or set the data folder in Settings.
    The game data is not included.
 
-2. Recommended: the original ArchLord server tables (monster spawns, loot) in
-   Server\Data\server-ini\. Without them, the world has no monsters or loot.
+2. The original ArchLord server tables (monster spawns, loot) are included in
+   Server\Data\server-ini\: monsters and loot from the first start.
 
 3. Open "HomeRPG ArchLord.exe" and click PLAY.
    The first start imports the world from your client (a few minutes, once, and again

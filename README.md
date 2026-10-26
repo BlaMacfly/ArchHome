@@ -43,8 +43,8 @@ le monde au premier démarrage. Le client d'origine n'est pas pris en charge : H
 - Premier démarrage automatique : tables du client déchiffrées, monde importé (PNJ, objets, quêtes,
   compétences, relief), titres de PNJ traduits — environ une minute ; refait seul après une mise à jour
   d'ArchCore (personnages conservés).
-- Monstres et butin si vous fournissez les tables du serveur d'origine (non incluses) ; sans elles, un
-  avertissement le dit, et le monde est réimporté dès qu'elles sont ajoutées.
+- Monstres et butin dès le premier lancement : les tables du serveur d'origine sont incluses dans le package ;
+  si elles manquent, un avertissement le dit, et le monde est réimporté dès qu'elles reviennent.
 
 **Régler**
 
@@ -84,7 +84,7 @@ le monde au premier démarrage. Le client d'origine n'est pas pris en charge : H
 
 1. Décompressez l'archive dans un dossier de votre disque (pas dans Program Files).
 2. Placez les données du jeu ArchLord 64 bits dans `Client\` à côté d'`ArchRust.exe`, ou indiquez leur dossier dans **Paramètres**.
-3. Facultatif : tables du serveur d'origine dans `Server\Data\server-ini\`.
+3. Rien d'autre : les tables du serveur d'origine sont incluses dans `Server\Data\server-ini\`.
 4. Ouvrez `HomeRPG ArchLord.exe`, créez votre compte dans **Comptes**, puis cliquez sur **JOUER**.
 
 Le [manuel d'utilisation](Documentation/Manuel-Utilisateur.md) détaille chaque onglet et le dépannage.
@@ -95,8 +95,9 @@ Ce dépôt contient le code source du launcher, les scripts de construction, de 
 documentation. L'archive générée inclut aussi l'exécutable ArchRust sous GPL, issu du commit noté dans
 `Build/manifest.json`, avec son lien vers le code source. Le dépôt et le package ne contiennent pas :
 
-- les données du jeu ArchLord ni rien qui en dérive (`Client/` hors `ArchRust.exe`, `Server/Data/`), ni les
-  tables du serveur d'origine : jamais redistribuées ;
+- les données du client ArchLord ni rien qui en dérive (`Client/` hors `ArchRust.exe` et ses AddOns,
+  `Server/Data/client-ini`) : jamais redistribuées. Le package inclut les tables du serveur d'origine
+  (`Server/Data/server-ini`), jamais versionnées dans ce dépôt ;
 - les binaires des composants autres qu'ArchRust : ArchCore est compilé depuis ses sources au commit figé dans
   `Build/manifest.json` (`Build/Build-ArchCore.ps1`) ; MariaDB et HeidiSQL sont figés par URL et empreinte
   SHA-256 (`Build/Get-Components.ps1`, `Build/Install-Components.ps1`) ;
@@ -182,7 +183,7 @@ is not supported.
   session in `Logs\`, a Logs tab with filter and colours, and a diagnostic export.
 - Accounts, database explorer with HeidiSQL button, GM help tab.
 
-Monsters and loot need the original server tables (not included). Requirements: Windows 10/11 64-bit, 8 GB,
+The original server tables are included: monsters and loot from the first start. Requirements: Windows 10/11 64-bit, 8 GB,
 your ArchRust client. Installation and every tab are described in the
 [user manual](Documentation/User-Manual.md); building from source in
 [02-Construction.md](Documentation/02-Construction.md) (French).

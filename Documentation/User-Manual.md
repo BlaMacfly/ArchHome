@@ -11,10 +11,9 @@ and a launcher that handles everything. You play with the ArchRust client.
 - The **ArchRust executable** (`Client\ArchRust.exe`, included in the package) and the 64-bit ArchLord game
   data (`character\`, `ini\`, `world\`, `texture\`, `object\`, `effect\`, `sound\`…), which you provide.
   HomeRPG distributes no game data. The original client is not supported.
-- Optional: the **original ArchLord server tables** (`spawndatatable.txt`, `spawninstancetable.txt`,
-  `itemdroptable.txt`, `groupdroprate.txt`, `droprankrate.txt`, `world\node_data`). They describe monster
-  spawns and loot and are not in the client. Without them the world has its NPCs, shops and quests, but no
-  monsters.
+- The **original ArchLord server tables** (monster spawns, loot, monster AI, refining, `world\node_data`) are
+  included in `Server\Data\server-ini\`. Without them the world would have its NPCs, shops and quests, but no
+  monsters: do not delete that folder.
 - No Internet connection: everything runs on 127.0.0.1.
 
 ## 2. Installation
@@ -24,8 +23,7 @@ and a launcher that handles everything. You play with the ArchRust client.
 2. Put your game data in `Client\` next to `ArchRust.exe`, or set its folder in **Settings** > "Game data".
    The launcher detects the included executable in `Client\`. If the game data is elsewhere (for example the
    `Game` folder of an ArchLord installation), ArchRust is started with `--game`.
-3. Optional: copy the original server tables into `Server\Data\server-ini\`, or set their folder in
-   **Settings**.
+3. The original server tables are already in `Server\Data\server-ini\`; **Settings** lets you use other ones.
 4. Open `HomeRPG ArchLord.exe`. If Windows shows "Windows protected your PC": "More info", then "Run anyway".
 
 ## 3. First start
@@ -38,7 +36,7 @@ Click **PLAY**. The launcher goes through:
    schema follows ArchCore updates).
 3. **World** (on the first start, again after an ArchCore update or once the original server tables are added
    to a world imported without monsters; accounts and characters are kept): the client tables are decrypted into `Server\Data\client-ini`, then imported into the
-   world database with the terrain height and, if provided, the original server tables; NPC titles are
+   world database with the terrain height and the original server tables; NPC titles are
    translated. One to a few minutes.
 4. **ArchCore**: login on 127.0.0.1:11002, world on 127.0.0.1:11008.
 5. **ArchRust**: `realmlist.wtf` points to the local server, the game language is applied, the game opens.
@@ -90,7 +88,7 @@ AddOns. On the first PLAY, the databases are updated and the world is reimported
 |---|---|
 | "ArchRust client not found or incomplete" | Settings > client folder: it must contain `ArchRust.exe` and `character\Reference.Dat` |
 | "port 11002 is already used" | another ArchCore server runs: stop it, or change the ports in Settings |
-| No monsters | original server tables missing: add them, then World > Reimport the world database |
+| No monsters | original server tables missing from `Server\Data\server-ini`: restore them from the package; the world is reimported on the next start |
 | ArchRust cannot connect | check the server is "Running"; look at Logs > Client then Server |
 | The game closes with an error | Logs > Client (`debug` level in Settings for more detail) |
 | The server stops while starting | Logs > Server; try Repair |

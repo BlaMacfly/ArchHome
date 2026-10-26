@@ -15,9 +15,10 @@ Cette version : ArchCore 7403088 (branche Core du 26 octobre 2026) et ArchRust 2
 * Windows 10 ou 11, 64 bits, environ 2 Go libres (plus vos données du jeu).
 * Les données du jeu ArchLord 64 bits (dossiers character, ini, world, texture, object,
   effect, sound…). Elles NE SONT PAS fournies : prenez-les dans votre propre client ArchLord.
-* Conseillé : les tables du serveur ArchLord d'origine (apparitions des monstres, butin, IA
-  des monstres, raffinage). Elles ne sont pas fournies non plus. Sans elles, le monde n'a
-  NI MONSTRES NI BUTIN : le launcher l'affiche en rouge et le dit au premier import.
+* Rien d'autre : les tables du serveur d'origine (apparitions des monstres, butin, IA des
+  monstres, raffinage, carte) sont incluses dans Server\Data\server-ini\. Le monde a ses
+  monstres et son butin dès le premier lancement. Ne supprimez pas ce dossier : sans lui,
+  le launcher affiche un avertissement en rouge et le monde n'a ni monstres ni butin.
 * Les ports 3316, 11002 et 11008 doivent être libres (un autre serveur ArchLord éteint).
 
 
@@ -30,12 +31,14 @@ Cette version : ArchCore 7403088 (branche Core du 26 octobre 2026) et ArchRust 2
    - copiez-les dans Client\, à côté d'ArchRust.exe ;
    - ou laissez-les où elles sont et indiquez leur dossier dans le launcher :
      Paramètres > « Données du jeu ArchLord ».
-3. Tables du serveur d'origine (si vous les avez) : copiez-les dans Server\Data\server-ini\
-   (liste des fichiers dans le LISEZMOI de ce dossier), ou indiquez leur dossier dans
-   Paramètres > « Tables du serveur d'origine ».
-4. Ouvrez « HomeRPG ArchLord.exe ». Le launcher n'est pas signé : si Windows affiche
+3. Ouvrez « HomeRPG ArchLord.exe ». Le launcher n'est pas signé : si Windows affiche
    « Windows a protégé votre ordinateur », cliquez sur « Informations complémentaires »
    puis « Exécuter quand même ».
+4. Langue : le launcher s'ouvre en français si Windows est en français, sinon en anglais.
+   Paramètres > « Langue du launcher » la change ; le jeu suit la même langue (textes du
+   serveur, noms des PNJ, textes des objets et des compétences). En anglais, quelques
+   écrans propres à ArchRust (connexion, certains libellés) et des messages d'AddOns
+   restent pour l'instant en français.
 
 
 3. PREMIER LANCEMENT
@@ -69,8 +72,8 @@ listées dans l'onglet « Aide MJ » du launcher.
 -------------------------
 
 Launcher fermé, copiez le dossier UserData\ de l'ancienne version dans la nouvelle
-(comptes, personnages, réglages, sauvegardes). Copiez aussi vos données du jeu (Client\) et
-les tables du serveur (Server\Data\server-ini\) si vous les aviez mises là.
+(comptes, personnages, réglages, sauvegardes). Copiez aussi vos données du jeu (Client\) si
+vous les aviez mises là. Les tables du serveur sont déjà dans la nouvelle version.
 Au premier JOUER, le launcher applique les nouvelles migrations des bases puis réimporte le
 monde (ArchCore a de nouvelles tables) ; vos comptes et personnages sont conservés.
 
@@ -115,9 +118,11 @@ Monde plus proche d'Archonia
   * niveaux des monstres, réapparition des boss en 30 à 45 minutes, vitesse de déplacement.
 
 Le launcher aussi a changé :
-  * ArchRust et ses AddOns sont fournis (seules les données du jeu restent à vous) ;
-  * avertissement clair quand les tables du serveur d'origine manquent (sinon : aucun
-    monstre), et réimport automatique dès qu'elles sont ajoutées ;
+  * ArchRust, ses AddOns et les tables du serveur d'origine sont fournis (seules les
+    données du jeu restent à vous) : monstres et butin dès le premier lancement ;
+  * entièrement en français ou en anglais, et le jeu suit la langue choisie ;
+  * avertissement clair si les tables du serveur d'origine viennent à manquer (sinon :
+    aucun monstre), et réimport automatique dès qu'elles reviennent ;
   * réimport automatique du monde après une mise à jour d'ArchCore ;
   * le contrôle des fichiers (onglet Accueil > Vérifier) nomme chaque fichier altéré
     ou manquant, aussi dans le journal ;

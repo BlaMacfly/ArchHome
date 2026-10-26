@@ -33,6 +33,16 @@ indiqué par le réglage « Données du jeu ») :
 - Correctif trouvé par ces essais : `my.ini` écrivait les chemins avec des `\` ; un dossier commençant par `s`,
   `t`, `n`, `r` ou `b` (`…\scratchpad\…`) empêchait MariaDB de démarrer. Chemins désormais en `/`.
 
+Le soir, package avec les tables du serveur d'origine (`-ServerTables`) :
+
+- Installation neuve sans aucun réglage de tables : import avec `Server\Data\server-ini`, aucun avertissement,
+  map_segment 45 312, 36 960 monstres chargés.
+- Anglais (`ui_language` et `game_language` = en) : launcher entièrement en anglais (Accueil, Paramètres,
+  journal), `options.toml` → `language = "en"`, `World.Language = "en"`, en jeu : noms et titres des PNJ,
+  onglets de discussion en anglais. Restent en français les écrans propres à ArchRust (connexion, « Joueur »,
+  message de bienvenue) et des messages d'AddOns : textes en dur dans ArchRust, hors de ce dépôt.
+- Installation importée sans tables puis mise à jour avec elles : réimport automatique, 36 960 monstres.
+
 Non testé : les nouveautés du jeu une à une (guildes, portails, raffinage…), laissées aux testeurs ; le package
 sur un autre PC.
 

@@ -726,7 +726,7 @@ impl App {
                 ui.label(&a.name);
                 let r = ui.label(&a.title);
                 if !a.interface.is_empty() {
-                    r.on_hover_text(format!("Interface : {}", a.interface));
+                    r.on_hover_text(crate::tf!("Interface : {}", "Interface: {}", a.interface));
                 }
                 ui.label(&a.version);
                 if !a.has_toc {
@@ -1167,9 +1167,11 @@ impl App {
                     }
                 });
                 if let Some(c) = chosen {
-                    // Interface traduite tout de suite, réglage enregistré.
+                    // Interface traduite tout de suite, réglage enregistré. Le jeu suit la même langue (textes du
+                    // serveur et d'ArchRust), qui reste modifiable juste en dessous.
                     self.settings.ui_language = c;
                     t::set_lang(self.settings.ui_lang());
+                    self.settings.game_language = self.settings.ui_lang();
                     self.save_settings();
                 }
             });

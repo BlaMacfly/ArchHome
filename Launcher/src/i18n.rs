@@ -151,8 +151,8 @@ pub const MSG_I18N: T = T("Import du monde : textes traduits…", "World import:
 pub const MSG_IMPORT_EMPTY: T = T("l'import n'a rempli aucune table du monde : voir le journal du serveur", "the import filled no world table: see the server log");
 pub const UNKNOWN_VERSION: T = T("version inconnue", "unknown version");
 pub const IMPORT_NO_TABLES: T = T(
-    "ATTENTION : tables du serveur ArchLord d'origine introuvables. Le monde est importé SANS MONSTRES NI BUTIN. Placez-les dans Server\\Data\\server-ini (voir le LISEZMOI de ce dossier) ou indiquez leur dossier dans Paramètres : le monde sera réimporté au démarrage suivant.",
-    "WARNING: original ArchLord server tables not found. The world is imported WITHOUT MONSTERS OR LOOT. Put them in Server\\Data\\server-ini (see the README in that folder) or set their folder in Settings: the world is reimported on the next start.",
+    "ATTENTION : tables du serveur ArchLord d'origine introuvables (elles sont incluses dans Server\\Data\\server-ini). Le monde est importé SANS MONSTRES NI BUTIN. Remettez-les depuis le paquet HomeRPG, ou indiquez leur dossier dans Paramètres : le monde sera réimporté au démarrage suivant.",
+    "WARNING: original ArchLord server tables not found (they are included in Server\\Data\\server-ini). The world is imported WITHOUT MONSTERS OR LOOT. Restore them from the HomeRPG package, or set their folder in Settings: the world is reimported on the next start.",
 );
 pub const IMPORT_NO_MONSTERS: T = T(
     "ATTENTION : l'import n'a placé aucun monstre malgré les tables du serveur d'origine. Vérifiez spawndatatable.txt et spawninstancetable.txt (journal du serveur, outils-*.log).",
@@ -225,7 +225,7 @@ pub const SERVER_STARTING: T = T("Démarrage…", "Starting…");
 pub const WORLD_EMPTY: T = T("Pas encore importé (au premier JOUER)", "Not imported yet (on the first PLAY)");
 pub const WORLD_IMPORTED_STOPPED: T = T("Importé (le détail s'affiche quand la base tourne)", "Imported (details show while the database runs)");
 pub const TABLES_OK: T = T("Présentes : monstres et butin importés", "Present: monsters and loot imported");
-pub const TABLES_MISSING: T = T("Absentes : le monde n'aura ni monstres ni butin (voir Paramètres)", "Missing: the world will have no monsters or loot (see Settings)");
+pub const TABLES_MISSING: T = T("Absentes de Server\\Data\\server-ini : le monde n'aura ni monstres ni butin (voir Paramètres)", "Missing from Server\\Data\\server-ini: the world will have no monsters or loot (see Settings)");
 pub const BTN_PLAY: T = T("JOUER", "PLAY");
 pub const BTN_START_SERVER: T = T("Démarrer le serveur seul", "Start the server only");
 pub const BTN_STOP: T = T("Arrêter", "Stop");
@@ -453,10 +453,10 @@ pub const SET_CLIENT_NONE_FOUND: T = T(
 );
 pub const SET_CLIENT_USE: T = T("Utiliser", "Use");
 pub const SET_CLIENT_IN_USE: T = T("Utilisé", "In use");
-pub const SET_TABLES_DIR: T = T("Tables du serveur d'origine (facultatif)", "Original server tables (optional)");
+pub const SET_TABLES_DIR: T = T("Tables du serveur d'origine", "Original server tables");
 pub const SET_TABLES_HINT: T = T(
-    "Apparitions des monstres, butin et carte du serveur ArchLord d'origine (spawndatatable.txt, spawninstancetable.txt, itemdroptable.txt, aidatatable.txt…). Elles ne sont pas dans le client et HomeRPG ne les fournit pas. Un monde importé sans elles est réimporté au démarrage suivant leur ajout.",
-    "Monster spawns, loot and map of the original ArchLord server (spawndatatable.txt, spawninstancetable.txt, itemdroptable.txt, aidatatable.txt…). They are not in the client and HomeRPG does not provide them. A world imported without them is reimported on the first start after they are added.",
+    "Apparitions des monstres, butin, IA des monstres, raffinage et carte du serveur ArchLord d'origine (spawndatatable.txt, spawninstancetable.txt, itemdroptable.txt, aidatatable.txt…). Incluses dans Server\\Data\\server-ini : ne changez ce dossier que pour utiliser d'autres tables. Un monde importé sans elles est réimporté au démarrage suivant leur retour.",
+    "Monster spawns, loot, monster AI, refining and map of the original ArchLord server (spawndatatable.txt, spawninstancetable.txt, itemdroptable.txt, aidatatable.txt…). Included in Server\\Data\\server-ini: change this folder only to use other tables. A world imported without them is reimported on the first start after they are back.",
 );
 pub const SET_PORTS: T = T("Ports du serveur", "Server ports");
 pub const SET_PORTS_HINT: T = T(

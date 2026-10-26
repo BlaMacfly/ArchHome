@@ -10,7 +10,13 @@ Version pour les testeurs / Tester build. ArchCore 7403088 (branche Core), ArchR
   guilde, niveaux des monstres et réapparition des boss d'Archonia. Nouvelles migrations des quatre bases.
 - Package : inclut ArchRust.exe (commit indiqué dans `Build/manifest.json`) et ses AddOns dans `Client/addons`
   (ArchAce, HelloArch, ArchCore Admin 1.2.0), hors du contrôle des fichiers ; les données du jeu restent fournies
-  par le joueur. `LISEZMOI-TESTEURS.txt` (installation, comptes de test, nouveautés à essayer, journaux).
+  par le joueur. `LISEZMOI-TESTEURS.txt` et `README-TESTERS.txt` (installation, comptes de test, nouveautés à
+  essayer, journaux).
+- Package : inclut les tables du serveur d'origine lues par `archcore import --server` dans
+  `Server/Data/server-ini` (`New-Package.ps1 -ServerTables`, jamais dans le dépôt) : monstres et butin dès le
+  premier lancement, sans rien à fournir. L'avertissement ne s'affiche plus que si elles manquent.
+- Anglais : changer la langue du launcher règle aussi celle du jeu (serveur et `options.toml` d'ArchRust) ;
+  anglais par défaut si Windows n'est pas en français.
 - Mise à jour d'une installation : `archcore db-init` à chaque démarrage (migrations), puis réimport automatique
   du monde quand la version d'ArchCore diffère de celle qui l'a importé (`UserData/monde-importe-par.txt`) ou
   quand les tables du serveur d'origine apparaissent après un import sans monstres. Personnages et comptes
