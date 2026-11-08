@@ -295,6 +295,12 @@ impl Orchestrator {
         if self.settings.server_tables_dir.trim().is_empty() { self.layout.default_server_tables() } else { PathBuf::from(self.settings.server_tables_dir.trim()) }
     }
 
+    /// Dossier `ini` du client de Webzen indiqué dans Paramètres, s'il en a bien les fichiers.
+    fn webzen_dir(&self) -> Option<PathBuf> {
+        let dir = self.settings.webzen_dir.trim();
+        (!dir.is_empty()).then(|| PathBuf::from(dir)).filter(|d| repair::webzen_present(d))
+    }
+
     /// Lignes des processus suivis (serveur, outils, client) vers les journaux de l'interface.
     fn drain_process_logs(&mut self) {
         let mut lines = Vec::new();
@@ -777,6 +783,12 @@ impl Orchestrator {
                 "original server tables added since the import: reimporting the world (characters and accounts kept)"
             ));
         }
+        if self.webzen_dir().is_some() && !self.layout.webzen_import_marker().is_file() {
+            return Some(tf!(
+                "données de Webzen indiquées depuis l'import : réimport du monde (personnages et comptes conservés)",
+                "Webzen data set since the import: reimporting the world (characters and accounts kept)"
+            ));
+        }
         None
     }
 
@@ -821,7 +833,22 @@ impl Orchestrator {
         let out_s = out.to_string_lossy().to_string();
         let tables_s = tables.to_string_lossy().to_string();
         self.log(tf!("import avec les tables du serveur d'origine : {}", "import with the original server tables: {}", tables.display()));
-        self.tool(&["import", &out_s, "--server", &tables_s])?;
+        let mut args = vec!["import".to_string(), out_s, "--server".into(), tables_s];
+        let webzen = self.webzen_dir();
+        match &webzen {
+            Some(w) => {
+                self.log(tf!("import avec les données de Webzen (quêtes, titres, maîtrises, expérience) : {}", "import with the Webzen data (quests, titles, masteries, experience): {}", w.display()));
+                args.extend(["--webzen".to_string(), w.to_string_lossy().to_string()]);
+            }
+            // Monde importé avec Webzen auparavant : ce réimport revient aux quêtes, titres, maîtrises et expérience du client.
+            None if self.layout.webzen_import_marker().is_file() => {
+                self.log(t::IMPORT_WITHOUT_WEBZEN.s());
+                self.notice(t::IMPORT_WITHOUT_WEBZEN.s());
+            }
+            None => {}
+        }
+        let args: Vec<&str> = args.iter().map(String::as_str).collect();
+        self.tool(&args)?;
         self.set(State::ImportingWorld, t::MSG_I18N.s(), 0.7);
         if let Err(e) = self.tool(&["i18n", "db", "fr"]) {
             // Facultatif : les titres de PNJ traduits servent de repli.
@@ -855,6 +882,16 @@ impl Orchestrator {
         }
         if let Err(e) = std::fs::write(self.layout.world_import_marker(), self.archcore_version()) {
             self.log(format!("{} : {e}", self.layout.world_import_marker().display()));
+        }
+        let marker = self.layout.webzen_import_marker();
+        let written = match &webzen {
+            // Date seulement : le dossier de Webzen est un chemin local, qui n'a rien à faire dans un paquet.
+            Some(_) => std::fs::write(&marker, format!("{} : import --webzen\n", util::datetime_readable())),
+            None if marker.is_file() => std::fs::remove_file(&marker),
+            None => Ok(()),
+        };
+        if let Err(e) = written {
+            self.log(format!("{} : {e}", marker.display()));
         }
         self.migrate_ep8(db)?;
         Ok(())

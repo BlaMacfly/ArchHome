@@ -1317,6 +1317,26 @@ impl App {
             ui.colored_label(status_color(present, true), if present { t::TABLES_OK.s() } else { t::TABLES_MISSING.s() });
             ui.small(t::SET_TABLES_HINT.s());
 
+            // ---- Données de Webzen (facultatives)
+            ui.add_space(10.0);
+            ui.label(RichText::new(t::SET_WEBZEN_DIR.s()).strong().color(GOLD));
+            ui.horizontal(|ui| {
+                ui.add(egui::TextEdit::singleline(&mut self.settings.webzen_dir).desired_width(480.0).hint_text(t::SET_WEBZEN_NONE.s()));
+                if ui.button(t::BROWSE.s()).clicked() {
+                    if let Some(dir) = rfd::FileDialog::new().set_title(t::SET_WEBZEN_DIR.s()).pick_folder() {
+                        self.settings.webzen_dir = dir.to_string_lossy().into_owned();
+                    }
+                }
+            });
+            let webzen = self.settings.webzen_dir.trim();
+            if !webzen.is_empty() {
+                let ok = crate::repair::webzen_present(std::path::Path::new(webzen));
+                ui.colored_label(status_color(ok, true), if ok { t::WEBZEN_OK.s() } else { t::WEBZEN_BAD.s() });
+            } else if self.layout.webzen_import_marker().is_file() {
+                ui.label(RichText::new(t::WEBZEN_IMPORTED.s()).color(Color32::from_gray(190)));
+            }
+            ui.small(t::SET_WEBZEN_HINT.s());
+
             // ---- Ports
             ui.add_space(10.0);
             ui.label(RichText::new(t::SET_PORTS.s()).strong().color(GOLD));

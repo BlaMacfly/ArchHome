@@ -87,6 +87,14 @@ pub fn server_tables_missing(dir: &Path) -> Vec<&'static str> {
     SERVER_TABLES.iter().copied().filter(|f| !dir.join(f).is_file()).collect()
 }
 
+/// Dossier `ini` du client officiel de Webzen (`archcore import --webzen`) : `questtemplate.ini` et `levelupexp.txt`,
+/// casse ignorée, comme le vérifie ArchCore.
+pub fn webzen_present(dir: &Path) -> bool {
+    let Ok(rd) = std::fs::read_dir(dir) else { return false };
+    let names: Vec<String> = rd.flatten().map(|e| e.file_name().to_string_lossy().to_lowercase()).collect();
+    ["questtemplate.ini", "levelupexp.txt"].iter().all(|f| names.iter().any(|n| n == f))
+}
+
 /// Toutes les tables du serveur d'origine sont dans `dir` : l'import des valeurs de l'épisode 8 est possible.
 pub fn server_tables_present(dir: &Path) -> bool {
     server_tables_missing(dir).is_empty()

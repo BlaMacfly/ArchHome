@@ -64,6 +64,8 @@ impl Layout {
     pub fn world_import_marker(&self) -> PathBuf { self.user_data().join("monde-importe-par.txt") }
     /// `archcore migrate-ep8 --apply` fait (ou inutile, sans personnage) : jamais refait
     pub fn ep8_migration_marker(&self) -> PathBuf { self.user_data().join("migration-ep8.txt") }
+    /// Monde importé avec les données de Webzen (`--webzen`) : présent tant que le dernier import les avait
+    pub fn webzen_import_marker(&self) -> PathBuf { self.user_data().join("monde-importe-avec-webzen.txt") }
 
     // Journaux
     pub fn logs(&self) -> PathBuf { self.root.join("Logs") }

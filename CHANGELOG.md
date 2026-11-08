@@ -1,5 +1,21 @@
 # Journal des versions / Changelog
 
+## 0.3.2 — 8 novembre 2026
+
+Version pour les testeurs / Tester build. ArchCore ea667d5 (branche Core) avec ArchBot e214b2c, ArchRust 072ebee,
+ArchCore Admin 1.4.0.
+
+- Quêtes, titres, maîtrises et courbe d'expérience d'origine : le monde du paquet des testeurs est importé avec les
+  données du client officiel de Webzen (`archcore import --webzen`) : 3 082 quêtes, 2 768 titres, 287 maîtrises,
+  expérience des niveaux 1 à 121. **La montée en niveau est plus lente qu'en 0.3.1.** Seule la base importée est
+  fournie, pas les données de Webzen.
+- ArchCore d053af0 : une guilde ne se dissout plus trop tôt (code 46, `Guild.DestroyDelayHours = 24`).
+- ArchRust 072ebee : titres et maîtrises d'origine, confirmations, minicarte et barre rapide d'Archonia.
+- Launcher : réglage « Données de Webzen » (Paramètres, facultatif) passé à l'import (`--webzen`) ; un dossier
+  indiqué après un import sans lui déclenche un réimport ; un réimport sans lui, sur un monde importé avec, est
+  signalé (retour aux quêtes, titres, maîtrises et à l'expérience du client).
+- `New-TesterPackage.ps1 -WebzenDir` : base du paquet importée avec Webzen, sans le dossier ni son chemin.
+
 ## 0.3.1 — 8 novembre 2026
 
 Version pour les testeurs / Tester build. ArchCore 6912f16 (branche Core) avec ArchBot (patch adapté à 6912f16),

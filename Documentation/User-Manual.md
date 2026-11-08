@@ -63,7 +63,7 @@ Before logging in, create your account in the **Accounts** tab (the server does 
 | Packs & AddOns | ArchRust resource packs (official `free-assets`, community packs in `patches`: enable, disable, add `.ahp` or folder, remove — same `packs.toml` as the in-game Options) and Lua AddOns (install from zip, disable, remove) |
 | Database | Explorer for the four databases (data with filter, sort, edit, insert, delete; structure; SQL with write confirmation); Open in HeidiSQL |
 | Backups | Back up now, restore (with a safety backup first), delete, export a diagnostic; automatic backup when the game closes |
-| Settings | Launcher language (automatic, French, English — applied immediately), game language, client folder, game data folder (optional), server tables folder, ports, automatic backups, log options |
+| Settings | Launcher language (automatic, French, English — applied immediately), game language, client folder, game data folder (optional), server tables folder, Webzen data (optional: `ini` folder of the official Webzen client, from which the import takes the original quests, titles, masteries and experience curve; the tester package already has a world imported with them, a reimport without them goes back to the client's), ports, automatic backups, log options |
 | Logs | Launcher, Server and Client views, text filter, warnings-and-errors filter, open the folder or current file |
 | GM help | ArchCore GM commands and ArchRust shortcuts |
 

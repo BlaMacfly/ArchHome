@@ -26,6 +26,10 @@
     UserData\Database, bases migrées, monde importé aux valeurs de l'épisode 8, Client\server-data écrit. Le
     launcher tourne le temps de l'opération sur les ports -InitPorts (pas ceux d'un serveur de développement),
     puis UserData\settings.json et Logs\ sont retirés : le testeur garde les réglages par défaut.
+.PARAMETER WebzenDir
+    Avec -InitDatabase : dossier ini du client officiel de Webzen, passé à l'import (--webzen) pour les quêtes, titres,
+    maîtrises et la courbe d'expérience d'origine. Seule la base importée va dans le paquet : ni ce dossier, ni son
+    chemin, ni le rapport Server\ArchCore\data\import-webzen.log.
 #>
 [CmdletBinding()]
 param(
@@ -34,7 +38,8 @@ param(
     [switch]$NoArchive,
     [switch]$HardLinks,
     [switch]$InitDatabase,
-    [int[]]$InitPorts = @(11102, 11108)
+    [int[]]$InitPorts = @(11102, 11108),
+    [string]$WebzenDir
 )
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
@@ -87,14 +92,18 @@ if ($InitDatabase) {
     if (Get-Process -Name 'homerpg-archlord-launcher', 'HomeRPG ArchLord' -ErrorAction SilentlyContinue) { throw "Un launcher HomeRPG est ouvert : le fermer d'abord" }
     New-Item -ItemType Directory -Force (Join-Path $dest 'UserData') | Out-Null
     $settings = [ordered]@{ ui_language = 'fr'; game_language = 'fr'; login_port = $InitPorts[0]; world_port = $InitPorts[1] }
+    if ($WebzenDir) { $settings.webzen_dir = (Resolve-Path -LiteralPath $WebzenDir).Path }
     [System.IO.File]::WriteAllText((Join-Path $dest 'UserData\settings.json'), ($settings | ConvertTo-Json), (New-Object System.Text.UTF8Encoding $false))
     $p = Start-Process -FilePath (Join-Path $dest 'HomeRPG ArchLord.exe') -ArgumentList @('--start', '--lang', 'fr', '--quit-after', '30') -WorkingDirectory $dest -PassThru
     if (-not $p.WaitForExit(1800000)) { $p.Kill(); throw "Premier lancement trop long (30 min)" }
     $log = Get-Content (Join-Path $dest 'Logs\launcher.log') -Raw -Encoding UTF8
-    foreach ($want in 'monde importé', 'tables de l''épisode 8 écrites', 'ArchCore opérationnel', 'MariaDB arrêtée') {
+    $wanted = @('monde importé', 'db-check : bases cohérentes', 'tables de l''épisode 8 écrites', 'ArchCore opérationnel', 'MariaDB arrêtée')
+    if ($WebzenDir) { $wanted += 'import avec les données de Webzen' }
+    foreach ($want in $wanted) {
         if ($log -notmatch [regex]::Escape($want)) { throw "Premier lancement incomplet (« $want » absent de Logs\launcher.log)" }
     }
     Remove-Item -Recurse -Force (Join-Path $dest 'Logs'), (Join-Path $dest 'UserData\settings.json')
+    Remove-Item -Force -ErrorAction SilentlyContinue (Join-Path $dest 'Server\ArchCore\data\import-webzen.log')
     # Clés RSA de MariaDB (private_key.pem, public_key.pem) : propres à chaque installation, régénérées par MariaDB
     # à son démarrage suivant ; jamais dans une archive partagée.
     Get-ChildItem (Join-Path $dest 'UserData\Database') -Filter '*.pem' | Remove-Item -Force

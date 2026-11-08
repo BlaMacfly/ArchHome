@@ -184,7 +184,10 @@ connecté.
 - **Langue du jeu** : textes envoyés par le serveur (titres des PNJ) et langue d'ArchRust, au prochain
   démarrage.
 - **Dossier du client ArchRust**, **données du jeu** (facultatif, si elles ne sont pas à côté d'ArchRust.exe),
-  **tables du serveur d'origine**, **ports** (11002 / 11008 par défaut :
+  **tables du serveur d'origine**, **données de Webzen** (facultatives : dossier `ini` du client officiel de
+  Webzen ; l'import en tire les quêtes, titres, maîtrises et la courbe d'expérience d'origine ; le paquet des
+  testeurs a déjà un monde importé avec elles, un réimport sans elles revient à celles du client),
+  **ports** (11002 / 11008 par défaut :
   changez-les si un autre serveur ArchCore tourne sur ce PC).
 - **Sauvegardes automatiques** : activées ou non, nombre conservé.
 - **Journaux** : journal détaillé du serveur (chaque paquet, pour un rapport de bug), niveau du journal

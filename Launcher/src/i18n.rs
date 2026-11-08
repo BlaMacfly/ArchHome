@@ -155,6 +155,22 @@ pub const IMPORT_NO_TABLES: T = T(
     "tables du serveur ArchLord d'origine incomplètes (incluses dans Server\\Data\\server-ini) : l'import du monde en a besoin pour les valeurs de l'épisode 8, les monstres et le butin. Remettez-les depuis le paquet HomeRPG, ou indiquez leur dossier dans Paramètres.",
     "original ArchLord server tables incomplete (included in Server\\Data\\server-ini): the world import needs them for the Episode 8 values, monsters and loot. Restore them from the HomeRPG package, or set their folder in Settings.",
 );
+pub const IMPORT_WITHOUT_WEBZEN: T = T(
+    "réimport sans les données de Webzen (Paramètres) : le monde importé avec elles revient aux quêtes, titres, maîtrises et à la courbe d'expérience du client.",
+    "reimport without the Webzen data (Settings): the world imported with them goes back to the client's quests, titles, masteries and experience curve.",
+);
+pub const SET_WEBZEN_DIR: T = T("Données de Webzen (facultatives)", "Webzen data (optional)");
+pub const SET_WEBZEN_NONE: T = T("aucune : quêtes, titres, maîtrises et expérience du client", "none: the client's quests, titles, masteries and experience");
+pub const SET_WEBZEN_HINT: T = T(
+    "Dossier ini du client officiel de Webzen (questtemplate.ini, levelupexp.txt…) : quêtes, titres, maîtrises et courbe d'expérience d'origine, pour ce qui existe dans l'épisode 8. Lu seulement à l'import du monde (réimport automatique au démarrage suivant). Le paquet des testeurs contient déjà un monde importé avec elles.",
+    "ini folder of the official Webzen client (questtemplate.ini, levelupexp.txt…): original quests, titles, masteries and experience curve, for what exists in Episode 8. Read only when the world is imported (automatic reimport on the next start). The tester package already has a world imported with them.",
+);
+pub const WEBZEN_OK: T = T("Données de Webzen reconnues", "Webzen data recognised");
+pub const WEBZEN_BAD: T = T("Pas un dossier ini de Webzen (questtemplate.ini et levelupexp.txt attendus)", "Not a Webzen ini folder (questtemplate.ini and levelupexp.txt expected)");
+pub const WEBZEN_IMPORTED: T = T(
+    "Le monde actuel a été importé avec les données de Webzen ; un réimport sans elles reviendrait à celles du client.",
+    "The current world was imported with the Webzen data; a reimport without them would go back to the client's.",
+);
 pub const MSG_DB_CHECK: T = T("Contrôle des bases (archcore db-check)…", "Checking the databases (archcore db-check)…");
 pub const DB_CHECK_FAILED: T = T(
     "archcore db-check signale une anomalie dans les bases : voir Journaux > Serveur (outils-*.log), et joignez-le à votre retour.",

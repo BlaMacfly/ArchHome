@@ -1,12 +1,13 @@
-HomeRPG ArchLord v0.3.1 — LISEZMOI pour les testeurs
+HomeRPG ArchLord v0.3.2 — LISEZMOI pour les testeurs
 ====================================================
 
 Merci de tester ! HomeRPG ArchLord fait tourner ArchLord en solo, hors ligne, sur votre PC :
 un serveur ArchCore local, sa propre base MariaDB et le client ArchRust, lancés par un seul
 bouton JOUER. Rien ne sort de votre PC (tout écoute sur 127.0.0.1).
 
-Cette version : ArchCore 6912f16 (branche Core du 8 novembre 2026) avec le module ArchBot
-(bots), ArchRust 7a6c7f3 (8 novembre 2026), ArchCore Admin 1.4.0.
+Cette version : ArchCore ea667d5 (branche Core du 8 novembre 2026) avec le module ArchBot
+(bots), ArchRust 072ebee (8 novembre 2026), ArchCore Admin 1.4.0. Le monde fourni est
+importé avec les quêtes, titres, maîtrises et la courbe d'expérience d'origine.
 
 C'est la première version pour les essais EN JEU : tout le code a été vérifié au
 simulateur, à vous de le jouer pour de vrai. Chaque retour compte.
@@ -74,8 +75,15 @@ avoir à le saisir. Les comptes archbot_… sont ceux des bots : le launcher
 les masque, n'y touchez pas.
 
 
-5. VOUS AVIEZ LA v0.3.0 OU LA v0.2.0 ?
--------------------------
+5. VOUS AVIEZ UNE VERSION PRÉCÉDENTE ?
+--------------------------------------
+
+Depuis la v0.3.1 : deux possibilités.
+  * Pour les quêtes, titres, maîtrises et l'expérience d'origine (conseillé) : gardez le
+    UserData\ fourni avec la v0.3.2 ; vos personnages de la v0.3.1 ne sont pas repris.
+  * Pour garder vos personnages : copiez le UserData\ de la v0.3.1 dans la nouvelle
+    version ; le monde est alors réimporté SANS les données d'origine de Webzen (quêtes,
+    titres, maîtrises et expérience du client, comme en v0.3.1).
 
 Depuis la v0.3.0 : launcher fermé, copiez le dossier UserData\ de l'ancienne version dans
 la nouvelle. Au premier JOUER, le launcher ajoute la table du Gacha, réimporte le monde,
@@ -94,6 +102,14 @@ réversible) et l'oubli des compétences vous est offert, leurs coûts ayant cha
 
 6. NOUVEAUTÉS — CE QU'IL FAUT ESSAYER
 -------------------------------------
+
+Nouveau dans la v0.3.2
+  * quêtes, titres, maîtrises et courbe d'expérience d'origine (client officiel de
+    Webzen) : 3 082 quêtes, 2 768 titres, 287 maîtrises, expérience jusqu'au niveau 121 ;
+  * la montée en niveau est PLUS LENTE qu'en v0.3.1 : c'est voulu (courbe d'origine) ;
+  * une guilde ne se dissout plus trop tôt (24 heures d'attente) ;
+  * titres et maîtrises d'origine aussi dans ArchRust, confirmations, minicarte et barre
+    rapide d'Archonia.
 
 Nouveau dans la v0.3.1
   * Gacha de l'épisode 8 : socles de tirage, coût en pass, or et charisme, refus
@@ -153,6 +169,9 @@ Les bots aussi peuvent servir de partenaires de groupe.
 7. PROBLÈMES CONNUS
 -------------------
 
+* N'utilisez pas Monde > « Réimporter la base monde » : sans les données de Webzen (non
+  fournies), le monde reviendrait aux quêtes, titres, maîtrises et à l'expérience du
+  client ; le launcher le signale s'il le fait.
 * Les noms de modèles des bots apparaissent en coréen dans le journal du serveur : c'est
   seulement le journal.
 * Les bots ne font pas encore : achats, quêtes, combat entre joueurs, montures, guildes,
@@ -187,5 +206,5 @@ passé, l'heure approximative et le nom du personnage. Une capture d'écran aide
 * Onglet Sauvegardes : sauvegarder et restaurer vos personnages.
 * Un souci de démarrage ? Onglet Accueil > Vérifier, puis Réparer.
 * Onglet Monde > « Réimporter la base monde » : refait l'import (comptes et personnages
-  conservés).
+  conservés) ; à éviter dans cette version, voir PROBLÈMES CONNUS.
 * Ne modifiez pas Client\server-data ni Client\realmlist.wtf : le launcher les écrit.

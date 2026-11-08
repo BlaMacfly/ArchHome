@@ -15,6 +15,18 @@ Une installation d'essai à part (copie du package, `UserData\settings.json` ave
 monde, par exemple 11102 / 11108) laisse libres les ports 11002 / 11008 d'un serveur de développement ; MariaDB
 garde le port 3316 de HomeRPG (celle de développement, 3306, n'est jamais touchée).
 
+## Résultats du 2026-11-08, soir (version 0.3.2, ArchCore ea667d5 + ArchBot e214b2c, ArchRust 072ebee)
+
+- Patch d'ArchBot appliqué tel quel sur ea667d5 ; mêmes tables du serveur exigées, aucune nouvelle migration.
+- Mise à jour de l'installation d'essai 0.3.1 avec « Données de Webzen » réglé : réimport avec `--webzen` en 36 s :
+  `level_exp` 121 niveaux, `skill_mastery` 287, `quest_template` 3 082 (188 écartées, détail dans
+  `Server\ArchCore\data\import-webzen.log`), `title_template` 2 768 ; `db-check` sans anomalie ; empreinte de
+  `server-data` `sha256:cdd4b453…`, la même que celle du client de développement.
+- `migrate-ep8` (rapport) : 20 personnages, rien à migrer (quêtes et titres compris) : pas de `--apply`.
+- `sim client` : OK ; `sim bots` : 16/16 PASS ; `ArchRust.exe play --connect` (072ebee) : en jeu, empreinte conforme,
+  3 AddOns. `sim title` et `sim quest` non concluants sur cette installation (second compte de test absent,
+  inventaire du personnage d'essai plein) : non comptés.
+
 ## Résultats du 2026-11-08 (version 0.3.1, ArchCore 6912f16 + ArchBot, ArchRust 7a6c7f3, ArchCore Admin 1.4.0)
 
 - Compilation : patch d'ArchBot adapté à 6912f16 (contexte de `sim.rs` ; `start_cast` reçoit la position au sol de

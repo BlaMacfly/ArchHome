@@ -1,12 +1,13 @@
-HomeRPG ArchLord v0.3.1 — README for testers
+HomeRPG ArchLord v0.3.2 — README for testers
 ============================================
 
 Thank you for testing! HomeRPG ArchLord runs ArchLord single-player and offline on your PC:
 a local ArchCore server, its own MariaDB database and the ArchRust client, all started by a
 single PLAY button. Nothing leaves your PC (everything listens on 127.0.0.1).
 
-This build: ArchCore 6912f16 (Core branch, November 8, 2026) with the ArchBot module
-(bots), ArchRust 7a6c7f3 (November 8, 2026), ArchCore Admin 1.4.0.
+This build: ArchCore ea667d5 (Core branch, November 8, 2026) with the ArchBot module
+(bots), ArchRust 072ebee (November 8, 2026), ArchCore Admin 1.4.0. The included world is
+imported with the original quests, titles, masteries and experience curve.
 
 This is the first build for IN-GAME testing: all the code was checked with the simulator,
 now it is your turn to really play it. Every report counts.
@@ -72,8 +73,15 @@ type them. The archbot_… accounts belong to the bots: the launcher hides them,
 alone.
 
 
-5. YOU HAD v0.3.0 OR v0.2.0?
-------------------
+5. YOU HAD AN EARLIER VERSION?
+------------------------------
+
+From v0.3.1: two choices.
+  * For the original quests, titles, masteries and experience (recommended): keep the
+    UserData\ shipped with v0.3.2; your v0.3.1 characters are not carried over.
+  * To keep your characters: copy the v0.3.1 UserData\ into the new version; the world is
+    then reimported WITHOUT the original Webzen data (the client's quests, titles,
+    masteries and experience, as in v0.3.1).
 
 From v0.3.0: with the launcher closed, copy the UserData\ folder of the old version into
 the new one. On the first PLAY, the launcher adds the Gacha table, reimports the world,
@@ -92,6 +100,14 @@ skill reset is offered, since skill costs changed.
 
 6. WHAT'S NEW — WHAT TO TRY
 ---------------------------
+
+New in v0.3.2
+  * original quests, titles, masteries and experience curve (official Webzen client):
+    3,082 quests, 2,768 titles, 287 masteries, experience up to level 121;
+  * levelling is SLOWER than in v0.3.1: this is intended (original curve);
+  * a guild no longer disbands too early (24-hour wait);
+  * original titles and masteries in ArchRust too, Archonia's confirmations, minimap and
+    quick bar.
 
 New in v0.3.1
   * Episode 8 Gacha: draw sockets, cost in passes, gold and charisma, explained
@@ -150,6 +166,9 @@ party partners.
 7. KNOWN ISSUES
 ---------------
 
+* Do not use World > "Reimport the world database": without the Webzen data (not
+  included), the world would go back to the client's quests, titles, masteries and
+  experience; the launcher reports it if it happens.
 * The bots' model names show in Korean in the server log: only in the log.
 * Bots do not do yet: shopping, quests, player versus player, mounts, guilds, healing
   allies.
@@ -183,5 +202,5 @@ approximate time and the character name. A screenshot helps a lot.
 * Backups tab: back up and restore your characters.
 * Startup trouble? Home tab > Check, then Repair.
 * World tab > "Reimport the world database": runs the import again (accounts and
-  characters kept).
+  characters kept); avoid it in this build, see KNOWN ISSUES.
 * Do not edit Client\server-data or Client\realmlist.wtf: the launcher writes them.
