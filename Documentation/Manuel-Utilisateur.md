@@ -28,9 +28,10 @@ portable et un launcher qui s'occupe de tout. Vous jouez avec le client ArchRust
 - L'exécutable **ArchRust** (`Client\ArchRust.exe`, fourni dans le package) et les données du client ArchLord
   64 bits (`character\`, `ini\`, `world\`, `texture\`, `object\`, `effect\`, `sound\`…), que vous fournissez.
   HomeRPG ne distribue aucune donnée du jeu. Le client d'origine n'est pas pris en charge.
-- Les **tables du serveur ArchLord d'origine** (apparitions des monstres, butin, IA des monstres, raffinage,
-  `world\node_data`) sont incluses dans `Server\Data\server-ini\`. Sans elles, le monde aurait ses PNJ, ses
-  boutiques et ses quêtes, mais aucun monstre : ne supprimez pas ce dossier.
+- Les **tables du serveur ArchLord d'origine** (valeurs du jeu de l'épisode 8 : compétences, objets, options,
+  monstres, régions, boutiques, portails, expérience ; apparitions des monstres, butin, IA, raffinage,
+  `world\node_data`) sont incluses dans `Server\Data\server-ini\`. L'import du monde les exige : ne supprimez
+  pas ce dossier.
 - Aucune connexion Internet : tout fonctionne sur 127.0.0.1.
 
 ## 2. Installation
@@ -60,15 +61,21 @@ Cliquez sur **JOUER**. Le launcher enchaîne :
    `archcore_world`, `archcore_logs`) et applique les migrations. Cette étape se refait à chaque démarrage :
    après une mise à jour d'ArchCore, le schéma suit tout seul.
 3. **Monde** (au premier démarrage) : les tables du client sont déchiffrées dans `Server\Data\client-ini`, puis
-   importées dans la base monde avec le relief du terrain et les tables du serveur
-   d'origine ; les titres de PNJ sont traduits. Compter une à quelques minutes. Sans les tables du serveur
-   d'origine, un avertissement le signale : le monde n'aura ni monstres ni butin. L'import se refait seul après
-   une mise à jour d'ArchCore, et quand les tables du serveur d'origine apparaissent après un import sans
-   monstres ; comptes et personnages sont conservés.
-4. **ArchCore** : connexion sur 127.0.0.1:11002, monde sur 127.0.0.1:11008. Le monde se charge en quelques
-   secondes (36 000 monstres environ avec les tables du serveur).
-5. **ArchRust** : `realmlist.wtf` pointe sur le serveur local, la langue du jeu est appliquée, puis le jeu
-   s'ouvre.
+   importées dans la base monde avec le relief du terrain : les **valeurs de l'épisode 8** viennent des tables
+   du serveur d'origine, les noms et visuels du client ; les titres de PNJ sont traduits. Compter environ une
+   minute. Sans les tables du serveur d'origine, le démarrage s'arrête et le dit. L'import se refait seul après
+   une mise à jour d'ArchCore ; comptes et personnages sont conservés. Une installation mise à jour depuis une
+   version d'avant l'épisode 8 (0.2.0 et avant) passe ensuite ses personnages aux mêmes valeurs
+   (`archcore migrate-ep8`), une seule fois, après une sauvegarde « avant-ep8 » : objets, options et compétences
+   propres à Archonia sont mis en quarantaine (réversible), l'oubli des compétences est offert.
+4. **Tables pour ArchRust** : `archcore export-client-tables` écrit les tables de l'épisode 8 au format du client
+   dans `Client\server-data` (à côté de `realmlist.wtf`), après chaque import et si elles manquent. Le serveur
+   en annonce l'empreinte (`Client.TablesDir`) ; ArchRust vérifie qu'elle est « conforme au serveur ».
+5. **ArchCore** : connexion sur 127.0.0.1:11002, monde sur 127.0.0.1:11008. Le monde se charge en quelques
+   secondes (36 000 monstres environ), puis les **bots** d'ArchBot entrent en jeu un par un (voir Monde).
+6. **ArchRust** : `realmlist.wtf` pointe sur le serveur local, la langue du jeu est appliquée, puis le jeu
+   s'ouvre sur le panneau de connexion d'ArchRust : identifiant et mot de passe, serveur local déjà rempli,
+   case « Enregistrer le compte » pour ne plus les saisir (le premier monde, « HomeRPG », est pris d'office).
 
 Avant de vous connecter, créez votre compte dans l'onglet **Comptes** (le serveur n'a pas besoin de tourner).
 
@@ -89,6 +96,7 @@ Avant de vous connecter, créez votre compte dans l'onglet **Comptes** (le serve
 - **Créer le compte** : identifiant de 1 à 16 lettres ou chiffres, mot de passe de 4 à 16 caractères sans
   espace ni accent, niveau MJ de 0 (joueur) à 3 (toutes les commandes). Le mot de passe est enregistré comme
   le fait ArchCore (empreinte SHA-256).
+- Les comptes `archbot_…` sont ceux des bots, créés par le serveur : ils sont masqués (leur nombre est indiqué).
 - Sélectionnez un compte dans la liste pour **changer son mot de passe** (celui saisi au-dessus) ou
   **appliquer le niveau MJ** choisi ; un joueur connecté le voit à sa reconnexion.
 - **Supprimer** : le compte, ses personnages (objets, quêtes, compétences, appartenance aux guildes) et sa
@@ -107,8 +115,35 @@ Réglages d'ArchCore (`world.conf`) avec leur valeur d'origine ; survolez un lib
 | Technique | seuils des « paquets lents » et « requêtes lentes » notés dans le journal du serveur |
 
 « Enregistrer » les garde dans `UserData\settings.json` ; ils s'appliquent au prochain démarrage du serveur.
-**Réimporter la base monde** relit le monde depuis le client (après avoir ajouté les tables du serveur ou mis à
-jour le client) ; comptes et personnages sont conservés.
+
+### Onglet ArchBot
+
+Tous les réglages des bots (`Server\Config\archbot.conf`), par groupe, avec leur explication au survol :
+
+| Groupe | Réglages |
+|---|---|
+| Activation | bots activés, bots autonomes, compagnons |
+| Population | bots autonomes au démarrage (15), bots en jeu au plus (40), délai entre deux entrées, niveaux des nouveaux bots (1 à 10), classes permises (TID), personnages gardés d'une partie à l'autre, durée de session |
+| Comportement | combat, butin, progression, groupes, rayons de perception, d'exploration et de ramassage, niveaux des monstres choisis, distance de suivi, réponses des bots |
+| Survie | seuils de fuite, de repos, de potions, d'engagement, attente avant résurrection |
+| Performances | cadence de l'IA, bots par tour, ralentissement loin des joueurs |
+| Administration | niveau MJ des commandes `/bot` de gestion (2), journal détaillé |
+
+Les valeurs sont celles d'ArchBot, sauf la population, réduite pour un jeu solo (modèle : 20 au départ, 100 au
+plus). L'onglet rappelle aussi les commandes du jeu. Les changements valent au prochain démarrage du serveur.
+
+**Bots.** Le serveur contient [ArchBot](https://github.com/BlaMacfly/ArchBot) : des personnages pilotés par le
+serveur, avec un compte, une classe, un niveau et un équipement, qui suivent les mêmes règles que vous. Les
+**bots autonomes** quittent leur village, chassent les monstres de leur niveau, ramassent, s'équipent, se
+reposent et reviennent après leur mort ; ils sont repris d'une partie à l'autre. Un **compagnon** s'engage en
+jeu : `/bot hire` (le bot libre le plus proche) ou `/bot hire Nom`, puis acceptez son invitation de groupe ; il
+vous suit et vous défend. Ordres : `/bot follow [distance]`, `stay`, `come`, `attack`, `passive`, `defensive`,
+`aggressive`, `stop`, `status`, aussi en chuchotant au bot ou à tout le groupe par `/p` ; `/bot dismiss` le
+libère, `/bot list` liste les bots. Pour les MJ : `/bot stats`, `/bot spawn n`, `/bot despawn n|all|nom`,
+`/bot population n`. Journal du serveur : lignes `[archbot]`. Décochez « Bots activés » (onglet ArchBot) pour jouer sans eux.
+**Réimporter la base monde** relit le monde depuis le client et les tables du serveur d'origine (après une mise
+à jour du client, par exemple) ; comptes et personnages sont conservés, les tables d'ArchRust sont réécrites au
+démarrage suivant.
 
 ## 7. Packs et AddOns
 
@@ -121,7 +156,7 @@ dossier) et les supprimer. Le launcher écrit le même fichier que la fenêtre O
 **AddOns Lua** : installés depuis une archive zip (le ou les dossiers contenant un `.toc` sont reconnus),
 désactivés par renommage `.off`, supprimés. Ils sont dans le dossier `addons` du client. Le package fournit
 ArchAce (cadres d'unité et options, `/options`), HelloArch (exemple) et
-[ArchCore Admin](https://github.com/BlaMacfly/ArchCoreAdmin), qui ajoute un panneau MJ en jeu (`/aca`).
+[ArchCore Admin](https://github.com/BlaMacfly/ArchCoreAdmin) 1.3.0, qui ajoute un panneau MJ en jeu (`/aca`).
 
 Fermez le jeu avant de changer ses packs ou ses AddOns.
 
@@ -182,15 +217,17 @@ raccourcis d'ArchRust. Exemples : `/additem <TID> [n]`, `/level 50`, `/money 100
 | `Server\ArchCore` | serveur ArchCore, schéma, couche de contenu, traductions | non (programme) |
 | `Server\Config` | configurations générées | non |
 | `Server\Data` | tables du client déchiffrées, tables du serveur d'origine | régénérées |
+| `Client\server-data` | tables de l'épisode 8 écrites pour ArchRust par le serveur | régénérées |
 | `Server\Database\mariadb` | MariaDB | non (programme) |
 | `UserData` | base de données, réglages, identifiants SQL, sauvegardes | **oui** |
 | `Logs` | journaux | au besoin |
 | `Client` | exécutable ArchRust fourni ; données du jeu à ajouter par vous | oui |
 
 Mise à jour : décompressez la nouvelle version dans un nouveau dossier, puis, launcher fermé, copiez-y
-`UserData` ainsi que vos données du jeu (si elles étaient dans `Client`) et `Server\Data\server-ini`. Gardez
-l'`ArchRust.exe` et les AddOns de la nouvelle version. Au premier JOUER, les bases sont mises à jour et le monde
-est réimporté.
+`UserData` ainsi que vos données du jeu (si elles étaient dans `Client`). Gardez l'`ArchRust.exe`, les AddOns et
+les tables `Server\Data\server-ini` de la nouvelle version (celles de la 0.2.0 ne suffisent plus). Au premier
+JOUER, les bases sont mises à jour, le monde est réimporté, les tables d'ArchRust sont écrites et, en venant d'une
+version d'avant l'épisode 8, les personnages passent aux valeurs de l'épisode 8 (voir Premier démarrage).
 
 ## 14. Dépannage
 
@@ -198,7 +235,9 @@ est réimporté.
 |---|---|
 | « client ArchRust introuvable ou incomplet » | le package doit contenir `Client\ArchRust.exe` ; indiquez vos données du jeu dans Paramètres, avec `character\Reference.Dat` |
 | « le port 11002 est déjà utilisé » | un autre serveur ArchCore tourne : arrêtez-le, ou changez les ports dans Paramètres |
-| Aucun monstre | tables du serveur d'origine absentes de `Server\Data\server-ini` : remettez-les depuis le package ; le monde est réimporté au démarrage suivant |
+| « tables du serveur ArchLord d'origine incomplètes » | des tables manquent dans `Server\Data\server-ini` (le journal du launcher les nomme) : remettez-les depuis le package |
+| Infobulles ou prix différents du serveur | le journal du client signale une empreinte de `server-data` différente : relancez le jeu par le launcher (il réécrit les tables), ou Monde > Réimporter |
+| Pas de bots | onglet ArchBot : « Bots activés » ; journal du serveur : lignes `[archbot]` |
 | ArchRust ne se connecte pas | vérifiez que le serveur est « En service » ; regardez Journaux > Client puis Serveur |
 | Le jeu se ferme sur une erreur | Journaux > Client (niveau `debug` dans Paramètres pour plus de détails) |
 | Le serveur s'arrête au démarrage | Journaux > Serveur ; essayez Réparer |

@@ -1,5 +1,55 @@
 # Journal des versions / Changelog
 
+## 0.3.1 — 8 novembre 2026
+
+Version pour les testeurs / Tester build. ArchCore 6912f16 (branche Core) avec ArchBot (patch adapté à 6912f16),
+ArchRust 7a6c7f3, ArchCore Admin 1.4.0.
+
+- ArchCore 6912f16 : Gacha de l'épisode 8 (socles, tables de tirage, coût en pass, or et charisme, refus), retour de
+  bug n° 2 (reprise d'objet à l'échange, loterie, apparence, inventaire, compétences), règle d'écart de niveau du
+  butin (`Rules.LootLevelGap = 11`), incantation sur place. Nouvelle migration de la base monde (`gacha_object`).
+- ArchRust 7a6c7f3 : Gacha et retour de bug n° 2 côté client. ArchCore Admin 1.4.0 : refus expliqués, liste de
+  monstres, fiche et filtre de classe.
+- ArchBot : patch régénéré pour 6912f16 (`start_cast` reçoit la position au sol des compétences de zone).
+- Import : les tables du serveur d'origine exigées passent de 23 à 31 (loteries, costumes, Gacha) ; le package les
+  prend désormais dans ArchCore (`data/server-ini` du commit du manifeste), identiques à celles de la 0.3.0.
+- Après chaque import, `archcore db-check` contrôle les bases : un problème est signalé (journal et accueil) sans
+  bloquer le démarrage.
+- Mise à jour d'une installation 0.3.0 : migration Gacha (`db-init`), réimport du monde, `db-check`, tables
+  d'ArchRust réécrites ; comptes, personnages et bots conservés.
+
+## 0.3.0 — 3 novembre 2026
+
+Version pour les essais en jeu / In-game test build. ArchCore f2ffef3 (branche Core) avec ArchBot 7436b3c (+ adaptation
+à f2ffef3), ArchRust b25a2a2 (dépôt ArchRust), ArchCore Admin 1.3.0.
+
+- ArchCore f2ffef3 : valeurs d'origine de l'épisode 8. Les valeurs de jeu (compétences, objets, options, runes,
+  monstres, raffinage, régions, boutiques, portails, expérience) viennent des tables du serveur ArchLord d'origine ;
+  les ajouts d'Archonia sont écartés. Nouvelles migrations des bases, titres, consommables, échange privé,
+  métamorphose, règles de combat et des régions, anti-triche côté serveur.
+- **ArchBot intégré** au serveur : bots autonomes qui peuplent le monde et compagnons à engager (`/bot hire`,
+  ordres par chuchotement ou `/p`). `Build-ArchCore.ps1` compile ArchCore sur une copie, avec ArchBot dans
+  `modules/ArchBot` et son patch ; le dépôt source d'ArchCore n'est jamais modifié. Nouvel **onglet ArchBot** :
+  les 35 réglages d'`archbot.conf` (activation, population, comportement, survie, performances, administration ;
+  population de départ 15 et 40 bots au plus pour le solo, le reste aux valeurs d'ArchBot) et les commandes du
+  jeu, écrits dans `Server/Config/archbot.conf`. Comptes `archbot_…` masqués dans l'onglet Comptes.
+- Import du monde : les tables du serveur d'origine sont **exigées** (ArchCore refuse d'importer sans elles) ; le
+  package en contient désormais le dossier complet (41 tables, `objects/`, `world/node_data`). Sans elles, le
+  démarrage s'arrête avec une explication au lieu d'importer un monde vide.
+- Tables pour ArchRust : après chaque import, `archcore export-client-tables` écrit les tables de l'épisode 8 au
+  format du client dans `Client/server-data` (à côté de `realmlist.wtf`) ; `Client.TablesDir` les annonce au
+  client, qui vérifie l'empreinte (journal du client : « conforme au serveur »). Réécrites si elles manquent ou
+  datent d'avant le dernier import.
+- Mise à jour d'une installation 0.2.0 : migrations (`db-init`), réimport du monde, puis, s'il y a des personnages,
+  sauvegarde « avant-ep8 » et `archcore migrate-ep8 --apply` une seule fois (objets, options et compétences hors
+  épisode 8 mis en quarantaine réversible, oubli des compétences offert ; `UserData/migration-ep8.txt`).
+- ArchRust b25a2a2 (nouveau dépôt BlaMacfly/ArchRust) : valeurs EP8 du serveur lues dans `server-data/`, panneau
+  de connexion d'ArchRust (case « Enregistrer le compte », premier monde annoncé pris d'office ; l'écran de
+  connexion d'Archonia est retiré), `realmlist.wtf` toujours écrit par le launcher. ArchCore Admin 1.3.0 (choix visuel des objets, simulateur de
+  butin).
+- Build : `Build-ArchCore.ps1 -Source <ArchCore> -ArchBot <ArchBot>` (toolchain 1.98.1, trois essais si rustc
+  plante) ; `New-Package.ps1 -ServerTables` copie tout le dossier des tables.
+
 ## 0.2.0 — 26 octobre 2026
 
 Version pour les testeurs / Tester build. ArchCore 7403088 (branche Core), ArchRust 2e41983 (branche client).

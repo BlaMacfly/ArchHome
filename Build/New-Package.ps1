@@ -5,8 +5,9 @@
     (empreintes) et SHA256SUMS.txt. Avec -Zip, produit aussi l'archive .zip.
     Client/ reçoit ArchRust.exe (-ArchRustExe) et les AddOns donnés par -Addons (dossiers d'AddOn, hors manifeste de
     fichiers : le joueur peut les désactiver ou les retirer).
-    Server/Data/server-ini/ reçoit, depuis -ServerTables, les seules tables du serveur ArchLord d'origine lues par
-    `archcore import --server` (décision de l'utilisateur du 2026-10-26 : monstres et butin dès le premier lancement).
+    Server/Data/server-ini/ reçoit, depuis -ServerTables, les tables du serveur ArchLord d'origine lues par
+    `archcore import --server` (décision de l'utilisateur du 2026-10-26 ; depuis ArchCore f2ffef3, l'import en tire
+    les valeurs de l'épisode 8 et les exige) : les fichiers .txt et .ini du dossier, objects\ et world\node_data.
     Elles vont dans le package seulement, jamais dans le dépôt (.gitignore : /Server/Data/, /Build/package/).
     Jamais inclus : les données du client sous Client/ et Server/Data/client-ini, UserData/, Logs/, Build/downloads/.
 #>
@@ -18,9 +19,15 @@ param(
     # Dossier des tables du serveur d'origine (spawndatatable.txt…) ; node_data est cherché comme le fait l'import.
     [Parameter(Mandatory=$true)][string]$ServerTables
 )
-# Fichiers lus par `archcore import --server` (crates/archcore/src/tools/import.rs).
-$serverTableFiles = @('spawndatatable.txt', 'spawninstancetable.txt', 'itemdroptable.txt', 'groupdroprate.txt', 'droprankrate.txt',
-    'aidatatable.txt', 'optionnumdroprate.txt', 'socketnumdroprate.txt', 'refineryrecipetable.txt')
+# Fichiers exigés par `archcore import --server` (crates/archcore/src/tools/import.rs ; même liste que SERVER_TABLES de
+# Launcher/src/repair.rs). Le reste du dossier (.txt, .ini, objects\) est copié aussi : l'import en lit d'autres s'ils
+# sont là (optionnumdroprate.txt, socketnumdroprate.txt…).
+$serverTableFiles = @('aidatatable.txt', 'avatarset.ini', 'characterdatatable.txt', 'droprankrate.txt', 'gachadroptableaccessories.txt',
+    'gachadroptablearmor.txt', 'gachadroptablecharisma.txt', 'gachadroptableevent.txt', 'gachadroptableweapon.txt', 'gachatypetemplate.ini',
+    'groupdroprate.txt', 'growupfactor.ini', 'itemconverttable.txt', 'itemdatatable.txt', 'itemdroptable.txt', 'itemlotterybox.txt',
+    'itemoptiontable.txt', 'itemruneattributetable.txt', 'levelupexp.ini', 'npc.ini', 'npctradelist.txt', 'refineryrecipetable.txt',
+    'regiontemplate.ini', 'skillconst.txt', 'skillconst2.txt', 'skillspec.txt', 'skilltemplate.ini', 'spawndatatable.txt',
+    'spawninstancetable.txt', 'teleportfee.txt', 'teleportpoint.ini')
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 $cargo = Get-Content (Join-Path $root 'Launcher\Cargo.toml') -Raw
@@ -64,8 +71,12 @@ foreach ($a in $Addons) { CopyTree (Resolve-Path -LiteralPath $a).Path (Join-Pat
 Copy-Item (Join-Path $PSScriptRoot 'package-files\Client-LISEZMOI.txt') (Join-Path $out 'Client\LISEZMOI.txt')
 Copy-Item (Join-Path $PSScriptRoot 'package-files\server-ini-LISEZMOI.txt') (Join-Path $out 'Server\Data\server-ini\LISEZMOI.txt')
 
-Step "Tables du serveur d'origine (Server\Data\server-ini : $($serverTableFiles.Count) tables et world\node_data)"
-foreach ($f in $serverTableFiles) { Copy-Item -LiteralPath (Join-Path $ServerTables $f) -Destination (Join-Path $out "Server\Data\server-ini\$f") }
+$tablesOut = Join-Path $out 'Server\Data\server-ini'
+$tableList = @(Get-ChildItem -LiteralPath $ServerTables -File | Where-Object { $_.Extension -in '.txt', '.ini' })
+Step "Tables du serveur d'origine (Server\Data\server-ini : $($tableList.Count) tables, objects\ et world\node_data)"
+foreach ($f in $tableList) { Copy-Item -LiteralPath $f.FullName -Destination (Join-Path $tablesOut $f.Name) }
+$objects = Join-Path $ServerTables 'objects'
+if (Test-Path -LiteralPath $objects -PathType Container) { CopyTree (Resolve-Path -LiteralPath $objects).Path (Join-Path $tablesOut 'objects') }
 New-Item -ItemType Directory -Force (Join-Path $out 'Server\Data\server-ini\world') | Out-Null
 Copy-Item -LiteralPath $nodeData -Destination (Join-Path $out 'Server\Data\server-ini\world\node_data')
 
@@ -92,6 +103,8 @@ New-Item -ItemType Directory -Force $lic | Out-Null
 Copy-Item (Join-Path $root 'LICENCE.txt') (Join-Path $out 'LICENCE.txt')
 Copy-Item (Join-Path $root 'LICENCE.txt') (Join-Path $lic 'HomeRPG-Licence.txt')
 Copy-Item (Join-Path $root 'Server\ArchCore\LICENSE') (Join-Path $lic 'ArchCore-GPL-3.0.txt')
+$withArchBot = Test-Path (Join-Path $root 'Server\ArchCore\archbot\archcore-archbot.patch')
+if ($withArchBot) { Copy-Item (Join-Path $root 'Server\ArchCore\archbot\LICENSE') (Join-Path $lic 'ArchBot-GPL-3.0.txt') }
 $mdbLic = Get-ChildItem (Join-Path $root 'Server\Database\mariadb') -File | Where-Object { $_.Name -match '^(COPYING|LICENSE|THIRDPARTY|README)' }
 foreach ($f in $mdbLic) { Copy-Item $f.FullName (Join-Path $lic "MariaDB-$($f.Name)") }
 foreach ($f in 'gpl.txt', 'license.txt', 'LICENSE-openssl') { $p = Join-Path $root "Tools\HeidiSQL\$f"; if (Test-Path $p) { Copy-Item $p (Join-Path $lic "HeidiSQL-$f") } }
@@ -107,13 +120,15 @@ $m = Get-Content (Join-Path $PSScriptRoot 'manifest.json') -Raw -Encoding UTF8 |
 $archcoreVersion = (Get-Content (Join-Path $root 'Server\ArchCore\VERSION.txt') -Raw).Trim()
 $sources = @("# Sources et licences", "", "Package HomeRPG ArchLord v$version généré le $(Get-Date -Format 'yyyy-MM-dd HH:mm').", "",
     "## Composants", "", "| Composant | Version / commit | Source | Licence |", "|---|---|---|---|",
-    "| ArchCore (Server\ArchCore) | $archcoreVersion | $($m.archcore.source) (branche $($m.archcore.branch)) | $($m.archcore.license) |",
+    "| ArchCore (Server\ArchCore) | $archcoreVersion | $($m.archcore.source) (branche $($m.archcore.branch)) | $($m.archcore.license) |")
+if ($withArchBot) { $sources += "| ArchBot (compilé dans Server\ArchCore\archcore.exe) | $($m.archbot.commit) | $($m.archbot.source) (branche $($m.archbot.branch)) | $($m.archbot.license) |" }
+$sources += @(
     "| ArchRust (Client\ArchRust.exe) | $($m.archrust.commit) | $($m.archrust.source) (branche $($m.archrust.branch)) | $($m.archrust.license) |")
 foreach ($c in $m.components) { $sources += "| $($c.id) | $($c.commit) | $($c.source) | $($c.license) |" }
 foreach ($a in $m.addons) { if (Test-Path (Join-Path $out "Client\addons\$($a.id)")) { $sources += "| AddOn $($a.id) (Client\addons\$($a.id)) | $($a.commit) | $($a.source) | $($a.license) |" } }
 $sources += @("| HomeRPG ArchLord (launcher, scripts, documentation, identité visuelle) | v$version | Sources\Launcher, Sources\Build, Tools\Scripts (ce package) | Propriétaire : LICENCE.txt |", "",
-    "Les licences des composants tiers ci-dessus s'appliquent uniquement à ces composants ; la licence HomeRPG ne les restreint pas. ArchCore, ArchRust et les AddOns sont des programmes distincts, livrés sans modification depuis les commits indiqués.", "",
-    "Le code source correspondant d'ArchCore, d'ArchRust et des AddOns est disponible aux adresses ci-dessus, branche et commit indiqués. Les sources de MariaDB et HeidiSQL correspondent aux versions listées.", "",
+    "Les licences des composants tiers ci-dessus s'appliquent uniquement à ces composants ; la licence HomeRPG ne les restreint pas. ArchCore, ArchRust et les AddOns sont des programmes distincts, livrés depuis les commits indiqués ; ArchCore est compilé avec le module ArchBot et son patch (Server\ArchCore\archbot\archcore-archbot.patch, appliqué tel quel), sans autre modification.", "",
+    "Le code source correspondant d'ArchCore, d'ArchBot, d'ArchRust et des AddOns est disponible aux adresses ci-dessus, branche et commit indiqués (ArchCore : commit indiqué plus le patch d'ArchBot fourni). Les sources de MariaDB et HeidiSQL correspondent aux versions listées.", "",
     "## Bibliothèques Rust du launcher (licences déclarées par les auteurs)", "", "| Crate | Version | Licence |", "|---|---|---|") + $crates
 [System.IO.File]::WriteAllText((Join-Path $lic 'SOURCES.md'), ($sources -join "`r`n"), (New-Object System.Text.UTF8Encoding $false))
 $src = Join-Path $out 'Sources\Launcher'

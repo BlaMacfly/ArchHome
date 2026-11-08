@@ -7,12 +7,13 @@ HomeRPG ArchLord — single-player, offline ArchLord
    (character\, ini\, world\, texture\…) next to it, or set the data folder in Settings.
    The game data is not included.
 
-2. The original ArchLord server tables (monster spawns, loot) are included in
-   Server\Data\server-ini\: monsters and loot from the first start.
+2. The original ArchLord server tables (Episode 8 game values, monster spawns, loot) are
+   included in Server\Data\server-ini\: the world import requires them.
 
 3. Open "HomeRPG ArchLord.exe" and click PLAY.
-   The first start imports the world from your client (a few minutes, once, and again
-   after an ArchCore update).
+   The first start imports the world (about a minute, once, and again after an ArchCore
+   update) and writes the server's tables for ArchRust into Client\server-data. The server
+   brings its own bots (ArchBot tab); in game, "/bot hire" hires a companion.
 
 4. Create your account in the Accounts tab (GM level 3 for every command),
    then log in with it in ArchRust.

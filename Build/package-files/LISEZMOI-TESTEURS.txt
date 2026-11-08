@@ -1,33 +1,37 @@
-HomeRPG ArchLord v0.2.0 — LISEZMOI pour les testeurs
+HomeRPG ArchLord v0.3.1 — LISEZMOI pour les testeurs
 ====================================================
 
 Merci de tester ! HomeRPG ArchLord fait tourner ArchLord en solo, hors ligne, sur votre PC :
 un serveur ArchCore local, sa propre base MariaDB et le client ArchRust, lancés par un seul
 bouton JOUER. Rien ne sort de votre PC (tout écoute sur 127.0.0.1).
 
-Cette version : ArchCore 7403088 (branche Core du 26 octobre 2026) et ArchRust 2e41983
-(branche client du 26 octobre 2026).
+Cette version : ArchCore 6912f16 (branche Core du 8 novembre 2026) avec le module ArchBot
+(bots), ArchRust 7a6c7f3 (8 novembre 2026), ArchCore Admin 1.4.0.
+
+C'est la première version pour les essais EN JEU : tout le code a été vérifié au
+simulateur, à vous de le jouer pour de vrai. Chaque retour compte.
 
 
 1. CE QU'IL VOUS FAUT
 ---------------------
 
-* Windows 10 ou 11, 64 bits, environ 2 Go libres (plus vos données du jeu).
+* Windows 10 ou 11, 64 bits, environ 2 Go libres (plus les données du jeu).
 * Les données du jeu ArchLord 64 bits (dossiers character, ini, world, texture, object,
-  effect, sound…). Elles NE SONT PAS fournies : prenez-les dans votre propre client ArchLord.
-* Rien d'autre : les tables du serveur d'origine (apparitions des monstres, butin, IA des
-  monstres, raffinage, carte) sont incluses dans Server\Data\server-ini\. Le monde a ses
-  monstres et son butin dès le premier lancement. Ne supprimez pas ce dossier : sans lui,
-  le launcher affiche un avertissement en rouge et le monde n'a ni monstres ni butin.
+  effect, sound…). Si votre paquet de test ne les contient pas déjà dans Client\, prenez-les
+  dans votre propre client ArchLord.
+* Rien d'autre : les tables du serveur ArchLord d'origine (valeurs du jeu de l'épisode 8,
+  apparitions des monstres, butin, IA, raffinage, carte) sont incluses dans
+  Server\Data\server-ini\. Ne supprimez pas ce dossier : sans lui, le monde ne peut pas
+  être importé.
 * Les ports 3316, 11002 et 11008 doivent être libres (un autre serveur ArchLord éteint).
 
 
 2. INSTALLATION
 ---------------
 
-1. Décompressez le dossier HomeRPG-ArchLord-v0.2.0 dans un dossier où vous pouvez écrire
-   (par exemple C:\Jeux\). Évitez « Program Files ».
-2. Données du jeu, au choix :
+1. Décompressez le dossier dans un dossier où vous pouvez écrire (par exemple C:\Jeux\).
+   Évitez « Program Files ».
+2. Données du jeu, si elles ne sont pas déjà dans Client\, au choix :
    - copiez-les dans Client\, à côté d'ArchRust.exe ;
    - ou laissez-les où elles sont et indiquez leur dossier dans le launcher :
      Paramètres > « Données du jeu ArchLord ».
@@ -35,10 +39,7 @@ Cette version : ArchCore 7403088 (branche Core du 26 octobre 2026) et ArchRust 2
    « Windows a protégé votre ordinateur », cliquez sur « Informations complémentaires »
    puis « Exécuter quand même ».
 4. Langue : le launcher s'ouvre en français si Windows est en français, sinon en anglais.
-   Paramètres > « Langue du launcher » la change ; le jeu suit la même langue (textes du
-   serveur, noms des PNJ, textes des objets et des compétences). En anglais, quelques
-   écrans propres à ArchRust (connexion, certains libellés) et des messages d'AddOns
-   restent pour l'instant en français.
+   Paramètres > « Langue du launcher » la change ; le jeu suit la même langue.
 
 
 3. PREMIER LANCEMENT
@@ -47,94 +48,118 @@ Cette version : ArchCore 7403088 (branche Core du 26 octobre 2026) et ArchRust 2
 Cliquez sur JOUER. Le launcher enchaîne, en affichant chaque étape :
   1. démarrage de MariaDB (création de la base la première fois) ;
   2. mise à jour du schéma des bases (archcore db-init) ;
-  3. import du monde depuis vos données du jeu (archcore import) : quelques minutes, une
-     seule fois (et de nouveau après une mise à jour d'ArchCore) ;
-  4. démarrage du serveur ArchCore ;
-  5. ouverture d'ArchRust, déjà réglé sur le serveur local et dans la langue choisie.
-Fermer ArchRust arrête aussi le serveur et la base, et fait une sauvegarde automatique de
-vos personnages.
+  3. import du monde : valeurs de l'épisode 8 depuis les tables du serveur d'origine, noms
+     et visuels depuis vos données du jeu (archcore import) : environ une minute, une seule
+     fois (et de nouveau après une mise à jour d'ArchCore) ;
+  4. écriture des tables de l'épisode 8 pour ArchRust dans Client\server-data (archcore
+     export-client-tables) : les infobulles, prix et conditions affichés par le jeu sont
+     ceux du serveur ;
+  5. démarrage du serveur ArchCore, avec ses bots ;
+  6. ouverture d'ArchRust, déjà réglé sur le serveur local et dans la langue choisie.
+Fermer ArchRust fait une sauvegarde automatique de vos personnages ; fermer le launcher
+arrête le serveur et la base.
 
 
 4. COMPTES DE TEST
 ------------------
 
 Aucun compte n'existe au départ. Dans l'onglet Comptes du launcher, créez par exemple :
-  * testeur  / test1234  niveau MJ 3 : toutes les commandes de maître du jeu, et le
-    panneau ArchCore Admin dans le jeu (/aca) ;
-  * joueur   / test1234  niveau MJ 0 : un joueur normal, pour vérifier ce qu'un joueur
-    sans droits peut faire.
+  * testeur  / test1234  niveau MJ 3 : toutes les commandes de maître du jeu, le panneau
+    ArchCore Admin dans le jeu (/aca) et les commandes MJ des bots ;
+  * joueur   / test1234  niveau MJ 0 : un joueur normal.
 Identifiant : 1 à 16 lettres ou chiffres ; mot de passe : 4 à 16 caractères sans espace.
-Connectez-vous dans ArchRust avec l'un d'eux et créez un personnage. Les commandes MJ sont
-listées dans l'onglet « Aide MJ » du launcher.
+Dans ArchRust, connectez-vous sur le panneau de connexion d'ArchRust (identifiant et mot
+de passe ; le serveur local est déjà rempli). Cochez « Enregistrer le compte » pour ne plus
+avoir à le saisir. Les comptes archbot_… sont ceux des bots : le launcher
+les masque, n'y touchez pas.
 
 
-5. VOUS AVIEZ LA v0.1.0 ?
+5. VOUS AVIEZ LA v0.3.0 OU LA v0.2.0 ?
 -------------------------
 
-Launcher fermé, copiez le dossier UserData\ de l'ancienne version dans la nouvelle
+Depuis la v0.3.0 : launcher fermé, copiez le dossier UserData\ de l'ancienne version dans
+la nouvelle. Au premier JOUER, le launcher ajoute la table du Gacha, réimporte le monde,
+contrôle les bases (archcore db-check) et réécrit Client\server-data ; comptes,
+personnages et bots sont conservés.
+
+Depuis la v0.2.0 : launcher fermé, copiez le dossier UserData\ de l'ancienne version dans la nouvelle
 (comptes, personnages, réglages, sauvegardes). Copiez aussi vos données du jeu (Client\) si
-vous les aviez mises là. Les tables du serveur sont déjà dans la nouvelle version.
-Au premier JOUER, le launcher applique les nouvelles migrations des bases puis réimporte le
-monde (ArchCore a de nouvelles tables) ; vos comptes et personnages sont conservés.
+vous les aviez mises là et que le nouveau paquet ne les contient pas.
+Au premier JOUER, le launcher applique les migrations des bases, réimporte le monde aux
+valeurs de l'épisode 8, puis met vos personnages aux mêmes valeurs (archcore migrate-ep8),
+une seule fois, après une sauvegarde « avant-ep8 » (onglet Sauvegardes) : les objets, options
+et compétences propres à Archonia sont mis de côté (rien n'est détruit, l'opération est
+réversible) et l'oubli des compétences vous est offert, leurs coûts ayant changé.
 
 
-6. NOUVEAUTÉS DEPUIS LA v0.1.0 — CE QU'IL FAUT ESSAYER
-------------------------------------------------------
+6. NOUVEAUTÉS — CE QU'IL FAUT ESSAYER
+-------------------------------------
 
-Guildes complètes (touche G, registraire de guilde au niveau 20)
-  * second de guilde, passation de la direction, agrandissement, liste des guildes ;
-  * emblèmes de guilde ;
-  * combats de guildes (défi, compte à rebours, résultat) ;
-  * alliances et hostilités entre guildes ;
-  * entrepôt de guilde, chez un gardien de banque.
-Zones de combat des portails
-  * les destinations de combat entre joueurs demandent une confirmation ; le portail est
-    refusé en combat ; « Retour » ramène au point de départ.
-Reconnexion automatique
-  * si la connexion est coupée, ArchRust se reconnecte seul ; le personnage reste 60 s dans
-    le monde en l'attendant. Pour l'essayer : /coupure dans la discussion.
-Compétences et objets d'Archonia
-  * compétences supérieures et héroïques (maîtrises, points héroïques, charisme), partage
-    des dégâts, purges, défense ignorée, compétences des monstres ;
-  * options des objets, runes et options liées des objets uniques.
-Raffinage
-  * chez le PNJ de raffinage ; commande MJ /last_refine (dernière recette).
-Conversion des objets
-  * conversion et dégâts élémentaires.
-Potions automatiques
-  * potions de la barre de raccourcis, prise automatique.
-Options d'Archonia (touche Échap > Options)
-  * onglets GFX, Affichage et Fonction, gardés d'une session à l'autre.
-Langue
-  * français ou anglais : launcher (Paramètres) et jeu (textes du serveur et d'ArchRust).
-AddOns
-  * fournis dans Client\addons : ArchAce (cadres et options, /options), ArchCore Admin
-    (panneau MJ, /aca), HelloArch (exemple). Onglet « Packs et AddOns » du launcher pour
-    les activer, les désactiver ou en ajouter (fichier .zip).
-Refus d'échange, de groupe et de guilde
-  * Options > Fonction : cochez un refus, puis demandez un échange, un groupe ou une
-    invitation de guilde avec un autre personnage : la demande doit être refusée.
-Monde plus proche d'Archonia
-  * niveaux des monstres, réapparition des boss en 30 à 45 minutes, vitesse de déplacement.
+Nouveau dans la v0.3.1
+  * Gacha de l'épisode 8 : socles de tirage, coût en pass, or et charisme, refus
+    expliqués (inventaire Cash plein, niveau…) ;
+  * retour de bug n° 2 corrigé : reprise d'un objet proposé à l'échange, loterie,
+    apparence, inventaire, compétences des classes sans évolution ;
+  * butin : un monstre trop éloigné de votre niveau (11 niveaux et plus, dans les deux
+    sens) ne laisse plus de butin ;
+  * pendant une incantation, le lanceur reste sur place ; tout sort à durée est annoncé ;
+  * ArchCore Admin 1.4.0 (/aca) : refus expliqués, liste de monstres, fiche d'objet et
+    filtre de classe.
+
+Depuis la v0.2.0
+
+Valeurs d'origine de l'épisode 8
+  * compétences, objets, options, runes, monstres, raffinage, régions, boutiques,
+    portails et expérience reprennent les valeurs du jeu d'origine ; les ajouts d'Archonia
+    sont écartés. Niveau maximal 120.
+  * dites-nous tout ce qui vous semble faux : un prix, des dégâts, un niveau requis, une
+    boutique, un monstre trop fort ou trop faible.
+Bots (ArchBot)
+  * des bots autonomes peuplent le monde (15 au démarrage) : ils chassent, ramassent,
+    s'équipent, se reposent, reviennent après leur mort ;
+  * engagez un compagnon : « /bot hire » près d'un bot (ou « /bot hire Nom »), acceptez
+    son invitation de groupe ; il vous suit et vous défend. Ordres : /bot follow, stay,
+    come, attack, passive, defensive, aggressive, stop, status ; aussi en chuchotant au
+    bot ou par /p à tout le groupe. « /bot dismiss » le libère ; « /bot list » ;
+  * MJ (niveau 2) : /bot stats, /bot spawn n, /bot despawn n|all|nom, /bot population n ;
+  * réglages : onglet ArchBot du launcher (activés ou non, autonomes, compagnons,
+    nombre, niveaux, classes, comportement, survie, performances), pris en compte au
+    démarrage suivant.
+Nouveaux systèmes
+  * titres (674 titres, Title Manager), métamorphose et évolution du Dragon Scion,
+    consommables (ragoûts, talismans, orbes de résurrection, Return Orb, Secret Safe…),
+    inventaire Cash et sac du familier, rappel de groupe, actions sociales, barre de
+    raccourcis gardée par le serveur, retour à la sélection des personnages, échange privé
+    (grille Ex), boutique des Shrines, munitions des arcs et arbalètes, objets à durée.
+ArchRust
+  * panneau de connexion d'ArchRust (compte enregistré), caméra d'origine, eau, herbe,
+    décor animé, ombres, son 3D, fenêtres des maîtrises.
+ArchCore Admin 1.3.0 (/aca)
+  * choix visuel des objets, simulateur de butin.
 
 Le launcher aussi a changé :
-  * ArchRust, ses AddOns et les tables du serveur d'origine sont fournis (seules les
-    données du jeu restent à vous) : monstres et butin dès le premier lancement ;
-  * entièrement en français ou en anglais, et le jeu suit la langue choisie ;
-  * avertissement clair si les tables du serveur d'origine viennent à manquer (sinon :
-    aucun monstre), et réimport automatique dès qu'elles reviennent ;
-  * réimport automatique du monde après une mise à jour d'ArchCore ;
-  * le contrôle des fichiers (onglet Accueil > Vérifier) nomme chaque fichier altéré
-    ou manquant, aussi dans le journal ;
-  * connexions à MariaDB fermées proprement (plus de « Aborted connection » à chaque
-    seconde dans Logs\mariadb-error.log) ;
-  * le compte MariaDB root@<nom du PC>, inutile, est supprimé après l'initialisation.
+  * il écrit les tables du serveur pour ArchRust (Client\server-data) et les réécrit
+    après chaque import ;
+  * l'import exige les tables du serveur d'origine : s'il en manque, le démarrage s'arrête
+    et le dit (au lieu d'un monde vide) ;
+  * nouvel onglet ArchBot : tous les réglages des bots, et les commandes du jeu ;
+  * mise à jour d'une installation 0.2.0 automatique, personnages compris.
 
 Deux personnages en même temps (groupe, échange, guilde) : pendant que le jeu tourne, vous
 pouvez ouvrir une seconde fois Client\ArchRust.exe et vous connecter avec l'autre compte.
+Les bots aussi peuvent servir de partenaires de groupe.
 
 
-7. LES JOURNAUX À NOUS RENVOYER
+7. PROBLÈMES CONNUS
+-------------------
+
+* Les noms de modèles des bots apparaissent en coréen dans le journal du serveur : c'est
+  seulement le journal.
+* Les bots ne font pas encore : achats, quêtes, combat entre joueurs, montures, guildes,
+  soins des alliés.
+
+
+8. LES JOURNAUX À NOUS RENVOYER
 -------------------------------
 
 Le plus simple : onglet Sauvegardes > « Exporter un diagnostic ». Le launcher crée
@@ -143,8 +168,9 @@ MariaDB, configurations, mots de passe masqués) et ouvre son dossier. Envoyez c
 
 Sinon, les journaux sont dans Logs\ :
   * Logs\launcher.log            le launcher (étapes, erreurs) ;
-  * Logs\server\archcore-*.log   le serveur ArchCore, un fichier par démarrage ;
-  * Logs\server\outils-*.log     l'initialisation et l'import du monde ;
+  * Logs\server\archcore-*.log   le serveur ArchCore, un fichier par démarrage (lignes
+                                 [archbot] pour les bots) ;
+  * Logs\server\outils-*.log     l'initialisation, l'import du monde, l'export des tables ;
   * Logs\client\archrust-*.log   le client ArchRust, un fichier par partie ;
   * Logs\mariadb-error.log       la base de données.
 Ils sont aussi visibles dans l'onglet Journaux du launcher.
@@ -153,7 +179,7 @@ Avec les journaux, dites-nous : ce que vous faisiez, ce que vous attendiez, ce q
 passé, l'heure approximative et le nom du personnage. Une capture d'écran aide beaucoup.
 
 
-8. BON À SAVOIR
+9. BON À SAVOIR
 ---------------
 
 * Tout reste dans le dossier : supprimez-le pour tout désinstaller. Gardez UserData\ si
@@ -162,3 +188,4 @@ passé, l'heure approximative et le nom du personnage. Une capture d'écran aide
 * Un souci de démarrage ? Onglet Accueil > Vérifier, puis Réparer.
 * Onglet Monde > « Réimporter la base monde » : refait l'import (comptes et personnages
   conservés).
+* Ne modifiez pas Client\server-data ni Client\realmlist.wtf : le launcher les écrit.

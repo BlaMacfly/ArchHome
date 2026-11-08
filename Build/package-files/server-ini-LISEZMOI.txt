@@ -1,15 +1,16 @@
-Tables du serveur ArchLord d'origine, incluses : spawndatatable.txt et spawninstancetable.txt
-(apparitions des monstres), itemdroptable.txt, groupdroprate.txt, droprankrate.txt (butin),
-aidatatable.txt (compétences des monstres), optionnumdroprate.txt, socketnumdroprate.txt,
-refineryrecipetable.txt (options, sockets, raffinage) et world\node_data (carte du serveur).
-Elles sont importées dans la base monde au premier lancement. Ne les supprimez pas : sans
-elles, le monde n'a NI MONSTRES NI BUTIN. Si elles ont manqué lors d'un import, le monde est
-réimporté au démarrage suivant leur retour (comptes et personnages conservés).
+Tables du serveur ArchLord d'origine, incluses. Depuis la version 0.3.0, ArchCore en tire les
+valeurs du jeu de l'épisode 8 (compétences, objets, options, runes, monstres, raffinage,
+régions, boutiques, portails, expérience : itemdatatable.txt, skilltemplate.ini,
+characterdatatable.txt…), en plus des apparitions des monstres (spawndatatable.txt,
+spawninstancetable.txt), du butin (itemdroptable.txt, groupdroprate.txt, droprankrate.txt), de
+l'IA des monstres (aidatatable.txt) et de la carte du serveur (world\node_data).
+Elles sont importées dans la base monde au premier lancement, et de nouveau après une mise à
+jour d'ArchCore. Ne les supprimez pas : sans elles, le monde NE PEUT PAS être importé.
 
-Original ArchLord server tables, included: spawndatatable.txt and spawninstancetable.txt
-(monster spawns), itemdroptable.txt, groupdroprate.txt, droprankrate.txt (loot),
-aidatatable.txt (monster skills), optionnumdroprate.txt, socketnumdroprate.txt,
-refineryrecipetable.txt (options, sockets, refining) and world\node_data (server map).
-They are imported into the world database on the first start. Do not delete them: without
-them, the world has NO MONSTERS OR LOOT. If they were missing during an import, the world is
-reimported on the first start after they are back (accounts and characters kept).
+Original ArchLord server tables, included. Since version 0.3.0, ArchCore takes the Episode 8
+game values from them (skills, items, options, runes, monsters, refining, regions, shops,
+portals, experience: itemdatatable.txt, skilltemplate.ini, characterdatatable.txt…), as well
+as monster spawns (spawndatatable.txt, spawninstancetable.txt), loot (itemdroptable.txt,
+groupdroprate.txt, droprankrate.txt), monster AI (aidatatable.txt) and the server map
+(world\node_data). They are imported into the world database on the first start, and again
+after an ArchCore update. Do not delete them: without them, the world CANNOT be imported.

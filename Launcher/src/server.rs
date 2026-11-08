@@ -35,11 +35,6 @@ fn database_keys(lines: &mut Vec<String>, creds: &DbCredentials) {
     set_conf_value(lines, "Database.Password", &quoted(&creds.password));
 }
 
-/// Dossier des données du jeu lu par les outils d'import (tables `ini/`, relief `world/`).
-pub fn game_dir(layout: &Layout, settings: &Settings) -> std::path::PathBuf {
-    crate::client::from_settings(layout, settings).game_dir
-}
-
 /// Les .conf sont régénérés à chaque démarrage depuis les modèles d'ArchCore : les clés gérées (écoute sur
 /// 127.0.0.1, ports, base, chemins) d'abord, puis les réglages de l'onglet Monde.
 pub fn generate_configs(layout: &Layout, creds: &DbCredentials, settings: &Settings) -> Result<(), String> {
@@ -63,17 +58,24 @@ pub fn generate_configs(layout: &Layout, creds: &DbCredentials, settings: &Setti
     set_conf_value(&mut w, "WorldServer.Group", &quoted(WORLD_NAME));
     set_conf_value(&mut w, "WorldServer.PublicAddress", "\"127.0.0.1\"");
     database_keys(&mut w, creds);
-    set_conf_value(&mut w, "Client.DataDir", &Layout::conf_path(&game_dir(layout, settings)));
+    let client = crate::client::from_settings(layout, settings);
+    set_conf_value(&mut w, "Client.DataDir", &Layout::conf_path(&client.game_dir));
+    // Tables de l'épisode 8 exportées pour ArchRust : le serveur annonce leur empreinte (tables.toml).
+    set_conf_value(&mut w, "Client.TablesDir", &Layout::conf_path(&crate::client::server_data_dir(&client)));
     set_conf_value(&mut w, "World.Language", &quoted(settings.game_language.code()));
     for opt in crate::conf_catalog::WORLD_OPTIONS {
-        let v = crate::conf_catalog::value(&settings.conf, opt);
-        let v = match opt.kind {
-            crate::conf_catalog::Kind::Choice(_) => quoted(v),
-            _ => v.to_string(),
-        };
-        set_conf_value(&mut w, opt.key, &v);
+        set_conf_value(&mut w, opt.key, &crate::conf_catalog::conf_value(&settings.conf, opt));
     }
     std::fs::write(out.join("world.conf"), w.join("\n") + "\n").map_err(|e| e.to_string())?;
+
+    // archbot.conf (module ArchBot compilé dans archcore.exe) : réglages de l'onglet Monde, section Bots.
+    if dist.join("archbot.conf.dist").is_file() {
+        let mut b = read("archbot.conf.dist")?;
+        for opt in crate::conf_catalog::ARCHBOT_OPTIONS {
+            set_conf_value(&mut b, opt.key, &crate::conf_catalog::conf_value(&settings.conf, opt));
+        }
+        std::fs::write(out.join("archbot.conf"), b.join("\n") + "\n").map_err(|e| e.to_string())?;
+    }
     Ok(())
 }
 

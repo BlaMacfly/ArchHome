@@ -62,6 +62,8 @@ impl Layout {
     pub fn backups(&self) -> PathBuf { self.user_data().join("Sauvegardes") }
     /// Version d'ArchCore (VERSION.txt) qui a importé le monde : une autre version le réimporte au démarrage
     pub fn world_import_marker(&self) -> PathBuf { self.user_data().join("monde-importe-par.txt") }
+    /// `archcore migrate-ep8 --apply` fait (ou inutile, sans personnage) : jamais refait
+    pub fn ep8_migration_marker(&self) -> PathBuf { self.user_data().join("migration-ep8.txt") }
 
     // Journaux
     pub fn logs(&self) -> PathBuf { self.root.join("Logs") }

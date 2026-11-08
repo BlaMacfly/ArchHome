@@ -1,14 +1,22 @@
 {
-  "$schema_note": "Manifeste des composants gérés par le projet. Les sha256 vides sont remplis par Get-Components.ps1 -Pin lors du premier téléchargement, puis figés : toute différence ultérieure est une erreur. ArchCore n'est pas téléchargé : Build-ArchCore.ps1 le compile depuis ses sources au commit indiqué.",
-  "version": "0.2.0",
-  "updated": "2026-10-26",
+  "$schema_note": "Manifeste des composants gérés par le projet. Les sha256 vides sont remplis par Get-Components.ps1 -Pin lors du premier téléchargement, puis figés : toute différence ultérieure est une erreur. ArchCore n'est pas téléchargé : Build-ArchCore.ps1 le compile depuis ses sources au commit indiqué, avec le module ArchBot (patch d'ArchBot appliqué sur une copie).",
+  "version": "0.3.1",
+  "updated": "2026-11-08",
   "archcore": {
-    "description": "ArchCore, émulateur de serveur ArchLord (connexion + monde) en Rust, branche Core. Compilé par Build\\Build-ArchCore.ps1 depuis une copie locale du dépôt (paramètre -Source) ou un clone du commit indiqué.",
+    "description": "ArchCore, émulateur de serveur ArchLord (connexion + monde) en Rust, branche Core, valeurs de l'épisode 8. Compilé par Build\\Build-ArchCore.ps1 sur une copie clonée de -Source (copie locale du dépôt) ou du dépôt, au commit indiqué, avec ArchBot dans modules/ArchBot et son patch.",
     "source": "https://github.com/BlaMacfly/ArchCore",
     "branch": "Core",
     "license": "GPL-3.0-or-later",
-    "commit": "7403088",
+    "commit": "6912f16",
     "install_to": "Server/ArchCore"
+  },
+  "archbot": {
+    "description": "ArchBot, module PlayerBots d'ArchCore (bots autonomes et compagnons) : cloné dans modules/ArchBot de la copie d'ArchCore, patches/archcore-archbot.patch appliqué (12 fichiers, adapté à ArchCore 6912f16), compilé dans archcore.exe (feature archbot). Réglages : Server/Config/archbot.conf, généré par le launcher depuis config/archbot.conf.dist.",
+    "source": "https://github.com/BlaMacfly/ArchBot",
+    "branch": "main",
+    "license": "GPL-3.0-or-later",
+    "commit": "e214b2c",
+    "install_to": "Server/ArchCore/archcore.exe (compilé dedans), Server/ArchCore/config/archbot.conf.dist, Server/ArchCore/archbot/"
   },
   "components": [
     {
@@ -41,7 +49,7 @@
   "user_provided": [
     {
       "id": "server-tables",
-      "description": "Incluses dans le package (New-Package.ps1 -ServerTables), jamais dans le dépôt : tables du serveur ArchLord d'origine (spawndatatable.txt, spawninstancetable.txt, itemdroptable.txt, groupdroprate.txt, droprankrate.txt, aidatatable.txt, optionnumdroprate.txt, socketnumdroprate.txt, refineryrecipetable.txt, world/node_data). Sans elles, le monde n'a ni monstres ni butin.",
+      "description": "Incluses dans le package (New-Package.ps1 -ServerTables), jamais dans le dépôt HomeRPG : tables du serveur ArchLord d'origine, livrées par ArchCore lui-même depuis b84b67a (data/server-ini du commit indiqué) et exigées par archcore import --server (valeurs de l'épisode 8, apparitions des monstres, butin, IA, raffinage, loteries, costumes, Gacha ; world/node_data pour la carte). Sans elles, le monde ne peut pas être importé.",
       "default_location": "Server/Data/server-ini"
     },
     {
@@ -59,10 +67,10 @@
     }
   ],
   "archrust": {
-    "description": "Client ArchLord réécrit en Rust (branche client du dépôt ArchCore) : seul l'exécutable est fourni, les données du jeu sont fournies par l'utilisateur.",
-    "source": "https://github.com/BlaMacfly/ArchCore/tree/2e41983/ArchRust",
-    "branch": "client",
-    "commit": "2e41983",
+    "description": "Client ArchLord réécrit en Rust (dépôt ArchRust) : seul l'exécutable est fourni, les données du jeu sont fournies par l'utilisateur. Il lit Client/server-data (tables de l'épisode 8 écrites par archcore export-client-tables).",
+    "source": "https://github.com/BlaMacfly/ArchRust/tree/7a6c7f3",
+    "branch": "main",
+    "commit": "7a6c7f3",
     "license": "GPL-3.0-or-later",
     "install_to": "Client/ArchRust.exe"
   },
@@ -70,24 +78,24 @@
     {
       "id": "ArchAce",
       "description": "AddOn d'interface livré avec ArchRust (cadres d'unité, plaques de noms, options).",
-      "source": "https://github.com/BlaMacfly/ArchCore/tree/2e41983/ArchRust/addons/ArchAce",
-      "commit": "2e41983",
+      "source": "https://github.com/BlaMacfly/ArchRust/tree/7a6c7f3/addons/ArchAce",
+      "commit": "7a6c7f3",
       "license": "GPL-3.0-or-later",
       "install_to": "Client/addons/ArchAce"
     },
     {
       "id": "HelloArch",
       "description": "AddOn d'exemple livré avec ArchRust.",
-      "source": "https://github.com/BlaMacfly/ArchCore/tree/2e41983/ArchRust/addons/HelloArch",
-      "commit": "2e41983",
+      "source": "https://github.com/BlaMacfly/ArchRust/tree/7a6c7f3/addons/HelloArch",
+      "commit": "7a6c7f3",
       "license": "GPL-3.0-or-later",
       "install_to": "Client/addons/HelloArch"
     },
     {
       "id": "ArchCoreAdmin",
-      "description": "ArchCore Admin 1.2.0 : panneau MJ (/aca) qui envoie les commandes MJ d'ArchCore et lit leurs réponses.",
-      "source": "https://github.com/BlaMacfly/ArchCoreAdmin",
-      "commit": "1c5051f",
+      "description": "ArchCore Admin 1.4.0 : panneau MJ (/aca) qui envoie les commandes MJ d'ArchCore et lit leurs réponses (choix visuel des objets, simulateur de butin, refus expliqués, liste de monstres, fiche et filtre de classe).",
+      "source": "https://github.com/BlaMacfly/ArchCoreAdmin/releases/tag/v1.4.0",
+      "commit": "8f2f348",
       "license": "GPL-3.0-or-later",
       "install_to": "Client/addons/ArchCoreAdmin"
     }

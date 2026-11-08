@@ -7,12 +7,14 @@ HomeRPG ArchLord — ArchLord en solo, hors ligne, en français
    ArchLord 64 bits (character\, ini\, world\, texture\…) ou indiquez leur dossier dans
    Paramètres. Les données du jeu ne sont pas fournies.
 
-2. Les tables du serveur ArchLord d'origine (apparitions des monstres, butin) sont incluses
-   dans Server\Data\server-ini\ : monstres et butin dès le premier lancement.
+2. Les tables du serveur ArchLord d'origine (valeurs du jeu de l'épisode 8, apparitions des
+   monstres, butin) sont incluses dans Server\Data\server-ini\ : l'import du monde les exige.
 
 3. Ouvrez « HomeRPG ArchLord.exe » et cliquez sur JOUER.
-   Le premier démarrage importe le monde depuis votre client (quelques minutes, une fois,
-   puis de nouveau après une mise à jour d'ArchCore).
+   Le premier démarrage importe le monde (environ une minute, une fois, puis de nouveau
+   après une mise à jour d'ArchCore) et écrit les tables du serveur pour ArchRust dans
+   Client\server-data. Le serveur a ses bots (onglet ArchBot) ; en jeu, « /bot hire »
+   engage un compagnon.
 
 4. Créez votre compte dans l'onglet Comptes (niveau MJ 3 pour toutes les commandes),
    puis connectez-vous dans ArchRust.

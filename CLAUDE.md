@@ -27,8 +27,10 @@ serveur ArchCore local + MariaDB portable + launcher Rust à un seul bouton.
   jamais dans le dépôt. Aucune donnée du client ArchLord dans le dépôt ou le package.
 - Les émulateurs de `../HomeRPG ArchLord/references/` ne sont jamais nommés ni copiés (même règle qu'ArchCore).
   Les tables du serveur d'origine se décrivent comme « tables du serveur ArchLord d'origine ».
-- ArchCore n'est pas modifié ici : il est compilé tel quel par `Build/Build-ArchCore.ps1` (target-dir séparé,
-  `--locked`) au commit de `Build/manifest.json`. Ne jamais remplacer `ArchCore-core/target/release/archcore.exe`.
+- ArchCore n'est pas modifié ici : `Build/Build-ArchCore.ps1` le compile sur une copie clonée (`Build/tmp/ArchCore-src`,
+  target-dir séparé, `--locked`, toolchain 1.98.1) au commit de `Build/manifest.json`, avec ArchBot dans
+  `modules/ArchBot` et son patch, rien d'autre. Un patch qui ne s'applique plus s'adapte dans le dépôt ArchBot.
+  Ne jamais remplacer `ArchCore-core/target/release/archcore.exe` ni compiler dans `ArchCore-core/target`.
 - Le serveur principal de l'utilisateur (MariaDB 3306, bases `archcore_*` de son instance, ports 11002/11008) n'est
   pas celui de HomeRPG : HomeRPG a sa propre MariaDB sur 3316 (`UserData/Database`). Avant un test, vérifier que
   11002/11008 sont libres ; ne jamais arrêter le serveur de l'utilisateur.

@@ -180,6 +180,20 @@ pub fn configure(info: &ClientInfo, settings: &Settings) -> Result<(), String> {
     std::fs::write(&opts, lines.join("\n") + "\n").map_err(|e| format!("{} : {e}", opts.display()))
 }
 
+/// Dossier « données du serveur » d'ArchRust : `server-data/` à côté de `realmlist.wtf` (dossier de l'exécutable),
+/// écrit par `archcore export-client-tables` et lu par ArchRust avant ses packs et les données du jeu.
+pub fn server_data_dir(info: &ClientInfo) -> PathBuf {
+    info.dir.join("server-data")
+}
+
+/// Langue choisie dans les options d'ArchRust (clé `language` de saved-variables/options.toml), si le
+/// launcher la connaît.
+pub fn game_language(dir: &Path) -> Option<crate::i18n::Lang> {
+    let text = std::fs::read_to_string(dir.join("saved-variables").join("options.toml")).ok()?;
+    let line = text.lines().take_while(|l| !l.trim_start().starts_with('[')).find(|l| l.trim_start().starts_with("language") && l.contains('='))?;
+    crate::i18n::Lang::parse(line.split_once('=')?.1.trim().trim_matches('"'))
+}
+
 /// Lance ArchRust : sorties dans `Logs/client/archrust-<date>.log` et dans l'onglet Journaux (Client).
 /// Le niveau de détail vient du réglage (RUST_LOG).
 pub fn launch(info: &ClientInfo, settings: &Settings, client_logs: &Path, sink: Sender<Line>) -> Result<(Child, Option<PathBuf>), String> {

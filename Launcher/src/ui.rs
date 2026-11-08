@@ -20,6 +20,7 @@ enum Tab {
     Home,
     Accounts,
     World,
+    ArchBot,
     Packs,
     Database,
     Backups,
@@ -85,6 +86,7 @@ impl App {
         let tab = match start_tab.as_deref() {
             Some("accounts") => Tab::Accounts,
             Some("world") => Tab::World,
+            Some("archbot") => Tab::ArchBot,
             Some("packs") => Tab::Packs,
             Some("database") => Tab::Database,
             Some("backups") => Tab::Backups,
@@ -236,6 +238,7 @@ impl eframe::App for App {
                 ui.selectable_value(&mut self.tab, Tab::Home, t::TAB_HOME.s());
                 ui.selectable_value(&mut self.tab, Tab::Accounts, t::TAB_ACCOUNTS.s());
                 ui.selectable_value(&mut self.tab, Tab::World, t::TAB_WORLD.s());
+                ui.selectable_value(&mut self.tab, Tab::ArchBot, t::TAB_ARCHBOT.s());
                 ui.selectable_value(&mut self.tab, Tab::Packs, t::TAB_PACKS.s());
                 ui.selectable_value(&mut self.tab, Tab::Database, t::TAB_DATABASE.s());
                 ui.selectable_value(&mut self.tab, Tab::Backups, t::TAB_BACKUPS.s());
@@ -263,6 +266,7 @@ impl eframe::App for App {
             Tab::Home => self.home(ui, &snap),
             Tab::Accounts => self.accounts(ui, &snap),
             Tab::World => self.world(ui, &snap),
+            Tab::ArchBot => self.archbot(ui, &snap),
             Tab::Packs => self.packs(ui, &snap),
             Tab::Database => self.database(ui, &snap),
             Tab::Backups => self.backups(ui, &snap),
@@ -464,6 +468,11 @@ impl App {
         if !snap.db_up && snap.accounts.is_empty() {
             ui.small(t::ACC_DB_TEMP.s());
         }
+        // Comptes des personnages d'ArchBot (archbot_…, créés par le serveur) : à part, ils ne se gèrent pas ici.
+        let (bots, accounts): (Vec<&crate::db::AccountRow>, Vec<&crate::db::AccountRow>) = snap.accounts.iter().partition(|a| a.username.starts_with("archbot_"));
+        if !bots.is_empty() {
+            ui.small(crate::tf!("{} compte(s) de bots (archbot_…) masqué(s) : ArchBot les gère.", "{} bot account(s) (archbot_…) hidden: ArchBot manages them.", bots.len()));
+        }
         ui.add_space(8.0);
         let playing = snap.state == State::Playing;
         TableBuilder::new(ui)
@@ -481,8 +490,8 @@ impl App {
                 h.col(|_| {});
             })
             .body(|body| {
-                body.rows(22.0, snap.accounts.len(), |mut row| {
-                    let a = &snap.accounts[row.index()];
+                body.rows(22.0, accounts.len(), |mut row| {
+                    let a = accounts[row.index()];
                     let selected = self.acc_selected.as_deref() == Some(a.username.as_str());
                     row.set_selected(selected);
                     row.col(|ui| { if ui.selectable_label(selected, &a.username).clicked() { self.acc_selected = Some(a.username.clone()); self.acc_gm = a.gmlevel.min(3); } });
@@ -535,6 +544,12 @@ impl App {
                             let mut v: f64 = current.parse().unwrap_or(1.0);
                             if ui.add(egui::Slider::new(&mut v, min..=max).step_by(0.1).fixed_decimals(1)).changed() {
                                 new_value = Some(format!("{v:.1}").trim_end_matches(".0").to_string());
+                            }
+                        }
+                        conf_catalog::Kind::Text => {
+                            let mut v = current.clone();
+                            if ui.add(egui::TextEdit::singleline(&mut v).desired_width(220.0)).changed() {
+                                new_value = Some(v.replace('"', ""));
                             }
                         }
                         conf_catalog::Kind::Choice(items) => {
@@ -1410,6 +1425,57 @@ impl App {
                 };
                 ui.label(RichText::new(l).monospace().color(color));
             }
+        });
+    }
+
+    /// Onglet ArchBot : réglages de archbot.conf (bots autonomes et compagnons), bots en base, commandes du jeu.
+    fn archbot(&mut self, ui: &mut egui::Ui, snap: &Snapshot) {
+        ui.heading(t::BOT_TITLE.s());
+        ui.label(t::BOT_INTRO.s());
+        if !self.layout.archcore_dir().join("config").join("archbot.conf.dist").is_file() {
+            ui.add_space(8.0);
+            ui.colored_label(WARN, t::BOTS_ABSENT.s());
+            return;
+        }
+        let bots = snap.accounts.iter().filter(|a| a.username.starts_with("archbot_")).count();
+        let enabled = conf_catalog::value(&self.settings.conf, &conf_catalog::ARCHBOT_OPTIONS[0]) == "1";
+        ui.horizontal_wrapped(|ui| {
+            ui.label(RichText::new(if enabled { t::BOT_ON.s() } else { t::BOT_OFF.s() }).strong().color(status_color(enabled, false)));
+            if !snap.accounts.is_empty() {
+                ui.separator();
+                ui.label(crate::tf!("{bots} bot(s) en base (comptes archbot_…)", "{bots} bot(s) in the database (archbot_… accounts)"));
+            }
+        });
+        if snap.state.services_up() {
+            ui.colored_label(WARN, t::SET_RESTART_NEEDED.s());
+        }
+        ui.horizontal(|ui| {
+            if ui.button(t::SAVE.s()).clicked() {
+                self.save_settings();
+            }
+            if ui.button(t::OPT_RESET_ALL.s()).clicked() {
+                for o in conf_catalog::ARCHBOT_OPTIONS {
+                    self.settings.conf.remove(o.key);
+                }
+            }
+            if let Some(n) = &self.settings_notice {
+                ui.label(n);
+            }
+        });
+        egui::ScrollArea::vertical().auto_shrink([false, false]).show(ui, |ui| {
+            Self::render_options(ui, conf_catalog::ARCHBOT_OPTIONS, &mut self.settings.conf, "archbot");
+            ui.add_space(12.0);
+            ui.separator();
+            ui.label(RichText::new(t::BOT_CMDS_TITLE.s()).strong().color(GOLD));
+            egui::Grid::new("bot_cmds").num_columns(2).spacing([16.0, 4.0]).striped(true).show(ui, |ui| {
+                for (cmd, what) in t::BOT_COMMANDS {
+                    ui.monospace(*cmd);
+                    ui.label(what.s());
+                    ui.end_row();
+                }
+            });
+            ui.add_space(6.0);
+            ui.small(t::BOTS_HINT.s());
         });
     }
 

@@ -2,8 +2,14 @@ ArchRust.exe (client ArchLord en Rust) et ses AddOns (dossier addons : ArchAce,
 ArchCore Admin, HelloArch) sont fournis ici. Placez à côté les données du jeu ArchLord
 64 bits (dossiers character, ini, world, texture, object, effect, sound…), ou indiquez leur
 dossier dans Paramètres du launcher. Les données du jeu ne sont pas fournies.
+Le launcher écrit ici realmlist.wtf (adresse du serveur local) et server-data\ (tables de
+l'épisode 8 du serveur, pour que les infobulles, prix et conditions d'ArchRust soient ceux du
+serveur) : ne les modifiez pas à la main.
 
 ArchRust.exe (the ArchLord client in Rust) and its AddOns (addons folder: ArchAce,
 ArchCore Admin, HelloArch) are included here. Put the 64-bit ArchLord game data next to it
 (character, ini, world, texture, object, effect, sound… folders), or set the data folder
 in the launcher's Settings. The game data is not included.
+The launcher writes realmlist.wtf (local server address) and server-data\ (the server's
+Episode 8 tables, so that ArchRust's tooltips, prices and requirements match the server)
+here: do not edit them by hand.

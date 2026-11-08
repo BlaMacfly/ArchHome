@@ -671,6 +671,7 @@ impl Orchestrator {
                     self.game = None;
                     self.drain_process_logs();
                     self.log(tf!("jeu terminé (code {:?})", "game ended (code {:?})", st.code()));
+                    self.adopt_game_language();
                     if st.code().unwrap_or(0) != 0 {
                         self.notice(t::GAME_CRASHED.s());
                     }
@@ -682,6 +683,23 @@ impl Orchestrator {
                     }
                 }
             }
+        }
+    }
+
+    /// Langue changée dans les options d'ArchRust : elle devient celle du launcher (réglages enregistrés,
+    /// serveur au prochain démarrage), sinon `client::configure` la remettrait au lancement suivant.
+    fn adopt_game_language(&mut self) {
+        let Some(lang) = client::game_language(&self.client_dir()) else { return };
+        if lang == self.settings.game_language {
+            return;
+        }
+        self.settings.game_language = lang;
+        match self.settings.save(&self.layout.settings_file()) {
+            Ok(()) => {
+                self.shared.lock().unwrap().settings_reloaded = true;
+                self.log(tf!("langue du jeu choisie dans ArchRust : {}", "game language chosen in ArchRust: {}", lang.native_name()));
+            }
+            Err(e) => self.log(tf!("réglages non enregistrés : {e}", "settings not saved: {e}")),
         }
     }
 
@@ -792,22 +810,18 @@ impl Orchestrator {
         self.set(State::ImportingWorld, t::MSG_DECRYPT.s(), 0.4);
         self.tool(&["decrypt", &ini.to_string_lossy(), &out.to_string_lossy()])?;
         self.set(State::ImportingWorld, t::MSG_IMPORT.s(), 0.5);
+        // Les valeurs de jeu viennent des tables du serveur d'origine (épisode 8) : ArchCore refuse d'importer sans elles.
         let tables = self.server_tables_dir();
+        let missing = repair::server_tables_missing(&tables);
+        if !missing.is_empty() {
+            self.log(tf!("tables du serveur d'origine absentes de {} : {}", "original server tables missing from {}: {}", tables.display(), missing.join(", ")));
+            self.notice(t::IMPORT_NO_TABLES.s());
+            return Err(t::IMPORT_NO_TABLES.s().into());
+        }
         let out_s = out.to_string_lossy().to_string();
         let tables_s = tables.to_string_lossy().to_string();
-        let with_tables = repair::server_tables_present(&tables);
-        if with_tables {
-            self.log(tf!("import avec les tables du serveur d'origine : {}", "import with the original server tables: {}", tables.display()));
-            self.tool(&["import", &out_s, "--server", &tables_s])?;
-        } else {
-            self.log(tf!(
-                "ATTENTION : tables du serveur d'origine absentes ({}, spawndatatable.txt et spawninstancetable.txt attendus) : monde importé SANS MONSTRES NI BUTIN",
-                "WARNING: original server tables missing ({}, spawndatatable.txt and spawninstancetable.txt expected): world imported WITHOUT MONSTERS OR LOOT",
-                tables.display()
-            ));
-            self.notice(t::IMPORT_NO_TABLES.s());
-            self.tool(&["import", &out_s])?;
-        }
+        self.log(tf!("import avec les tables du serveur d'origine : {}", "import with the original server tables: {}", tables.display()));
+        self.tool(&["import", &out_s, "--server", &tables_s])?;
         self.set(State::ImportingWorld, t::MSG_I18N.s(), 0.7);
         if let Err(e) = self.tool(&["i18n", "db", "fr"]) {
             // Facultatif : les titres de PNJ traduits servent de repli.
@@ -826,14 +840,83 @@ impl Orchestrator {
         if !status.imported() {
             return Err(t::MSG_IMPORT_EMPTY.s().into());
         }
-        if with_tables && status.monsters == 0 {
+        if status.monsters == 0 {
             self.log(t::IMPORT_NO_MONSTERS.s());
             self.notice(t::IMPORT_NO_MONSTERS.s());
+        }
+        // Contrôle de cohérence des bases (lecture seule) : signalé, sans empêcher le démarrage.
+        self.set(State::ImportingWorld, t::MSG_DB_CHECK.s(), 0.72);
+        match self.tool(&["db-check"]) {
+            Ok(()) => self.log(tf!("db-check : bases cohérentes", "db-check: databases consistent")),
+            Err(e) => {
+                self.log(tf!("db-check : {e}", "db-check: {e}"));
+                self.notice(t::DB_CHECK_FAILED.s());
+            }
         }
         if let Err(e) = std::fs::write(self.layout.world_import_marker(), self.archcore_version()) {
             self.log(format!("{} : {e}", self.layout.world_import_marker().display()));
         }
+        self.migrate_ep8(db)?;
         Ok(())
+    }
+
+    /// Personnages créés avant l'épisode 8 (installation mise à jour) : `archcore migrate-ep8` les met aux valeurs
+    /// d'origine, une seule fois, après une sauvegarde. Rien n'est détruit (quarantaine réversible :
+    /// `archcore migrate-ep8 --restore <passe>`). Chaque passe offre l'oubli des compétences : jamais deux fois.
+    fn migrate_ep8(&mut self, db: &MariaDb) -> Result<(), String> {
+        let marker = self.layout.ep8_migration_marker();
+        if marker.is_file() {
+            return Ok(());
+        }
+        let characters = db.characters_count().unwrap_or(0);
+        if characters > 0 {
+            self.set(State::ImportingWorld, t::MSG_MIGRATE_EP8.s(), 0.75);
+            self.tool(&["migrate-ep8"])?;
+            let shared = self.shared.clone();
+            let info = backup::create(&self.layout, db, "avant-ep8", &|step| shared.lock().unwrap().message = format!("{} ({step})", t::MSG_BACKUP.s()))
+                .map_err(|e| tf!("sauvegarde avant migrate-ep8 : {e}", "backup before migrate-ep8: {e}"))?;
+            self.log(tf!("sauvegarde avant la migration EP8 : {}", "backup before the EP8 migration: {}", info.path.display()));
+            self.tool(&["migrate-ep8", "--apply"])?;
+            self.refresh_backups();
+        }
+        let note = tf!(
+            "{} : migrate-ep8 {} ({characters} personnage(s))\n",
+            "{} : migrate-ep8 {} ({characters} character(s))\n",
+            util::datetime_readable(),
+            if characters > 0 { "--apply" } else { "inutile" }
+        );
+        std::fs::write(&marker, note).map_err(|e| format!("{} : {e}", marker.display()))
+    }
+
+    /// Tables de valeurs de l'épisode 8 au format du client, dans `server-data/` à côté de `realmlist.wtf`
+    /// d'ArchRust (le serveur annonce leur empreinte, `Client.TablesDir`). Réécrites après chaque import, et
+    /// quand elles manquent ou sont plus anciennes que l'import (autre client choisi, dossier supprimé).
+    fn export_client_tables(&mut self) {
+        let client = self.client();
+        if !client.is_ok() {
+            return;
+        }
+        let dir = client::server_data_dir(&client);
+        let manifest = dir.join("tables.toml");
+        let mtime = |p: &Path| std::fs::metadata(p).and_then(|m| m.modified()).ok();
+        let fresh = match (mtime(&manifest), mtime(&self.layout.world_import_marker())) {
+            (Some(tables), Some(import)) => tables >= import,
+            (Some(_), None) => true,
+            _ => false,
+        };
+        if fresh {
+            return;
+        }
+        self.set(State::ImportingWorld, t::MSG_EXPORT_TABLES.s(), 0.78);
+        let (dir_s, game_s) = (dir.to_string_lossy().to_string(), client.game_dir.to_string_lossy().to_string());
+        match self.tool(&["export-client-tables", &dir_s, "--game", &game_s]) {
+            Ok(()) => self.log(tf!("tables de l'épisode 8 écrites pour ArchRust : {}", "Episode 8 tables written for ArchRust: {}", dir.display())),
+            // ArchRust lit alors ses propres tables : le jeu reste jouable, les infobulles peuvent différer du serveur.
+            Err(e) => {
+                self.log(tf!("export des tables pour ArchRust : {e}", "table export for ArchRust: {e}"));
+                self.notice(tf!("export des tables pour ArchRust : {e}", "table export for ArchRust: {e}"));
+            }
+        }
     }
 
     fn reimport_world(&mut self) {
@@ -1190,6 +1273,7 @@ impl Orchestrator {
         if let Err(e) = self.prepare_world(&db, false) {
             return self.fail_ret(t::CTX_WORLD.s(), e);
         }
+        self.export_client_tables();
         if let Err(e) = db.ensure_world_row(self.settings.world_port) {
             return self.fail_ret(t::CTX_SCHEMA.s(), e);
         }

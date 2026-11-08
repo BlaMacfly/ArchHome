@@ -70,9 +70,26 @@ pub fn verify_files(layout: &Layout, manifest: &FilesManifest, progress: &dyn Fn
     (missing, altered)
 }
 
-/// Tables du serveur d'origine présentes dans `dir` (au minimum les apparitions de monstres).
+/// Tables du serveur d'origine exigées par `archcore import --server` (valeurs de l'épisode 8, monstres, butin, IA,
+/// loteries, costumes, Gacha ; `crates/archcore/src/tools/import.rs`). `world/node_data` (carte) et `objects/` sont
+/// lus s'ils sont là.
+pub const SERVER_TABLES: [&str; 31] = [
+    "aidatatable.txt", "avatarset.ini", "characterdatatable.txt", "droprankrate.txt", "gachadroptableaccessories.txt",
+    "gachadroptablearmor.txt", "gachadroptablecharisma.txt", "gachadroptableevent.txt", "gachadroptableweapon.txt",
+    "gachatypetemplate.ini", "groupdroprate.txt", "growupfactor.ini", "itemconverttable.txt", "itemdatatable.txt", "itemdroptable.txt",
+    "itemlotterybox.txt", "itemoptiontable.txt", "itemruneattributetable.txt", "levelupexp.ini", "npc.ini", "npctradelist.txt",
+    "refineryrecipetable.txt", "regiontemplate.ini", "skillconst.txt", "skillconst2.txt", "skillspec.txt", "skilltemplate.ini",
+    "spawndatatable.txt", "spawninstancetable.txt", "teleportfee.txt", "teleportpoint.ini",
+];
+
+/// Tables du serveur d'origine absentes de `dir`.
+pub fn server_tables_missing(dir: &Path) -> Vec<&'static str> {
+    SERVER_TABLES.iter().copied().filter(|f| !dir.join(f).is_file()).collect()
+}
+
+/// Toutes les tables du serveur d'origine sont dans `dir` : l'import des valeurs de l'épisode 8 est possible.
 pub fn server_tables_present(dir: &Path) -> bool {
-    dir.join("spawndatatable.txt").is_file() && dir.join("spawninstancetable.txt").is_file()
+    server_tables_missing(dir).is_empty()
 }
 
 /// Données dérivées : tables du client déchiffrées (le client 64 bits en compte plus de 200).

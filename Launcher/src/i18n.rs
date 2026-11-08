@@ -118,6 +118,7 @@ pub const SPAWN_BLOCKED_ANTIVIRUS: T = T(
 pub const TAB_HOME: T = T("Accueil", "Home");
 pub const TAB_ACCOUNTS: T = T("Comptes", "Accounts");
 pub const TAB_WORLD: T = T("Monde", "World");
+pub const TAB_ARCHBOT: T = T("ArchBot", "ArchBot");
 pub const TAB_PACKS: T = T("Packs et AddOns", "Packs & AddOns");
 pub const TAB_DATABASE: T = T("Base de données", "Database");
 pub const TAB_BACKUPS: T = T("Sauvegardes", "Backups");
@@ -151,9 +152,16 @@ pub const MSG_I18N: T = T("Import du monde : textes traduits…", "World import:
 pub const MSG_IMPORT_EMPTY: T = T("l'import n'a rempli aucune table du monde : voir le journal du serveur", "the import filled no world table: see the server log");
 pub const UNKNOWN_VERSION: T = T("version inconnue", "unknown version");
 pub const IMPORT_NO_TABLES: T = T(
-    "ATTENTION : tables du serveur ArchLord d'origine introuvables (elles sont incluses dans Server\\Data\\server-ini). Le monde est importé SANS MONSTRES NI BUTIN. Remettez-les depuis le paquet HomeRPG, ou indiquez leur dossier dans Paramètres : le monde sera réimporté au démarrage suivant.",
-    "WARNING: original ArchLord server tables not found (they are included in Server\\Data\\server-ini). The world is imported WITHOUT MONSTERS OR LOOT. Restore them from the HomeRPG package, or set their folder in Settings: the world is reimported on the next start.",
+    "tables du serveur ArchLord d'origine incomplètes (incluses dans Server\\Data\\server-ini) : l'import du monde en a besoin pour les valeurs de l'épisode 8, les monstres et le butin. Remettez-les depuis le paquet HomeRPG, ou indiquez leur dossier dans Paramètres.",
+    "original ArchLord server tables incomplete (included in Server\\Data\\server-ini): the world import needs them for the Episode 8 values, monsters and loot. Restore them from the HomeRPG package, or set their folder in Settings.",
 );
+pub const MSG_DB_CHECK: T = T("Contrôle des bases (archcore db-check)…", "Checking the databases (archcore db-check)…");
+pub const DB_CHECK_FAILED: T = T(
+    "archcore db-check signale une anomalie dans les bases : voir Journaux > Serveur (outils-*.log), et joignez-le à votre retour.",
+    "archcore db-check reports a database anomaly: see Logs > Server (outils-*.log), and attach it to your report.",
+);
+pub const MSG_EXPORT_TABLES: T = T("Tables de l'épisode 8 pour ArchRust (archcore export-client-tables)…", "Episode 8 tables for ArchRust (archcore export-client-tables)…");
+pub const MSG_MIGRATE_EP8: T = T("Personnages aux valeurs de l'épisode 8 (archcore migrate-ep8)…", "Characters to the Episode 8 values (archcore migrate-ep8)…");
 pub const IMPORT_NO_MONSTERS: T = T(
     "ATTENTION : l'import n'a placé aucun monstre malgré les tables du serveur d'origine. Vérifiez spawndatatable.txt et spawninstancetable.txt (journal du serveur, outils-*.log).",
     "WARNING: the import placed no monsters despite the original server tables. Check spawndatatable.txt and spawninstancetable.txt (server log, outils-*.log).",
@@ -224,8 +232,8 @@ pub const SERVER_RUNNING: T = T("En service (connexion et monde)", "Running (log
 pub const SERVER_STARTING: T = T("Démarrage…", "Starting…");
 pub const WORLD_EMPTY: T = T("Pas encore importé (au premier JOUER)", "Not imported yet (on the first PLAY)");
 pub const WORLD_IMPORTED_STOPPED: T = T("Importé (le détail s'affiche quand la base tourne)", "Imported (details show while the database runs)");
-pub const TABLES_OK: T = T("Présentes : monstres et butin importés", "Present: monsters and loot imported");
-pub const TABLES_MISSING: T = T("Absentes de Server\\Data\\server-ini : le monde n'aura ni monstres ni butin (voir Paramètres)", "Missing from Server\\Data\\server-ini: the world will have no monsters or loot (see Settings)");
+pub const TABLES_OK: T = T("Présentes : valeurs de l'épisode 8, monstres et butin", "Present: Episode 8 values, monsters and loot");
+pub const TABLES_MISSING: T = T("Incomplètes dans Server\\Data\\server-ini : le monde ne peut pas être importé (voir Paramètres)", "Incomplete in Server\\Data\\server-ini: the world cannot be imported (see Settings)");
 pub const BTN_PLAY: T = T("JOUER", "PLAY");
 pub const BTN_START_SERVER: T = T("Démarrer le serveur seul", "Start the server only");
 pub const BTN_STOP: T = T("Arrêter", "Stop");
@@ -281,6 +289,32 @@ pub const ACC_DB_TEMP: T = T("La liste s'affiche quand la base est démarrée (A
 
 // ------------------------------------------------------------------ monde
 pub const WORLD_TITLE: T = T("Réglages du monde", "World settings");
+pub const BOTS_HINT: T = T(
+    "Les bots sont de vrais personnages du serveur (comptes archbot_…, repris d'une partie à l'autre). Ils suivent les mêmes règles que vous. Journal du serveur : lignes [archbot]. Ordres aux compagnons aussi en leur chuchotant (« /w Nom stay ») ou à tout le groupe par /p (« /p stay »). Les comptes des bots sont masqués dans l'onglet Comptes.",
+    "Bots are real server characters (archbot_… accounts, kept from one session to the next). They follow the same rules as you. Server log: [archbot] lines. Companion orders also by whispering to them (\"/w Name stay\") or to the whole party with /p (\"/p stay\"). The bots' accounts are hidden in the Accounts tab.",
+);
+pub const BOTS_ABSENT: T = T("Ce serveur ArchCore est compilé sans ArchBot : pas de bots.", "This ArchCore server is built without ArchBot: no bots.");
+pub const BOT_TITLE: T = T("ArchBot — bots joueurs", "ArchBot — player bots");
+pub const BOT_INTRO: T = T(
+    "Réglages des bots du serveur (archbot.conf) : population de bots autonomes qui vivent dans le monde, compagnons à engager en jeu, comportement, survie, performances. Survolez un libellé pour son explication. Les changements s'appliquent au prochain démarrage du serveur.",
+    "Settings of the server's bots (archbot.conf): population of autonomous bots living in the world, companions to hire in game, behaviour, survival, performance. Hover a label for its explanation. Changes apply on the next server start.",
+);
+pub const BOT_ON: T = T("Bots activés", "Bots enabled");
+pub const BOT_OFF: T = T("Bots désactivés", "Bots disabled");
+pub const BOT_CMDS_TITLE: T = T("Commandes en jeu", "In-game commands");
+/// Commandes d'ArchBot (discussion du jeu ; ordres aussi par chuchotement au bot ou par /p au groupe).
+pub const BOT_COMMANDS: &[(&str, T)] = &[
+    ("/bot hire [nom]", T("le bot libre le plus proche (ou celui nommé) devient votre compagnon et vous invite dans son groupe", "the nearest free bot (or the named one) becomes your companion and invites you to its party")),
+    ("/bot dismiss [nom]", T("vos compagnons (ou celui nommé) redeviennent autonomes", "your companions (or the named one) become autonomous again")),
+    ("/bot follow [distance]", T("vous suivre (100 à 3000)", "follow you (100 to 3000)")),
+    ("/bot stay · /bot come", T("rester sur place · vous rejoindre", "stay here · come to you")),
+    ("/bot attack · /bot stop", T("attaquer votre cible · cesser le combat", "attack your target · stop fighting")),
+    ("/bot passive · defensive · aggressive", T("attitude : riposte seulement · défend son maître (défaut) · engage aussi les monstres proches", "stance: only strikes back · defends its master (default) · also engages nearby monsters")),
+    ("/bot status · /bot list · /bot help", T("état du compagnon · bots en jeu · aide", "companion status · bots in game · help")),
+    ("/bot stats", T("MJ : métriques (bots, tours d'IA, actions, morts…)", "GM: metrics (bots, AI ticks, actions, deaths…)")),
+    ("/bot spawn n · /bot despawn n|all|nom", T("MJ : faire entrer n bots · en faire sortir", "GM: bring n bots in · take bots out")),
+    ("/bot population n", T("MJ : population de bots autonomes visée", "GM: target population of autonomous bots")),
+];
 pub const WORLD_INTRO: T = T(
     "Réglages d'ArchCore (world.conf), avec leurs valeurs d'origine. Survolez un libellé pour son explication.",
     "ArchCore settings (world.conf), with their original values. Hover a label for its explanation.",
@@ -455,8 +489,8 @@ pub const SET_CLIENT_USE: T = T("Utiliser", "Use");
 pub const SET_CLIENT_IN_USE: T = T("Utilisé", "In use");
 pub const SET_TABLES_DIR: T = T("Tables du serveur d'origine", "Original server tables");
 pub const SET_TABLES_HINT: T = T(
-    "Apparitions des monstres, butin, IA des monstres, raffinage et carte du serveur ArchLord d'origine (spawndatatable.txt, spawninstancetable.txt, itemdroptable.txt, aidatatable.txt…). Incluses dans Server\\Data\\server-ini : ne changez ce dossier que pour utiliser d'autres tables. Un monde importé sans elles est réimporté au démarrage suivant leur retour.",
-    "Monster spawns, loot, monster AI, refining and map of the original ArchLord server (spawndatatable.txt, spawninstancetable.txt, itemdroptable.txt, aidatatable.txt…). Included in Server\\Data\\server-ini: change this folder only to use other tables. A world imported without them is reimported on the first start after they are back.",
+    "Tables du serveur ArchLord d'origine : valeurs de l'épisode 8 (compétences, objets, options, monstres, régions, boutiques, portails, expérience), apparitions des monstres, butin, IA, raffinage et carte (itemdatatable.txt, skilltemplate.ini, spawndatatable.txt…). Incluses dans Server\\Data\\server-ini : ne changez ce dossier que pour utiliser d'autres tables. L'import du monde les exige.",
+    "Original ArchLord server tables: Episode 8 values (skills, items, options, monsters, regions, shops, portals, experience), monster spawns, loot, AI, refining and map (itemdatatable.txt, skilltemplate.ini, spawndatatable.txt…). Included in Server\\Data\\server-ini: change this folder only to use other tables. The world import requires them.",
 );
 pub const SET_PORTS: T = T("Ports du serveur", "Server ports");
 pub const SET_PORTS_HINT: T = T(
@@ -495,7 +529,7 @@ pub const RPT_UNREPAIRABLE: T = T("Des fichiers du programme manquent ou sont al
 pub const RPT_DATA: T = T("Données", "Data");
 pub const RPT_CLIENT: T = T("Client ArchRust", "ArchRust client");
 pub const RPT_CLIENT_INI: T = T("Tables du client lues (Server\\Data\\client-ini)", "Client tables read (Server\\Data\\client-ini)");
-pub const RPT_SERVER_TABLES: T = T("Tables du serveur d'origine (facultatives)", "Original server tables (optional)");
+pub const RPT_SERVER_TABLES: T = T("Tables du serveur d'origine (exigées par l'import)", "Original server tables (required by the import)");
 pub const RPT_DB: T = T("Bases", "Databases");
 pub const RPT_DB_OK: T = T("Bases complètes, monde importé.", "Databases complete, world imported.");
 pub const RPT_DB_INCOMPLETE: T = T("Bases ou monde incomplets : utilisez Réparer.", "Databases or world incomplete: use Repair.");
