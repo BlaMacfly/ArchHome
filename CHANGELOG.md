@@ -1,5 +1,16 @@
 # Journal des versions / Changelog
 
+## 0.3.3 — 9 novembre 2026
+
+Version pour les testeurs / Tester build. ArchCore 6b1bf96 (branche Core) avec ArchBot e214b2c, ArchRust 5c96570,
+ArchCore Admin 1.4.0.
+
+- Quêtes des objets du monde : 153 quêtes de plus, données ou rendues par des objets du décor (3 235 quêtes,
+  780 objets de quête, 1 044 groupes) ; base du paquet importée avec les données de Webzen, comme en 0.3.2.
+- Ramassage : les objets de quête se ramassent sur le décor (barre de 5 s), pour 588 quêtes.
+- Deux nouvelles migrations de la base monde (`quetes_des_objets`, `ramassage_des_objets`), appliquées seules au
+  démarrage (`db-init`).
+
 ## 0.3.2 — 8 novembre 2026
 
 Version pour les testeurs / Tester build. ArchCore ea667d5 (branche Core) avec ArchBot e214b2c, ArchRust 072ebee,

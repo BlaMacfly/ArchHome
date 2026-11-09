@@ -1,13 +1,13 @@
 {
   "$schema_note": "Manifeste des composants gérés par le projet. Les sha256 vides sont remplis par Get-Components.ps1 -Pin lors du premier téléchargement, puis figés : toute différence ultérieure est une erreur. ArchCore n'est pas téléchargé : Build-ArchCore.ps1 le compile depuis ses sources au commit indiqué, avec le module ArchBot (patch d'ArchBot appliqué sur une copie).",
-  "version": "0.3.2",
-  "updated": "2026-11-08",
+  "version": "0.3.3",
+  "updated": "2026-11-09",
   "archcore": {
     "description": "ArchCore, émulateur de serveur ArchLord (connexion + monde) en Rust, branche Core, valeurs de l'épisode 8. Compilé par Build\\Build-ArchCore.ps1 sur une copie clonée de -Source (copie locale du dépôt) ou du dépôt, au commit indiqué, avec ArchBot dans modules/ArchBot et son patch.",
     "source": "https://github.com/BlaMacfly/ArchCore",
     "branch": "Core",
     "license": "GPL-3.0-or-later",
-    "commit": "ea667d5",
+    "commit": "6b1bf96",
     "install_to": "Server/ArchCore"
   },
   "archbot": {
@@ -68,9 +68,9 @@
   ],
   "archrust": {
     "description": "Client ArchLord réécrit en Rust (dépôt ArchRust) : seul l'exécutable est fourni, les données du jeu sont fournies par l'utilisateur. Il lit Client/server-data (tables de l'épisode 8 écrites par archcore export-client-tables).",
-    "source": "https://github.com/BlaMacfly/ArchRust/tree/072ebee",
+    "source": "https://github.com/BlaMacfly/ArchRust/tree/5c96570",
     "branch": "main",
-    "commit": "072ebee",
+    "commit": "5c96570",
     "license": "GPL-3.0-or-later",
     "install_to": "Client/ArchRust.exe"
   },
@@ -78,16 +78,16 @@
     {
       "id": "ArchAce",
       "description": "AddOn d'interface livré avec ArchRust (cadres d'unité, plaques de noms, options).",
-      "source": "https://github.com/BlaMacfly/ArchRust/tree/072ebee/addons/ArchAce",
-      "commit": "072ebee",
+      "source": "https://github.com/BlaMacfly/ArchRust/tree/5c96570/addons/ArchAce",
+      "commit": "5c96570",
       "license": "GPL-3.0-or-later",
       "install_to": "Client/addons/ArchAce"
     },
     {
       "id": "HelloArch",
       "description": "AddOn d'exemple livré avec ArchRust.",
-      "source": "https://github.com/BlaMacfly/ArchRust/tree/072ebee/addons/HelloArch",
-      "commit": "072ebee",
+      "source": "https://github.com/BlaMacfly/ArchRust/tree/5c96570/addons/HelloArch",
+      "commit": "5c96570",
       "license": "GPL-3.0-or-later",
       "install_to": "Client/addons/HelloArch"
     },

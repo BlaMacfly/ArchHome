@@ -1,12 +1,12 @@
-HomeRPG ArchLord v0.3.2 — README for testers
+HomeRPG ArchLord v0.3.3 — README for testers
 ============================================
 
 Thank you for testing! HomeRPG ArchLord runs ArchLord single-player and offline on your PC:
 a local ArchCore server, its own MariaDB database and the ArchRust client, all started by a
 single PLAY button. Nothing leaves your PC (everything listens on 127.0.0.1).
 
-This build: ArchCore ea667d5 (Core branch, November 8, 2026) with the ArchBot module
-(bots), ArchRust 072ebee (November 8, 2026), ArchCore Admin 1.4.0. The included world is
+This build: ArchCore 6b1bf96 (Core branch, November 9, 2026) with the ArchBot module
+(bots), ArchRust 5c96570 (November 9, 2026), ArchCore Admin 1.4.0. The included world is
 imported with the original quests, titles, masteries and experience curve.
 
 This is the first build for IN-GAME testing: all the code was checked with the simulator,
@@ -76,12 +76,12 @@ alone.
 5. YOU HAD AN EARLIER VERSION?
 ------------------------------
 
-From v0.3.1: two choices.
+From v0.3.2, v0.3.1 or earlier: two choices.
   * For the original quests, titles, masteries and experience (recommended): keep the
-    UserData\ shipped with v0.3.2; your v0.3.1 characters are not carried over.
-  * To keep your characters: copy the v0.3.1 UserData\ into the new version; the world is
-    then reimported WITHOUT the original Webzen data (the client's quests, titles,
-    masteries and experience, as in v0.3.1).
+    UserData\ shipped with v0.3.3; your earlier characters are not carried over.
+  * To keep your characters: copy your earlier UserData\ into the new version; the world
+    is then reimported WITHOUT the original Webzen data (the client's quests, titles,
+    masteries and experience, as in v0.3.1, and no world object quests).
 
 From v0.3.0: with the launcher closed, copy the UserData\ folder of the old version into
 the new one. On the first PLAY, the launcher adds the Gacha table, reimports the world,
@@ -100,6 +100,11 @@ skill reset is offered, since skill costs changed.
 
 6. WHAT'S NEW — WHAT TO TRY
 ---------------------------
+
+New in v0.3.3
+  * 153 more quests, given or completed by scenery objects (3,235 quests in all): walk up
+    to the object and click it to open its quest window, as with an NPC;
+  * gathering: quest items are gathered from the scenery (5-second bar), for 588 quests.
 
 New in v0.3.2
   * original quests, titles, masteries and experience curve (official Webzen client):

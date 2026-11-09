@@ -1,12 +1,12 @@
-HomeRPG ArchLord v0.3.2 — LISEZMOI pour les testeurs
+HomeRPG ArchLord v0.3.3 — LISEZMOI pour les testeurs
 ====================================================
 
 Merci de tester ! HomeRPG ArchLord fait tourner ArchLord en solo, hors ligne, sur votre PC :
 un serveur ArchCore local, sa propre base MariaDB et le client ArchRust, lancés par un seul
 bouton JOUER. Rien ne sort de votre PC (tout écoute sur 127.0.0.1).
 
-Cette version : ArchCore ea667d5 (branche Core du 8 novembre 2026) avec le module ArchBot
-(bots), ArchRust 072ebee (8 novembre 2026), ArchCore Admin 1.4.0. Le monde fourni est
+Cette version : ArchCore 6b1bf96 (branche Core du 9 novembre 2026) avec le module ArchBot
+(bots), ArchRust 5c96570 (9 novembre 2026), ArchCore Admin 1.4.0. Le monde fourni est
 importé avec les quêtes, titres, maîtrises et la courbe d'expérience d'origine.
 
 C'est la première version pour les essais EN JEU : tout le code a été vérifié au
@@ -78,12 +78,12 @@ les masque, n'y touchez pas.
 5. VOUS AVIEZ UNE VERSION PRÉCÉDENTE ?
 --------------------------------------
 
-Depuis la v0.3.1 : deux possibilités.
+Depuis la v0.3.2, la v0.3.1 ou avant : deux possibilités.
   * Pour les quêtes, titres, maîtrises et l'expérience d'origine (conseillé) : gardez le
-    UserData\ fourni avec la v0.3.2 ; vos personnages de la v0.3.1 ne sont pas repris.
-  * Pour garder vos personnages : copiez le UserData\ de la v0.3.1 dans la nouvelle
-    version ; le monde est alors réimporté SANS les données d'origine de Webzen (quêtes,
-    titres, maîtrises et expérience du client, comme en v0.3.1).
+    UserData\ fourni avec la v0.3.3 ; vos anciens personnages ne sont pas repris.
+  * Pour garder vos personnages : copiez votre ancien UserData\ dans la nouvelle version ;
+    le monde est alors réimporté SANS les données d'origine de Webzen (quêtes, titres,
+    maîtrises et expérience du client, comme en v0.3.1, et sans les quêtes des objets).
 
 Depuis la v0.3.0 : launcher fermé, copiez le dossier UserData\ de l'ancienne version dans
 la nouvelle. Au premier JOUER, le launcher ajoute la table du Gacha, réimporte le monde,
@@ -102,6 +102,12 @@ réversible) et l'oubli des compétences vous est offert, leurs coûts ayant cha
 
 6. NOUVEAUTÉS — CE QU'IL FAUT ESSAYER
 -------------------------------------
+
+Nouveau dans la v0.3.3
+  * 153 quêtes de plus, données ou rendues par des objets du décor (3 235 quêtes en
+    tout) : cliquez sur l'objet pour ouvrir sa fenêtre de quête, comme avec un PNJ ;
+  * ramassage : les objets de quête se ramassent sur le décor (barre de 5 secondes),
+    pour 588 quêtes.
 
 Nouveau dans la v0.3.2
   * quêtes, titres, maîtrises et courbe d'expérience d'origine (client officiel de

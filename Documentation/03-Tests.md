@@ -15,6 +15,17 @@ Une installation d'essai à part (copie du package, `UserData\settings.json` ave
 monde, par exemple 11102 / 11108) laisse libres les ports 11002 / 11008 d'un serveur de développement ; MariaDB
 garde le port 3316 de HomeRPG (celle de développement, 3306, n'est jamais touchée).
 
+## Résultats du 2026-11-09 (version 0.3.3, ArchCore 6b1bf96 + ArchBot e214b2c, ArchRust 5c96570)
+
+- Patch d'ArchBot appliqué tel quel ; mêmes tables du serveur exigées.
+- Mise à jour de l'installation d'essai 0.3.2 (Webzen réglé) : migrations `quetes_des_objets` et
+  `ramassage_des_objets`, réimport avec `--webzen` : `quest_template` 3 235, `quest_object` 780, `quest_group` 1 044 ;
+  `db-check` sans anomalie ; empreinte de `server-data` `sha256:e9e04d30…` (la même que le client de développement).
+- `migrate-ep8` (rapport) : rien à migrer. `sim client` : OK ; `sim bots` : 16/16 PASS ; avec un compte MJ et un
+  personnage neufs : `sim questobject` « quêtes des objets : OK », `sim questgather` « ramassage des quêtes : OK »
+  (avec l'ancien personnage d'essai, inventaire plein : arrêt sur délai d'attente) ; `ArchRust.exe play --connect`
+  (5c96570) : en jeu, empreinte conforme, 3 AddOns.
+
 ## Résultats du 2026-11-08, soir (version 0.3.2, ArchCore ea667d5 + ArchBot e214b2c, ArchRust 072ebee)
 
 - Patch d'ArchBot appliqué tel quel sur ea667d5 ; mêmes tables du serveur exigées, aucune nouvelle migration.
