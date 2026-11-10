@@ -1,5 +1,19 @@
 # Journal des versions / Changelog
 
+## 0.3.4 — 10 novembre 2026
+
+Version pour les testeurs / Tester build. ArchCore 23c2ced (branche Core) avec ArchBot d06afc8, ArchRust 2f82448,
+ArchCore Admin 1.4.0.
+
+- Quêtes et titres traduits dans toutes les langues : la base du paquet est importée avec les données de Webzen et
+  les traductions d'ArchCore (`archcore import --webzen … --traductions …`), qui complètent les textes de Webzen
+  sans jamais les remplacer. Nouvelle migration de la base monde (`source_des_traductions`).
+- ArchRust 2f82448 : marques de quête au-dessus des PNJ et des objets du décor, animation du ramassage.
+- ArchCore 23c2ced : protocole vérifié contre Webzen, refus des options du joueur (échange, groupe, guilde…).
+- ArchBot d06afc8 : les bots en trop sortent quand on baisse leur nombre ; expérience sur 64 bits.
+- Launcher : réglage « Traductions d'ArchCore » (Paramètres, facultatif, avec les données de Webzen) passé à
+  l'import (`--traductions`) ; son ajout déclenche un réimport. `New-TesterPackage.ps1 -TranslationsDir`.
+
 ## 0.3.3 — 9 novembre 2026
 
 Version pour les testeurs / Tester build. ArchCore 6b1bf96 (branche Core) avec ArchBot e214b2c, ArchRust 5c96570,

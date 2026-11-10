@@ -22,6 +22,9 @@ pub struct Settings {
     /// Dossier `ini` du client officiel de Webzen (facultatif) : quêtes, titres, maîtrises et courbe d'expérience
     /// d'origine (`archcore import --webzen`). Vide : import sans lui.
     pub webzen_dir: String,
+    /// Dossier des traductions d'ArchCore (fichiers `<langue>.tsv`, facultatif) : textes de Webzen qu'une langue n'a
+    /// pas (`archcore import --traductions`, seulement avec `webzen_dir`). Vide : import sans elles.
+    pub translations_dir: String,
     pub login_port: u16,
     pub world_port: u16,
     /// Surcharges de world.conf (clé -> valeur), limitées au catalogue `conf_catalog` (onglet Monde).
@@ -45,6 +48,7 @@ impl Default for Settings {
             game_dir: String::new(),
             server_tables_dir: String::new(),
             webzen_dir: String::new(),
+            translations_dir: String::new(),
             login_port: DEFAULT_LOGIN_PORT,
             world_port: DEFAULT_WORLD_PORT,
             conf: std::collections::BTreeMap::new(),

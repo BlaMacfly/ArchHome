@@ -187,6 +187,8 @@ connecté.
   **tables du serveur d'origine**, **données de Webzen** (facultatives : dossier `ini` du client officiel de
   Webzen ; l'import en tire les quêtes, titres, maîtrises et la courbe d'expérience d'origine ; le paquet des
   testeurs a déjà un monde importé avec elles, un réimport sans elles revient à celles du client),
+  **traductions d'ArchCore** (facultatives, avec les données de Webzen : dossier des `<langue>.tsv` qui
+  complètent les textes de Webzen dans les langues qui ne les ont pas),
   **ports** (11002 / 11008 par défaut :
   changez-les si un autre serveur ArchCore tourne sur ce PC).
 - **Sauvegardes automatiques** : activées ou non, nombre conservé.

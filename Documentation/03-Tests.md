@@ -15,6 +15,17 @@ Une installation d'essai à part (copie du package, `UserData\settings.json` ave
 monde, par exemple 11102 / 11108) laisse libres les ports 11002 / 11008 d'un serveur de développement ; MariaDB
 garde le port 3316 de HomeRPG (celle de développement, 3306, n'est jamais touchée).
 
+## Résultats du 2026-11-10 (version 0.3.4, ArchCore 23c2ced + ArchBot d06afc8, ArchRust 2f82448)
+
+- Patch d'ArchBot d06afc8 appliqué tel quel ; mêmes tables du serveur exigées.
+- Mise à jour de l'installation d'essai 0.3.3 avec « Données de Webzen » et « Traductions d'ArchCore » réglés :
+  migration `source_des_traductions`, réimport avec `--webzen` et `--traductions` (7 langues chargées ; textes de
+  quêtes ajoutés en de, en, es, fr, pt-BR), mêmes chiffres de quêtes (3 235, 780 objets, 1 044 groupes) ; `db-check`
+  sans anomalie ; empreinte de `server-data` `sha256:7eba6c30…`, la même que le client de développement.
+- `migrate-ep8` : rien à migrer ; `sim client` : OK ; `sim bots` : 16/16 ; `sim questobject` et `sim questgather` :
+  OK ; `ArchRust.exe play --connect` (2f82448) : en jeu, empreinte conforme, 3 AddOns. Non vérifiés à part : la
+  sortie des bots en trop (`/bot population`), les marques de quête et l'animation du ramassage à l'écran.
+
 ## Résultats du 2026-11-09 (version 0.3.3, ArchCore 6b1bf96 + ArchBot e214b2c, ArchRust 5c96570)
 
 - Patch d'ArchBot appliqué tel quel ; mêmes tables du serveur exigées.

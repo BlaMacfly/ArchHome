@@ -1337,6 +1337,24 @@ impl App {
             }
             ui.small(t::SET_WEBZEN_HINT.s());
 
+            // ---- Traductions d'ArchCore (facultatives, avec les données de Webzen)
+            ui.add_space(10.0);
+            ui.label(RichText::new(t::SET_TRANSLATIONS_DIR.s()).strong().color(GOLD));
+            ui.horizontal(|ui| {
+                ui.add(egui::TextEdit::singleline(&mut self.settings.translations_dir).desired_width(480.0).hint_text(t::SET_TRANSLATIONS_NONE.s()));
+                if ui.button(t::BROWSE.s()).clicked() {
+                    if let Some(dir) = rfd::FileDialog::new().set_title(t::SET_TRANSLATIONS_DIR.s()).pick_folder() {
+                        self.settings.translations_dir = dir.to_string_lossy().into_owned();
+                    }
+                }
+            });
+            let translations = self.settings.translations_dir.trim();
+            if !translations.is_empty() {
+                let ok = crate::repair::translations_present(std::path::Path::new(translations));
+                ui.colored_label(status_color(ok, true), if ok { t::TRANSLATIONS_OK.s() } else { t::TRANSLATIONS_BAD.s() });
+            }
+            ui.small(t::SET_TRANSLATIONS_HINT.s());
+
             // ---- Ports
             ui.add_space(10.0);
             ui.label(RichText::new(t::SET_PORTS.s()).strong().color(GOLD));

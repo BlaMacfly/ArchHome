@@ -165,6 +165,14 @@ pub const SET_WEBZEN_HINT: T = T(
     "Dossier ini du client officiel de Webzen (questtemplate.ini, levelupexp.txt…) : quêtes, titres, maîtrises et courbe d'expérience d'origine, pour ce qui existe dans l'épisode 8. Lu seulement à l'import du monde (réimport automatique au démarrage suivant). Le paquet des testeurs contient déjà un monde importé avec elles.",
     "ini folder of the official Webzen client (questtemplate.ini, levelupexp.txt…): original quests, titles, masteries and experience curve, for what exists in Episode 8. Read only when the world is imported (automatic reimport on the next start). The tester package already has a world imported with them.",
 );
+pub const SET_TRANSLATIONS_DIR: T = T("Traductions d'ArchCore (facultatives)", "ArchCore translations (optional)");
+pub const SET_TRANSLATIONS_NONE: T = T("aucune : textes de Webzen seuls", "none: Webzen texts only");
+pub const SET_TRANSLATIONS_HINT: T = T(
+    "Dossier des traductions d'ArchCore (en.tsv, fr.tsv, de.tsv…) : quêtes et titres de Webzen traduits dans les langues qui ne les ont pas, sans jamais remplacer un texte de Webzen. Utilisé seulement avec les données de Webzen, à l'import du monde (réimport automatique au démarrage suivant). Le paquet des testeurs contient déjà un monde importé avec elles.",
+    "ArchCore translations folder (en.tsv, fr.tsv, de.tsv…): Webzen quests and titles translated into the languages that lack them, never replacing a Webzen text. Used only with the Webzen data, when the world is imported (automatic reimport on the next start). The tester package already has a world imported with them.",
+);
+pub const TRANSLATIONS_OK: T = T("Traductions reconnues (fichiers .tsv)", "Translations recognised (.tsv files)");
+pub const TRANSLATIONS_BAD: T = T("Aucun fichier .tsv dans ce dossier", "No .tsv file in this folder");
 pub const WEBZEN_OK: T = T("Données de Webzen reconnues", "Webzen data recognised");
 pub const WEBZEN_BAD: T = T("Pas un dossier ini de Webzen (questtemplate.ini et levelupexp.txt attendus)", "Not a Webzen ini folder (questtemplate.ini and levelupexp.txt expected)");
 pub const WEBZEN_IMPORTED: T = T(

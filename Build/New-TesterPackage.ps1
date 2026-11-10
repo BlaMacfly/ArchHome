@@ -30,6 +30,9 @@
     Avec -InitDatabase : dossier ini du client officiel de Webzen, passé à l'import (--webzen) pour les quêtes, titres,
     maîtrises et la courbe d'expérience d'origine. Seule la base importée va dans le paquet : ni ce dossier, ni son
     chemin, ni le rapport Server\ArchCore\data\import-webzen.log.
+.PARAMETER TranslationsDir
+    Avec -WebzenDir : dossier des traductions d'ArchCore (<langue>.tsv), passé à l'import (--traductions). Seule la
+    base importée va dans le paquet.
 #>
 [CmdletBinding()]
 param(
@@ -39,7 +42,8 @@ param(
     [switch]$HardLinks,
     [switch]$InitDatabase,
     [int[]]$InitPorts = @(11102, 11108),
-    [string]$WebzenDir
+    [string]$WebzenDir,
+    [string]$TranslationsDir
 )
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
@@ -93,12 +97,17 @@ if ($InitDatabase) {
     New-Item -ItemType Directory -Force (Join-Path $dest 'UserData') | Out-Null
     $settings = [ordered]@{ ui_language = 'fr'; game_language = 'fr'; login_port = $InitPorts[0]; world_port = $InitPorts[1] }
     if ($WebzenDir) { $settings.webzen_dir = (Resolve-Path -LiteralPath $WebzenDir).Path }
+    if ($TranslationsDir) {
+        if (-not $WebzenDir) { throw "-TranslationsDir exige -WebzenDir (archcore import --traductions exige --webzen)" }
+        $settings.translations_dir = (Resolve-Path -LiteralPath $TranslationsDir).Path
+    }
     [System.IO.File]::WriteAllText((Join-Path $dest 'UserData\settings.json'), ($settings | ConvertTo-Json), (New-Object System.Text.UTF8Encoding $false))
     $p = Start-Process -FilePath (Join-Path $dest 'HomeRPG ArchLord.exe') -ArgumentList @('--start', '--lang', 'fr', '--quit-after', '30') -WorkingDirectory $dest -PassThru
     if (-not $p.WaitForExit(1800000)) { $p.Kill(); throw "Premier lancement trop long (30 min)" }
     $log = Get-Content (Join-Path $dest 'Logs\launcher.log') -Raw -Encoding UTF8
     $wanted = @('monde importé', 'db-check : bases cohérentes', 'tables de l''épisode 8 écrites', 'ArchCore opérationnel', 'MariaDB arrêtée')
     if ($WebzenDir) { $wanted += 'import avec les données de Webzen' }
+    if ($TranslationsDir) { $wanted += 'import avec les traductions d''ArchCore' }
     foreach ($want in $wanted) {
         if ($log -notmatch [regex]::Escape($want)) { throw "Premier lancement incomplet (« $want » absent de Logs\launcher.log)" }
     }

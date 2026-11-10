@@ -95,6 +95,11 @@ pub fn webzen_present(dir: &Path) -> bool {
     ["questtemplate.ini", "levelupexp.txt"].iter().all(|f| names.iter().any(|n| n == f))
 }
 
+/// Dossier des traductions d'ArchCore (`archcore import --traductions`) : au moins un fichier `<langue>.tsv`.
+pub fn translations_present(dir: &Path) -> bool {
+    std::fs::read_dir(dir).map(|rd| rd.flatten().any(|e| e.file_name().to_string_lossy().to_lowercase().ends_with(".tsv"))).unwrap_or(false)
+}
+
 /// Toutes les tables du serveur d'origine sont dans `dir` : l'import des valeurs de l'épisode 8 est possible.
 pub fn server_tables_present(dir: &Path) -> bool {
     server_tables_missing(dir).is_empty()

@@ -1,13 +1,14 @@
-HomeRPG ArchLord v0.3.3 — README for testers
+HomeRPG ArchLord v0.3.4 — README for testers
 ============================================
 
 Thank you for testing! HomeRPG ArchLord runs ArchLord single-player and offline on your PC:
 a local ArchCore server, its own MariaDB database and the ArchRust client, all started by a
 single PLAY button. Nothing leaves your PC (everything listens on 127.0.0.1).
 
-This build: ArchCore 6b1bf96 (Core branch, November 9, 2026) with the ArchBot module
-(bots), ArchRust 5c96570 (November 9, 2026), ArchCore Admin 1.4.0. The included world is
-imported with the original quests, titles, masteries and experience curve.
+This build: ArchCore 23c2ced (Core branch, November 10, 2026) with the ArchBot module
+(bots), ArchRust 2f82448 (November 10, 2026), ArchCore Admin 1.4.0. The included world is
+imported with the original quests, titles, masteries and experience curve, translated
+into every language.
 
 This is the first build for IN-GAME testing: all the code was checked with the simulator,
 now it is your turn to really play it. Every report counts.
@@ -76,9 +77,9 @@ alone.
 5. YOU HAD AN EARLIER VERSION?
 ------------------------------
 
-From v0.3.2, v0.3.1 or earlier: two choices.
+From v0.3.3 or earlier: two choices.
   * For the original quests, titles, masteries and experience (recommended): keep the
-    UserData\ shipped with v0.3.3; your earlier characters are not carried over.
+    UserData\ shipped with v0.3.4; your earlier characters are not carried over.
   * To keep your characters: copy your earlier UserData\ into the new version; the world
     is then reimported WITHOUT the original Webzen data (the client's quests, titles,
     masteries and experience, as in v0.3.1, and no world object quests).
@@ -100,6 +101,15 @@ skill reset is offered, since skill costs changed.
 
 6. WHAT'S NEW — WHAT TO TRY
 ---------------------------
+
+New in v0.3.4
+  * quests and titles translated into every game language (missing original texts are
+    completed by ArchCore's translations);
+  * quest markers above NPCs and scenery objects;
+  * gathering animation;
+  * the player's options (trade, party, guild refusals…) are respected;
+  * bots: when you lower their number (/bot population), the surplus bots leave the
+    world.
 
 New in v0.3.3
   * 153 more quests, given or completed by scenery objects (3,235 quests in all): walk up

@@ -295,6 +295,13 @@ impl Orchestrator {
         if self.settings.server_tables_dir.trim().is_empty() { self.layout.default_server_tables() } else { PathBuf::from(self.settings.server_tables_dir.trim()) }
     }
 
+    /// Dossier des traductions d'ArchCore indiqué dans Paramètres, s'il a des fichiers `.tsv` et que les données de
+    /// Webzen sont là (ArchCore n'accepte `--traductions` qu'avec `--webzen`).
+    fn translations_dir(&self) -> Option<PathBuf> {
+        let dir = self.settings.translations_dir.trim();
+        (!dir.is_empty() && self.webzen_dir().is_some()).then(|| PathBuf::from(dir)).filter(|d| repair::translations_present(d))
+    }
+
     /// Dossier `ini` du client de Webzen indiqué dans Paramètres, s'il en a bien les fichiers.
     fn webzen_dir(&self) -> Option<PathBuf> {
         let dir = self.settings.webzen_dir.trim();
@@ -789,6 +796,13 @@ impl Orchestrator {
                 "Webzen data set since the import: reimporting the world (characters and accounts kept)"
             ));
         }
+        let with_translations = std::fs::read_to_string(self.layout.webzen_import_marker()).is_ok_and(|m| m.contains("--traductions"));
+        if self.translations_dir().is_some() && !with_translations {
+            return Some(tf!(
+                "traductions d'ArchCore indiquées depuis l'import : réimport du monde (personnages et comptes conservés)",
+                "ArchCore translations set since the import: reimporting the world (characters and accounts kept)"
+            ));
+        }
         None
     }
 
@@ -835,10 +849,15 @@ impl Orchestrator {
         self.log(tf!("import avec les tables du serveur d'origine : {}", "import with the original server tables: {}", tables.display()));
         let mut args = vec!["import".to_string(), out_s, "--server".into(), tables_s];
         let webzen = self.webzen_dir();
+        let translations = self.translations_dir();
         match &webzen {
             Some(w) => {
                 self.log(tf!("import avec les données de Webzen (quêtes, titres, maîtrises, expérience) : {}", "import with the Webzen data (quests, titles, masteries, experience): {}", w.display()));
                 args.extend(["--webzen".to_string(), w.to_string_lossy().to_string()]);
+                if let Some(t) = &translations {
+                    self.log(tf!("import avec les traductions d'ArchCore : {}", "import with the ArchCore translations: {}", t.display()));
+                    args.extend(["--traductions".to_string(), t.to_string_lossy().to_string()]);
+                }
             }
             // Monde importé avec Webzen auparavant : ce réimport revient aux quêtes, titres, maîtrises et expérience du client.
             None if self.layout.webzen_import_marker().is_file() => {
@@ -886,7 +905,7 @@ impl Orchestrator {
         let marker = self.layout.webzen_import_marker();
         let written = match &webzen {
             // Date seulement : le dossier de Webzen est un chemin local, qui n'a rien à faire dans un paquet.
-            Some(_) => std::fs::write(&marker, format!("{} : import --webzen\n", util::datetime_readable())),
+            Some(_) => std::fs::write(&marker, format!("{} : import --webzen{}\n", util::datetime_readable(), if translations.is_some() { " --traductions" } else { "" })),
             None if marker.is_file() => std::fs::remove_file(&marker),
             None => Ok(()),
         };

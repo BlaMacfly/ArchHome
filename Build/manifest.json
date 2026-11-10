@@ -1,21 +1,21 @@
 {
   "$schema_note": "Manifeste des composants gérés par le projet. Les sha256 vides sont remplis par Get-Components.ps1 -Pin lors du premier téléchargement, puis figés : toute différence ultérieure est une erreur. ArchCore n'est pas téléchargé : Build-ArchCore.ps1 le compile depuis ses sources au commit indiqué, avec le module ArchBot (patch d'ArchBot appliqué sur une copie).",
-  "version": "0.3.3",
-  "updated": "2026-11-09",
+  "version": "0.3.4",
+  "updated": "2026-11-10",
   "archcore": {
     "description": "ArchCore, émulateur de serveur ArchLord (connexion + monde) en Rust, branche Core, valeurs de l'épisode 8. Compilé par Build\\Build-ArchCore.ps1 sur une copie clonée de -Source (copie locale du dépôt) ou du dépôt, au commit indiqué, avec ArchBot dans modules/ArchBot et son patch.",
     "source": "https://github.com/BlaMacfly/ArchCore",
     "branch": "Core",
     "license": "GPL-3.0-or-later",
-    "commit": "6b1bf96",
+    "commit": "23c2ced",
     "install_to": "Server/ArchCore"
   },
   "archbot": {
-    "description": "ArchBot, module PlayerBots d'ArchCore (bots autonomes et compagnons) : cloné dans modules/ArchBot de la copie d'ArchCore, patches/archcore-archbot.patch appliqué (12 fichiers, adapté à ArchCore 6912f16), compilé dans archcore.exe (feature archbot). Réglages : Server/Config/archbot.conf, généré par le launcher depuis config/archbot.conf.dist.",
+    "description": "ArchBot, module PlayerBots d'ArchCore (bots autonomes et compagnons) : cloné dans modules/ArchBot de la copie d'ArchCore, patches/archcore-archbot.patch appliqué (12 fichiers, adapté à ArchCore 23c2ced), compilé dans archcore.exe (feature archbot). Réglages : Server/Config/archbot.conf, généré par le launcher depuis config/archbot.conf.dist.",
     "source": "https://github.com/BlaMacfly/ArchBot",
     "branch": "main",
     "license": "GPL-3.0-or-later",
-    "commit": "e214b2c",
+    "commit": "d06afc8",
     "install_to": "Server/ArchCore/archcore.exe (compilé dedans), Server/ArchCore/config/archbot.conf.dist, Server/ArchCore/archbot/"
   },
   "components": [
@@ -68,9 +68,9 @@
   ],
   "archrust": {
     "description": "Client ArchLord réécrit en Rust (dépôt ArchRust) : seul l'exécutable est fourni, les données du jeu sont fournies par l'utilisateur. Il lit Client/server-data (tables de l'épisode 8 écrites par archcore export-client-tables).",
-    "source": "https://github.com/BlaMacfly/ArchRust/tree/5c96570",
+    "source": "https://github.com/BlaMacfly/ArchRust/tree/2f82448",
     "branch": "main",
-    "commit": "5c96570",
+    "commit": "2f82448",
     "license": "GPL-3.0-or-later",
     "install_to": "Client/ArchRust.exe"
   },
@@ -78,16 +78,16 @@
     {
       "id": "ArchAce",
       "description": "AddOn d'interface livré avec ArchRust (cadres d'unité, plaques de noms, options).",
-      "source": "https://github.com/BlaMacfly/ArchRust/tree/5c96570/addons/ArchAce",
-      "commit": "5c96570",
+      "source": "https://github.com/BlaMacfly/ArchRust/tree/2f82448/addons/ArchAce",
+      "commit": "2f82448",
       "license": "GPL-3.0-or-later",
       "install_to": "Client/addons/ArchAce"
     },
     {
       "id": "HelloArch",
       "description": "AddOn d'exemple livré avec ArchRust.",
-      "source": "https://github.com/BlaMacfly/ArchRust/tree/5c96570/addons/HelloArch",
-      "commit": "5c96570",
+      "source": "https://github.com/BlaMacfly/ArchRust/tree/2f82448/addons/HelloArch",
+      "commit": "2f82448",
       "license": "GPL-3.0-or-later",
       "install_to": "Client/addons/HelloArch"
     },
