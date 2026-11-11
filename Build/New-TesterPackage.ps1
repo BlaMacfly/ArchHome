@@ -1,6 +1,6 @@
 ﻿<#
 .SYNOPSIS
-    Paquet des testeurs, prêt à jouer : copie du package (Build\package\HomeRPG-ArchLord-v<version>) dans
+    Paquet des testeurs, prêt à jouer : copie du package (Build\package\ArchHome-v<version>) dans
     <OutDir>\ArchHome-Testing-v<version>, avec les données du jeu d'un client complet dans Client\ et (avec
     -InitDatabase) la base déjà initialisée et le monde importé, puis archive .7z
     et SHA256SUMS.txt à côté. Diffusion privée aux testeurs, comme le paquet 0.2.0 ; jamais dans un dépôt.
@@ -15,7 +15,7 @@
 .PARAMETER GameData
     Dossier d'un client complet (données du jeu ArchLord 64 bits à côté d'ArchRust.exe).
 .PARAMETER OutDir
-    Dossier de sortie, par exemple « Bureau\HomeRPG ArchLord v0.3.0 ».
+    Dossier de sortie, par exemple « Bureau\ArchHome v0.3.0 ».
 .PARAMETER NoArchive
     Dossier seulement, sans .7z.
 .PARAMETER HardLinks
@@ -49,13 +49,13 @@ $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 $cargo = Get-Content (Join-Path $root 'Launcher\Cargo.toml') -Raw
 $version = [regex]::Match($cargo, '(?m)^version\s*=\s*"([^"]+)"').Groups[1].Value
-$package = Join-Path $PSScriptRoot "package\HomeRPG-ArchLord-v$version"
+$package = Join-Path $PSScriptRoot "package\ArchHome-v$version"
 $name = "ArchHome-Testing-v$version"
 $dest = Join-Path $OutDir $name
 $archive = Join-Path $OutDir "$name.7z"
 function Step { param($m) Write-Host "[$(Get-Date -Format HH:mm:ss)] $m" }
 
-if (-not (Test-Path (Join-Path $package 'HomeRPG ArchLord.exe'))) { throw "Package absent : $package (Build\New-Package.ps1)" }
+if (-not (Test-Path (Join-Path $package 'ArchHome.exe'))) { throw "Package absent : $package (Build\New-Package.ps1)" }
 if (-not (Test-Path -LiteralPath (Join-Path $GameData 'character\Reference.Dat'))) { throw "Pas de données du jeu dans $GameData (character\Reference.Dat)" }
 if (Test-Path -LiteralPath $dest) { throw "Existe déjà : $dest" }
 if (-not $NoArchive -and (Test-Path -LiteralPath $archive)) { throw "Existe déjà : $archive" }
@@ -93,7 +93,7 @@ if ($HardLinks) {
 }
 if ($InitDatabase) {
     Step "Premier lancement dans le paquet (ports $($InitPorts -join ' / ') le temps de l'opération)"
-    if (Get-Process -Name 'homerpg-archlord-launcher', 'HomeRPG ArchLord' -ErrorAction SilentlyContinue) { throw "Un launcher HomeRPG est ouvert : le fermer d'abord" }
+    if (Get-Process -Name 'homerpg-archlord-launcher', 'HomeRPG ArchLord', 'ArchHome' -ErrorAction SilentlyContinue) { throw "Un launcher ArchHome est ouvert : le fermer d'abord" }
     New-Item -ItemType Directory -Force (Join-Path $dest 'UserData') | Out-Null
     $settings = [ordered]@{ ui_language = 'fr'; game_language = 'fr'; login_port = $InitPorts[0]; world_port = $InitPorts[1] }
     if ($WebzenDir) { $settings.webzen_dir = (Resolve-Path -LiteralPath $WebzenDir).Path }
@@ -102,7 +102,7 @@ if ($InitDatabase) {
         $settings.translations_dir = (Resolve-Path -LiteralPath $TranslationsDir).Path
     }
     [System.IO.File]::WriteAllText((Join-Path $dest 'UserData\settings.json'), ($settings | ConvertTo-Json), (New-Object System.Text.UTF8Encoding $false))
-    $p = Start-Process -FilePath (Join-Path $dest 'HomeRPG ArchLord.exe') -ArgumentList @('--start', '--lang', 'fr', '--quit-after', '30') -WorkingDirectory $dest -PassThru
+    $p = Start-Process -FilePath (Join-Path $dest 'ArchHome.exe') -ArgumentList @('--start', '--lang', 'fr', '--quit-after', '30') -WorkingDirectory $dest -PassThru
     if (-not $p.WaitForExit(1800000)) { $p.Kill(); throw "Premier lancement trop long (30 min)" }
     $log = Get-Content (Join-Path $dest 'Logs\launcher.log') -Raw -Encoding UTF8
     $wanted = @('monde importé', 'db-check : bases cohérentes', 'tables de l''épisode 8 écrites', 'ArchCore opérationnel', 'MariaDB arrêtée')

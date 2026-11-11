@@ -200,26 +200,34 @@ impl eframe::App for App {
             ctx.send_viewport_cmd(egui::ViewportCommand::Close);
         }
 
-        // Fond : dégradé sombre et logo en filigrane, peints sur le calque d'arrière-plan avant les panneaux.
+        // Fond : image d'ArchHome en recouvrement (toute la fenêtre, centrée, rognée sans déformation), puis un voile
+        // sombre plus dense en haut et en bas (titre, onglets, barre d'état) pour la lisibilité ; l'image n'est pas
+        // modifiée. Peint sur le calque d'arrière-plan avant les panneaux.
         {
             let screen = ctx.screen_rect();
             let painter = ctx.layer_painter(egui::LayerId::background());
-            let mut mesh = egui::Mesh::default();
-            let top = Color32::from_rgb(34, 24, 14);
-            let bottom = Color32::from_rgb(8, 7, 12);
-            mesh.colored_vertex(screen.left_top(), top);
-            mesh.colored_vertex(screen.right_top(), top);
-            mesh.colored_vertex(screen.right_bottom(), bottom);
-            mesh.colored_vertex(screen.left_bottom(), bottom);
-            mesh.add_triangle(0, 1, 2);
-            mesh.add_triangle(0, 2, 3);
-            painter.add(egui::Shape::mesh(mesh));
-            let side = screen.height().min(screen.width()) * 0.8;
-            let rect = egui::Rect::from_center_size(egui::pos2(screen.right() - side * 0.42, screen.center().y + 30.0), egui::vec2(side, side));
-            let img = egui::Image::new(egui::include_image!("../assets/logo-512.png"));
-            if let Ok(egui::load::TexturePoll::Ready { texture }) = img.load_for_size(ctx, rect.size()) {
-                painter.image(texture.id, rect, egui::Rect::from_min_max(egui::pos2(0.0, 0.0), egui::pos2(1.0, 1.0)), Color32::from_white_alpha(18));
+            painter.rect_filled(screen, 0.0, Color32::from_rgb(12, 9, 7));
+            let img = egui::Image::new(egui::include_image!("../assets/archhome-background.png"));
+            if let Ok(egui::load::TexturePoll::Ready { texture }) = img.load_for_size(ctx, screen.size()) {
+                let (iw, ih) = (texture.size.x.max(1.0), texture.size.y.max(1.0));
+                let (sa, ia) = (screen.width() / screen.height().max(1.0), iw / ih);
+                // Part de l'image gardée : toute la largeur si la fenêtre est plus large que l'image, sinon toute la hauteur.
+                let (u, v) = if sa > ia { (1.0, ia / sa) } else { (sa / ia, 1.0) };
+                let uv = egui::Rect::from_center_size(egui::pos2(0.5, 0.5), egui::vec2(u, v));
+                painter.image(texture.id, screen, uv, Color32::WHITE);
             }
+            let mut veil = egui::Mesh::default();
+            let (y0, y1, y2, y3) = (screen.top(), screen.top() + screen.height() * 0.30, screen.bottom() - screen.height() * 0.25, screen.bottom());
+            for (y, alpha) in [(y0, 175), (y1, 95), (y2, 95), (y3, 190)] {
+                veil.colored_vertex(egui::pos2(screen.left(), y), Color32::from_black_alpha(alpha));
+                veil.colored_vertex(egui::pos2(screen.right(), y), Color32::from_black_alpha(alpha));
+            }
+            for i in 0..3u32 {
+                let k = i * 2;
+                veil.add_triangle(k, k + 1, k + 3);
+                veil.add_triangle(k, k + 3, k + 2);
+            }
+            painter.add(egui::Shape::mesh(veil));
         }
         let panel_frame = egui::Frame::new().inner_margin(8.0).fill(Color32::from_black_alpha(110));
 
@@ -229,7 +237,7 @@ impl eframe::App for App {
                 ui.add(egui::Image::new(egui::include_image!("../assets/logo-512.png")).fit_to_exact_size(egui::vec2(56.0, 56.0)));
                 ui.add_space(8.0);
                 ui.vertical(|ui| {
-                    ui.label(RichText::new("HomeRPG ArchLord").size(26.0).strong().color(GOLD));
+                    ui.label(RichText::new("ArchHome").size(26.0).strong().color(GOLD));
                     ui.label(RichText::new(t::SUBTITLE.s()).italics().color(Color32::from_gray(190)));
                 });
             });
@@ -289,7 +297,7 @@ impl App {
             ui.add_space(6.0);
             if ui.add_enabled(!busy, egui::Button::new(RichText::new(t::RO_INSTALL.s()).size(18.0).strong()).min_size(egui::vec2(220.0, 40.0))).clicked() {
                 if let Some(dir) = rfd::FileDialog::new().set_title(t::RO_PICK_TITLE.s()).pick_folder() {
-                    let dest = if dir.file_name().map(|n| n.to_string_lossy().contains("HomeRPG")).unwrap_or(false) { dir } else { dir.join("HomeRPG ArchLord") };
+                    let dest = if dir.file_name().map(|n| { let n = n.to_string_lossy(); n.contains("ArchHome") || n.contains("HomeRPG") }).unwrap_or(false) { dir } else { dir.join("ArchHome") };
                     self.send(Command::InstallTo(dest));
                 }
             }

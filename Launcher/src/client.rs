@@ -158,7 +158,7 @@ pub fn discover_with_configured(root: &Path, configured: &Path) -> Vec<ClientInf
 pub fn configure(info: &ClientInfo, settings: &Settings) -> Result<(), String> {
     let realmlist = info.dir.join("realmlist.wtf");
     let text = format!(
-        "# Serveur de connexion ArchRust (ecrit par HomeRPG ArchLord).\n# Forme : set realmlist <hote>[:<port>]   (port 11002 par defaut)\nset realmlist 127.0.0.1:{}\n",
+        "# Serveur de connexion ArchRust (ecrit par ArchHome).\n# Forme : set realmlist <hote>[:<port>]   (port 11002 par defaut)\nset realmlist 127.0.0.1:{}\n",
         settings.login_port
     );
     std::fs::write(&realmlist, text).map_err(|e| format!("{} : {e}", realmlist.display()))?;

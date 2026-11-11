@@ -1,7 +1,7 @@
-HomeRPG ArchLord v0.3.4 — README for testers
-============================================
+ArchHome v0.3.4 — README for testers
+====================================
 
-Thank you for testing! HomeRPG ArchLord runs ArchLord single-player and offline on your PC:
+Thank you for testing! ArchHome runs ArchLord single-player and offline on your PC:
 a local ArchCore server, its own MariaDB database and the ArchRust client, all started by a
 single PLAY button. Nothing leaves your PC (everything listens on 127.0.0.1).
 
@@ -36,7 +36,7 @@ now it is your turn to really play it. Every report counts.
    - copy it into Client\, next to ArchRust.exe;
    - or leave it where it is and set its folder in the launcher:
      Settings > "ArchLord game data".
-3. Open "HomeRPG ArchLord.exe". The launcher is not signed: if Windows shows "Windows
+3. Open "ArchHome.exe". The launcher is not signed: if Windows shows "Windows
    protected your PC", click "More info" then "Run anyway".
 4. Language: the launcher opens in French if Windows is in French, otherwise in English.
    Settings > "Launcher language" changes it; the game follows the same language.
@@ -77,6 +77,9 @@ alone.
 5. YOU HAD AN EARLIER VERSION?
 ------------------------------
 
+The program is now called ArchHome.exe (before: HomeRPG ArchLord.exe): recreate your
+shortcuts. The UserData\ folder and your settings carry over as before.
+
 From v0.3.3 or earlier: two choices.
   * For the original quests, titles, masteries and experience (recommended): keep the
     UserData\ shipped with v0.3.4; your earlier characters are not carried over.
@@ -103,6 +106,8 @@ skill reset is offered, since skill costs changed.
 ---------------------------
 
 New in v0.3.4
+  * the launcher is now called ArchHome (ArchHome.exe) and has a new background; the
+    world is called "ArchHome" in the server list;
   * quests and titles translated into every game language (missing original texts are
     completed by ArchCore's translations);
   * quest markers above NPCs and scenery objects;

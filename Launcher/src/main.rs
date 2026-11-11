@@ -1,4 +1,4 @@
-//! HomeRPG ArchLord — launcher (Rust, egui). © 2026 BlaMacfly. Licence propriétaire : voir LICENCE.txt.
+//! ArchHome — launcher (Rust, egui). © 2026 BlaMacfly. Licence propriétaire : voir LICENCE.txt.
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 mod addons;
@@ -63,7 +63,7 @@ fn main() -> eframe::Result {
     if let Some(p) = arg("--install-to") {
         let _ = tx.send(orchestrator::Command::InstallTo(std::path::PathBuf::from(p)));
     }
-    let mut viewport = eframe::egui::ViewportBuilder::default().with_inner_size([1000.0, 720.0]).with_min_inner_size([780.0, 540.0]).with_title("HomeRPG ArchLord");
+    let mut viewport = eframe::egui::ViewportBuilder::default().with_inner_size([1000.0, 720.0]).with_min_inner_size([780.0, 540.0]).with_title("ArchHome");
     if let Ok(img) = image::load_from_memory(include_bytes!("../assets/logo-256.png")) {
         let rgba = img.to_rgba8();
         let (width, height) = rgba.dimensions();
@@ -71,7 +71,7 @@ fn main() -> eframe::Result {
     }
     let options = eframe::NativeOptions { viewport, ..Default::default() };
     let tx_exit = tx.clone();
-    let result = eframe::run_native("HomeRPG ArchLord", options, Box::new(move |cc| Ok(Box::new(ui::App::new(cc, layout, settings, shared, tx, quit_after, start_tab)))));
+    let result = eframe::run_native("ArchHome", options, Box::new(move |cc| Ok(Box::new(ui::App::new(cc, layout, settings, shared, tx, quit_after, start_tab)))));
     // Fermeture : l'orchestrateur arrête les services qu'il a démarrés (MariaDB comprise, arrêt SQL propre) ; le
     // processus attend qu'il ait fini, sans quoi la fin de main interromprait l'arrêt en cours.
     let _ = tx_exit.send(orchestrator::Command::Shutdown);

@@ -1,12 +1,12 @@
 # 01 — Architecture et choix
 
-HomeRPG ArchLord est l'équivalent, pour ArchLord, de HomeCraft Edition Vanilla (World of Warcraft 1.12.1) : un
+ArchHome est l'équivalent, pour ArchLord, de HomeCraft Edition Vanilla (World of Warcraft 1.12.1) : un
 dossier autonome, un serveur local, un launcher à un seul bouton. Ce document fixe ce qui a été repris, ce qui
 change et pourquoi.
 
 ## Composants
 
-| Rôle | HomeCraft Vanilla | HomeRPG ArchLord |
+| Rôle | HomeCraft Vanilla | ArchHome |
 |---|---|---|
 | Serveur | VMaNGOS : realmd + mangosd, binaires officiels | ArchCore : un seul `archcore.exe` (`all` = connexion + monde), compilé depuis ses sources avec le module ArchBot |
 | Base | MariaDB portable, 127.0.0.1:3315 | MariaDB portable 13.0.2, 127.0.0.1:3316 |
@@ -39,7 +39,7 @@ Playing → Stopping → Installed`, `Error` depuis tout état de démarrage.
    --apply`.
 4 bis. `export-client-tables <client>/server-data --game <données du jeu>` si `tables.toml` manque ou est plus
    ancien que le dernier import : ArchRust lit ces tables avant ses packs, le serveur annonce leur empreinte.
-5. Ligne `archcore_auth.world` : nom « HomeRPG », adresse `127.0.0.1:<port monde>` (c'est cette table, pas
+5. Ligne `archcore_auth.world` : nom « ArchHome », adresse `127.0.0.1:<port monde>` (c'est cette table, pas
    world.conf, que lit le serveur de connexion).
 6. `archcore all` ; prêt quand les deux ports répondent. ArchBot démarre avec le monde (journal `[archbot]`)
    et ses bots sortent du monde à l'arrêt (Ctrl+C). Ensuite seul le processus est surveillé (un sondage

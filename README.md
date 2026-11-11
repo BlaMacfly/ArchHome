@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="Launcher/assets/logo-256.png" alt="HomeRPG ArchLord" width="180">
+  <img src="Launcher/assets/logo-256.png" alt="ArchHome" width="180">
 </p>
 
-<h1 align="center">HomeRPG ArchLord</h1>
+<h1 align="center">ArchHome</h1>
 
 <p align="center">
   <b>ArchLord en solo, hors ligne — Single-player, offline ArchLord</b><br>
@@ -21,7 +21,7 @@
 
 ## 🇫🇷 Français
 
-**HomeRPG ArchLord** transforme le client ArchLord 64 bits en jeu solo complet, sans serveur distant, sans compte
+**ArchHome** transforme le client ArchLord 64 bits en jeu solo complet, sans serveur distant, sans compte
 en ligne, sans rien installer dans Windows. Tout tient dans un dossier :
 
 | Composant | Rôle |
@@ -29,11 +29,11 @@ en ligne, sans rien installer dans Windows. Tout tient dans un dossier :
 | [ArchCore](https://github.com/BlaMacfly/ArchCore) | serveur ArchLord (connexion + monde) en Rust, valeurs d'origine de l'épisode 8, sur 127.0.0.1 uniquement |
 | [ArchBot](https://github.com/BlaMacfly/ArchBot) | module PlayerBots compilé dans ArchCore : bots autonomes qui peuplent le monde, compagnons à engager |
 | MariaDB portable | comptes, personnages et monde importé, sur 127.0.0.1:3316 |
-| Launcher HomeRPG (Rust, egui) | démarre tout dans le bon ordre, importe le monde au premier lancement, configure ArchRust, crée les comptes, sauvegarde, répare, et expose les réglages dans des onglets |
+| Launcher ArchHome (Rust, egui) | démarre tout dans le bon ordre, importe le monde au premier lancement, configure ArchRust, crée les comptes, sauvegarde, répare, et expose les réglages dans des onglets |
 | [ArchRust](https://github.com/BlaMacfly/ArchRust) | le client ArchLord réécrit en Rust, inclus dans le package ; le joueur fournit les données du jeu |
 
 Le package fournit l'exécutable ArchRust et ses AddOns ; le joueur fournit les données du jeu ArchLord. Le serveur en importe
-le monde au premier démarrage. Le client d'origine n'est pas pris en charge : HomeRPG joue avec ArchRust.
+le monde au premier démarrage. Le client d'origine n'est pas pris en charge : ArchHome joue avec ArchRust.
 
 ### Fonctionnalités
 
@@ -82,7 +82,7 @@ le monde au premier démarrage. Le client d'origine n'est pas pris en charge : H
 |---|---|
 | Système | Windows 10 ou 11, 64 bits |
 | Mémoire | 8 Go |
-| Espace disque | ≈ 1 Go pour HomeRPG, en plus du client |
+| Espace disque | ≈ 1 Go pour ArchHome, en plus du client |
 | Client | ArchRust (`Client\ArchRust.exe`, inclus) et données du jeu ArchLord 64 bits fournies par vous |
 | Réseau | aucun : tout fonctionne hors ligne |
 
@@ -92,7 +92,7 @@ le monde au premier démarrage. Le client d'origine n'est pas pris en charge : H
 2. Placez les données du jeu ArchLord 64 bits dans `Client\` à côté d'`ArchRust.exe`, ou indiquez leur dossier dans **Paramètres**.
 3. Rien d'autre : les tables du serveur d'origine (valeurs de l'épisode 8, monstres, butin) sont incluses dans
    `Server\Data\server-ini\`.
-4. Ouvrez `HomeRPG ArchLord.exe`, créez votre compte dans **Comptes**, puis cliquez sur **JOUER**.
+4. Ouvrez `ArchHome.exe`, créez votre compte dans **Comptes**, puis cliquez sur **JOUER**.
 
 Le [manuel d'utilisation](Documentation/Manuel-Utilisateur.md) détaille chaque onglet et le dépannage.
 
@@ -143,7 +143,7 @@ Ne lancez jamais un test pendant que votre launcher est ouvert.
 ### Architecture
 
 ```
-HomeRPG ArchLord.exe            launcher Rust (eframe/egui 0.32, crate mysql pur Rust, aucune DLL)
+ArchHome.exe            launcher Rust (eframe/egui 0.32, crate mysql pur Rust, aucune DLL)
 ├─ orchestrateur (thread)       machine à états, premier démarrage, surveillance, commandes de l'interface
 ├─ db.rs / server.rs            MariaDB portable, comptes ; auth.conf / world.conf / archbot.conf, outils ArchCore, Ctrl+C
 ├─ client.rs / packs.rs / addons.rs   ArchRust : realmlist.wtf, langue, lancement, packs, AddOns
@@ -159,19 +159,19 @@ Build/    manifeste des composants, compilation d'ArchCore, packaging
 
 ### Licence
 
-- **HomeRPG ArchLord** (launcher, scripts, documentation, nom et logo) : © 2026 BlaMacfly, licence
+- **ArchHome** (launcher, scripts, documentation, nom et logo) : © 2026 BlaMacfly, licence
   propriétaire [LICENCE.txt](LICENCE.txt) — usage personnel, consultation et fork sur GitHub autorisés ;
   redistribution, modification et usage commercial interdits sans accord écrit.
 - Composants tiers, sous leurs licences propres : ArchCore, ArchBot, ArchRust (GPL-3.0-or-later), MariaDB (GPL-2.0), HeidiSQL
   (GPL-2.0), bibliothèques Rust (MIT/Apache-2.0 et assimilées).
-- ArchLord est une marque de son titulaire. HomeRPG est une création indépendante, sans lien avec lui. Les
+- ArchLord est une marque de son titulaire. ArchHome est une création indépendante, sans lien avec lui. Les
   données du jeu ne sont pas fournies.
 
 ---
 
 ## 🇬🇧 English
 
-**HomeRPG ArchLord** turns the 64-bit ArchLord client into a complete single-player game: no remote server, no
+**ArchHome** turns the 64-bit ArchLord client into a complete single-player game: no remote server, no
 online account, nothing installed into Windows. Everything lives in one folder: a local
 [ArchCore](https://github.com/BlaMacfly/ArchCore) server (login + world, Rust, original Episode 8 values) with
 its [ArchBot](https://github.com/BlaMacfly/ArchBot) bots, bound to 127.0.0.1, a portable MariaDB, and a one-button
@@ -201,7 +201,7 @@ your ArchRust client. Installation and every tab are described in the
 [user manual](Documentation/User-Manual.md); building from source in
 [02-Construction.md](Documentation/02-Construction.md) (French).
 
-**Licence**: HomeRPG ArchLord is proprietary (personal use; viewing and forking on GitHub allowed; no
+**Licence**: ArchHome is proprietary (personal use; viewing and forking on GitHub allowed; no
 redistribution, modification or commercial use without written permission) — see [LICENCE.txt](LICENCE.txt).
 Third-party components keep their own licences (ArchCore, ArchBot, ArchRust GPL-3.0-or-later, MariaDB and HeidiSQL GPL-2.0,
 Rust crates MIT/Apache-2.0). No ArchLord game data is provided.

@@ -1,5 +1,5 @@
-HomeRPG ArchLord — ArchLord en solo, hors ligne, en français
-==============================================================
+ArchHome — ArchLord en solo, hors ligne, en français
+====================================================
 
 (English: see README.txt and README-TESTERS.txt — Testeurs : lisez LISEZMOI-TESTEURS.txt)
 
@@ -10,7 +10,7 @@ HomeRPG ArchLord — ArchLord en solo, hors ligne, en français
 2. Les tables du serveur ArchLord d'origine (valeurs du jeu de l'épisode 8, apparitions des
    monstres, butin) sont incluses dans Server\Data\server-ini\ : l'import du monde les exige.
 
-3. Ouvrez « HomeRPG ArchLord.exe » et cliquez sur JOUER.
+3. Ouvrez « ArchHome.exe » et cliquez sur JOUER.
    Le premier démarrage importe le monde (environ une minute, une fois, puis de nouveau
    après une mise à jour d'ArchCore) et écrit les tables du serveur pour ArchRust dans
    Client\server-data. Le serveur a ses bots (onglet ArchBot) ; en jeu, « /bot hire »

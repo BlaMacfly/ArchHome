@@ -53,7 +53,7 @@ powershell -ExecutionPolicy Bypass -File Build\Sign-Launcher.ps1 -Thumbprint <em
 # Paquet des testeurs prêt à jouer (dossier + .7z + SHA256SUMS, sur le Bureau, jamais dans un dépôt) : le package
 # ci-dessus, les données du jeu d'un client complet dans Client\ et, avec -InitDatabase, la base déjà initialisée et
 # importée aux valeurs de l'épisode 8 avec Client\server-data (diffusion privée aux testeurs, comme le paquet 0.2.0).
-& .\Build\New-TesterPackage.ps1 -GameData "C:\…\Client ArchRust" -OutDir "C:\…\Bureau\HomeRPG ArchLord v0.3.4" -HardLinks -InitDatabase `
+& .\Build\New-TesterPackage.ps1 -GameData "C:\…\Client ArchRust" -OutDir "C:\…\Bureau\ArchHome v0.3.4" -HardLinks -InitDatabase `
     -WebzenDir "C:\…\client-webzen-2017\app\ini" -TranslationsDir "C:\…\data\traductions"   # données d'origine et traductions ; seule la base va dans le paquet
 # -HardLinks : données du jeu en liens physiques vers -GameData (même disque, aucun espace en plus ; n'y rien modifier).
 ```
@@ -61,7 +61,7 @@ powershell -ExecutionPolicy Bypass -File Build\Sign-Launcher.ps1 -Thumbprint <em
 `-Addons` prend une liste PowerShell : appeler le script avec `&` dans PowerShell (avec `powershell -File`, la liste
 arrive en une seule chaîne).
 
-`New-Package.ps1` produit `Build\package\HomeRPG-ArchLord-v<version>\` : `HomeRPG ArchLord.exe`, `Server\`
+`New-Package.ps1` produit `Build\package\ArchHome-v<version>\` : `ArchHome.exe`, `Server\`
 (ArchCore, MariaDB allégée, dossiers vides `Config`, `Data\server-ini` avec un LISEZMOI), `Client\` (`ArchRust.exe`,
 les AddOns de `-Addons` dans `addons\`, hors du contrôle des fichiers, et un LISEZMOI, sans données du jeu),
 `Data\server-ini` (les tables du serveur d'origine lues par `archcore import --server` : tout le dossier, les 31

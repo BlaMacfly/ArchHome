@@ -13,7 +13,7 @@ marche).
 
 Une installation d'essai à part (copie du package, `UserData\settings.json` avec d'autres ports de connexion et de
 monde, par exemple 11102 / 11108) laisse libres les ports 11002 / 11008 d'un serveur de développement ; MariaDB
-garde le port 3316 de HomeRPG (celle de développement, 3306, n'est jamais touchée).
+garde le port 3316 de ArchHome (celle de développement, 3306, n'est jamais touchée).
 
 ## Résultats du 2026-11-10 (version 0.3.4, ArchCore 23c2ced + ArchBot d06afc8, ArchRust 2f82448)
 
@@ -25,6 +25,9 @@ garde le port 3316 de HomeRPG (celle de développement, 3306, n'est jamais touch
 - `migrate-ep8` : rien à migrer ; `sim client` : OK ; `sim bots` : 16/16 ; `sim questobject` et `sim questgather` :
   OK ; `ArchRust.exe play --connect` (2f82448) : en jeu, empreinte conforme, 3 AddOns. Non vérifiés à part : la
   sortie des bots en trop (`/bot population`), les marques de quête et l'animation du ramassage à l'écran.
+- Nom ArchHome et nouveau fond : fenêtre « ArchHome » à 1016×759 et en plein écran (1936×1048) : image en
+  recouvrement centré, sans déformation, texte et boutons lisibles (captures). Dossier Testing renommé
+  « ArchHome v0.3.4 » (chemin avec espace) : démarrage sans réimport, monde inscrit sous le nom « ArchHome ».
 
 ## Résultats du 2026-11-09 (version 0.3.3, ArchCore 6b1bf96 + ArchBot e214b2c, ArchRust 5c96570)
 

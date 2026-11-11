@@ -1,5 +1,5 @@
-HomeRPG ArchLord — single-player, offline ArchLord
-===================================================
+ArchHome — single-player, offline ArchLord
+==========================================
 
 (Français : voir LISEZMOI.txt — testers: read README-TESTERS.txt)
 
@@ -10,7 +10,7 @@ HomeRPG ArchLord — single-player, offline ArchLord
 2. The original ArchLord server tables (Episode 8 game values, monster spawns, loot) are
    included in Server\Data\server-ini\: the world import requires them.
 
-3. Open "HomeRPG ArchLord.exe" and click PLAY.
+3. Open "ArchHome.exe" and click PLAY.
    The first start imports the world (about a minute, once, and again after an ArchCore
    update) and writes the server's tables for ArchRust into Client\server-data. The server
    brings its own bots (ArchBot tab); in game, "/bot hire" hires a companion.

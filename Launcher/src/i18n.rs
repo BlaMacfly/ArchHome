@@ -110,8 +110,8 @@ pub const SPAWN_BLOCKED_APP_CONTROL: T = T(
     "Windows blocked this program (Smart App Control or a company policy): allow it in Windows Security > App & browser control",
 );
 pub const SPAWN_BLOCKED_ANTIVIRUS: T = T(
-    "l'antivirus a bloqué ce programme : ajoutez le dossier HomeRPG ArchLord aux exclusions",
-    "the antivirus blocked this program: add the HomeRPG ArchLord folder to its exclusions",
+    "l'antivirus a bloqué ce programme : ajoutez le dossier ArchHome aux exclusions",
+    "the antivirus blocked this program: add the ArchHome folder to its exclusions",
 );
 
 // ------------------------------------------------------------------ onglets
@@ -152,8 +152,8 @@ pub const MSG_I18N: T = T("Import du monde : textes traduits…", "World import:
 pub const MSG_IMPORT_EMPTY: T = T("l'import n'a rempli aucune table du monde : voir le journal du serveur", "the import filled no world table: see the server log");
 pub const UNKNOWN_VERSION: T = T("version inconnue", "unknown version");
 pub const IMPORT_NO_TABLES: T = T(
-    "tables du serveur ArchLord d'origine incomplètes (incluses dans Server\\Data\\server-ini) : l'import du monde en a besoin pour les valeurs de l'épisode 8, les monstres et le butin. Remettez-les depuis le paquet HomeRPG, ou indiquez leur dossier dans Paramètres.",
-    "original ArchLord server tables incomplete (included in Server\\Data\\server-ini): the world import needs them for the Episode 8 values, monsters and loot. Restore them from the HomeRPG package, or set their folder in Settings.",
+    "tables du serveur ArchLord d'origine incomplètes (incluses dans Server\\Data\\server-ini) : l'import du monde en a besoin pour les valeurs de l'épisode 8, les monstres et le butin. Remettez-les depuis le paquet ArchHome, ou indiquez leur dossier dans Paramètres.",
+    "original ArchLord server tables incomplete (included in Server\\Data\\server-ini): the world import needs them for the Episode 8 values, monsters and loot. Restore them from the ArchHome package, or set their folder in Settings.",
 );
 pub const IMPORT_WITHOUT_WEBZEN: T = T(
     "réimport sans les données de Webzen (Paramètres) : le monde importé avec elles revient aux quêtes, titres, maîtrises et à la courbe d'expérience du client.",
@@ -236,8 +236,8 @@ pub const CTX_INSTALL: T = T("installation", "installation");
 // Support en lecture seule
 pub const RO_TITLE: T = T("Le dossier actuel est en lecture seule", "The current folder is read-only");
 pub const RO_TEXT: T = T(
-    "HomeRPG ArchLord doit être copié sur un disque inscriptible (pas dans Program Files ni sur un DVD).",
-    "HomeRPG ArchLord must be copied to a writable disk (not Program Files, not a DVD).",
+    "ArchHome doit être copié sur un disque inscriptible (pas dans Program Files ni sur un DVD).",
+    "ArchHome must be copied to a writable disk (not Program Files, not a DVD).",
 );
 pub const RO_INSTALL: T = T("Copier sur le disque…", "Copy to disk…");
 pub const RO_PICK_TITLE: T = T("Dossier de destination", "Destination folder");

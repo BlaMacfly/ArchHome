@@ -4,7 +4,7 @@
 
 $script:ProjectRoot = Split-Path -Parent $PSScriptRoot
 while ($script:ProjectRoot -and -not (Test-Path (Join-Path $script:ProjectRoot 'Server'))) { $script:ProjectRoot = Split-Path -Parent $script:ProjectRoot }
-if (-not $script:ProjectRoot) { throw "Racine HomeRPG introuvable (aucun dossier Server au-dessus de $PSScriptRoot)" }
+if (-not $script:ProjectRoot) { throw "Racine ArchHome introuvable (aucun dossier Server au-dessus de $PSScriptRoot)" }
 
 function Get-ProjectPath {
     param([Parameter(Mandatory)][string]$Relative)

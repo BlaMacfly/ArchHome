@@ -1,6 +1,6 @@
 ﻿<#
 .SYNOPSIS
-    Construit la version portable distribuable dans Build/package/HomeRPG-ArchLord-v<version>/ : launcher, ArchCore,
+    Construit la version portable distribuable dans Build/package/ArchHome-v<version>/ : launcher, ArchCore,
     MariaDB allégée, HeidiSQL (s'il est installé), documentation, licences et sources, manifeste de fichiers
     (empreintes) et SHA256SUMS.txt. Avec -Zip, produit aussi l'archive .zip.
     Client/ reçoit ArchRust.exe (-ArchRustExe) et les AddOns donnés par -Addons (dossiers d'AddOn, hors manifeste de
@@ -32,7 +32,7 @@ $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 $cargo = Get-Content (Join-Path $root 'Launcher\Cargo.toml') -Raw
 $version = [regex]::Match($cargo, '(?m)^version\s*=\s*"([^"]+)"').Groups[1].Value
-$name = "HomeRPG-ArchLord-v$version"
+$name = "ArchHome-v$version"
 $out = Join-Path $PSScriptRoot "package\$name"
 $launcher = Join-Path $root 'Launcher\target\release\homerpg-archlord-launcher.exe'
 if (-not (Test-Path $launcher)) { throw "Launcher non compilé : $launcher" }
@@ -61,7 +61,7 @@ function CopyTree { param($src, $dst, [string[]]$Exclude = @())
 }
 
 Step "Launcher"
-Copy-Item $launcher (Join-Path $out 'HomeRPG ArchLord.exe')
+Copy-Item $launcher (Join-Path $out 'ArchHome.exe')
 
 Step "ArchCore (programme, schéma, couche de contenu, traductions, modèles de configuration)"
 CopyTree (Join-Path $root 'Server\ArchCore') (Join-Path $out 'Server\ArchCore')
@@ -101,7 +101,7 @@ Step "Licences et sources"
 $lic = Join-Path $out 'LICENCES'
 New-Item -ItemType Directory -Force $lic | Out-Null
 Copy-Item (Join-Path $root 'LICENCE.txt') (Join-Path $out 'LICENCE.txt')
-Copy-Item (Join-Path $root 'LICENCE.txt') (Join-Path $lic 'HomeRPG-Licence.txt')
+Copy-Item (Join-Path $root 'LICENCE.txt') (Join-Path $lic 'ArchHome-Licence.txt')
 Copy-Item (Join-Path $root 'Server\ArchCore\LICENSE') (Join-Path $lic 'ArchCore-GPL-3.0.txt')
 $withArchBot = Test-Path (Join-Path $root 'Server\ArchCore\archbot\archcore-archbot.patch')
 if ($withArchBot) { Copy-Item (Join-Path $root 'Server\ArchCore\archbot\LICENSE') (Join-Path $lic 'ArchBot-GPL-3.0.txt') }
@@ -118,7 +118,7 @@ $meta = Get-Content $metaFile -Raw | ConvertFrom-Json
 $crates = $meta.packages | Where-Object { $_.name -ne 'homerpg-archlord-launcher' } | Sort-Object name | ForEach-Object { "| $($_.name) | $($_.version) | $($_.license) |" }
 $m = Get-Content (Join-Path $PSScriptRoot 'manifest.json') -Raw -Encoding UTF8 | ConvertFrom-Json
 $archcoreVersion = (Get-Content (Join-Path $root 'Server\ArchCore\VERSION.txt') -Raw).Trim()
-$sources = @("# Sources et licences", "", "Package HomeRPG ArchLord v$version généré le $(Get-Date -Format 'yyyy-MM-dd HH:mm').", "",
+$sources = @("# Sources et licences", "", "Package ArchHome v$version généré le $(Get-Date -Format 'yyyy-MM-dd HH:mm').", "",
     "## Composants", "", "| Composant | Version / commit | Source | Licence |", "|---|---|---|---|",
     "| ArchCore (Server\ArchCore) | $archcoreVersion | $($m.archcore.source) (branche $($m.archcore.branch)) | $($m.archcore.license) |")
 if ($withArchBot) { $sources += "| ArchBot (compilé dans Server\ArchCore\archcore.exe) | $($m.archbot.commit) | $($m.archbot.source) (branche $($m.archbot.branch)) | $($m.archbot.license) |" }
@@ -126,8 +126,8 @@ $sources += @(
     "| ArchRust (Client\ArchRust.exe) | $($m.archrust.commit) | $($m.archrust.source) (branche $($m.archrust.branch)) | $($m.archrust.license) |")
 foreach ($c in $m.components) { $sources += "| $($c.id) | $($c.commit) | $($c.source) | $($c.license) |" }
 foreach ($a in $m.addons) { if (Test-Path (Join-Path $out "Client\addons\$($a.id)")) { $sources += "| AddOn $($a.id) (Client\addons\$($a.id)) | $($a.commit) | $($a.source) | $($a.license) |" } }
-$sources += @("| HomeRPG ArchLord (launcher, scripts, documentation, identité visuelle) | v$version | Sources\Launcher, Sources\Build, Tools\Scripts (ce package) | Propriétaire : LICENCE.txt |", "",
-    "Les licences des composants tiers ci-dessus s'appliquent uniquement à ces composants ; la licence HomeRPG ne les restreint pas. ArchCore, ArchRust et les AddOns sont des programmes distincts, livrés depuis les commits indiqués ; ArchCore est compilé avec le module ArchBot et son patch (Server\ArchCore\archbot\archcore-archbot.patch, appliqué tel quel), sans autre modification.", "",
+$sources += @("| ArchHome (launcher, scripts, documentation, identité visuelle) | v$version | Sources\Launcher, Sources\Build, Tools\Scripts (ce package) | Propriétaire : LICENCE.txt |", "",
+    "Les licences des composants tiers ci-dessus s'appliquent uniquement à ces composants ; la licence ArchHome ne les restreint pas. ArchCore, ArchRust et les AddOns sont des programmes distincts, livrés depuis les commits indiqués ; ArchCore est compilé avec le module ArchBot et son patch (Server\ArchCore\archbot\archcore-archbot.patch, appliqué tel quel), sans autre modification.", "",
     "Le code source correspondant d'ArchCore, d'ArchBot, d'ArchRust et des AddOns est disponible aux adresses ci-dessus, branche et commit indiqués (ArchCore : commit indiqué plus le patch d'ArchBot fourni). Les sources de MariaDB et HeidiSQL correspondent aux versions listées.", "",
     "## Bibliothèques Rust du launcher (licences déclarées par les auteurs)", "", "| Crate | Version | Licence |", "|---|---|---|") + $crates
 [System.IO.File]::WriteAllText((Join-Path $lic 'SOURCES.md'), ($sources -join "`r`n"), (New-Object System.Text.UTF8Encoding $false))

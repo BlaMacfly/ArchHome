@@ -328,7 +328,7 @@ impl Orchestrator {
     }
 
     fn run(&mut self) {
-        self.log(tf!("HomeRPG ArchLord {} — {}", "HomeRPG ArchLord {} — {}", Layout::version(), self.layout.root.display()));
+        self.log(tf!("ArchHome {} — {}", "ArchHome {} — {}", Layout::version(), self.layout.root.display()));
         if !self.layout.is_writable() {
             self.log(tf!("support en lecture seule : {}", "read-only medium: {}", self.layout.root.display()));
             let mut s = self.shared.lock().unwrap();
@@ -645,7 +645,7 @@ impl Orchestrator {
         match r {
             Ok(()) => {
                 self.log(tf!("copié vers {}", "copied to {}", dest.display()));
-                let exe_name = std::env::current_exe().ok().and_then(|p| p.file_name().map(|n| n.to_os_string())).unwrap_or_else(|| "HomeRPG ArchLord.exe".into());
+                let exe_name = std::env::current_exe().ok().and_then(|p| p.file_name().map(|n| n.to_os_string())).unwrap_or_else(|| "ArchHome.exe".into());
                 let launched = std::process::Command::new(dest.join(&exe_name)).current_dir(dest).spawn().is_ok();
                 let mut s = self.shared.lock().unwrap();
                 s.state = State::NotInstalled;

@@ -17,6 +17,7 @@
 /Build/package/
 /Build/files-manifest.json
 /Launcher/target/
+/ArchHome.exe
 /HomeRPG ArchLord.exe
 *.orig
 

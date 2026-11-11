@@ -49,7 +49,7 @@
   "user_provided": [
     {
       "id": "server-tables",
-      "description": "Incluses dans le package (New-Package.ps1 -ServerTables), jamais dans le dépôt HomeRPG : tables du serveur ArchLord d'origine, livrées par ArchCore lui-même depuis b84b67a (data/server-ini du commit indiqué) et exigées par archcore import --server (valeurs de l'épisode 8, apparitions des monstres, butin, IA, raffinage, loteries, costumes, Gacha ; world/node_data pour la carte). Sans elles, le monde ne peut pas être importé.",
+      "description": "Incluses dans le package (New-Package.ps1 -ServerTables), jamais dans le dépôt ArchHome : tables du serveur ArchLord d'origine, livrées par ArchCore lui-même depuis b84b67a (data/server-ini du commit indiqué) et exigées par archcore import --server (valeurs de l'épisode 8, apparitions des monstres, butin, IA, raffinage, loteries, costumes, Gacha ; world/node_data pour la carte). Sans elles, le monde ne peut pas être importé.",
       "default_location": "Server/Data/server-ini"
     },
     {

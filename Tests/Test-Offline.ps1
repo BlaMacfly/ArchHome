@@ -15,7 +15,7 @@ $d = (Get-Date).AddMinutes(30)
 while (-not (Test-Port $Layout.WorldPort) -and (Get-Date) -lt $d) { Start-Sleep -Seconds 1 }
 Start-Sleep -Seconds 8
 # Processus du projet seulement : une MariaDB installée par ailleurs sur le PC n'est pas concernée.
-$pids = @(Get-Process -Name 'homerpg-archlord-launcher', 'HomeRPG ArchLord', 'archcore', 'mariadbd' -ErrorAction SilentlyContinue | Where-Object { $_.Path -and $_.Path.StartsWith($ProjectRoot, [StringComparison]::OrdinalIgnoreCase) } | Select-Object -ExpandProperty Id)
+$pids = @(Get-Process -Name 'homerpg-archlord-launcher', 'HomeRPG ArchLord', 'ArchHome', 'archcore', 'mariadbd' -ErrorAction SilentlyContinue | Where-Object { $_.Path -and $_.Path.StartsWith($ProjectRoot, [StringComparison]::OrdinalIgnoreCase) } | Select-Object -ExpandProperty Id)
 $conns = Get-NetTCPConnection -ErrorAction SilentlyContinue | Where-Object { $pids -contains $_.OwningProcess }
 $listen = $conns | Where-Object { $_.State -eq 'Listen' }
 $established = $conns | Where-Object { $_.State -ne 'Listen' -and $_.State -ne 'Bound' }

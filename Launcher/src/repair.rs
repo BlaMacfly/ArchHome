@@ -146,7 +146,7 @@ pub fn export_diagnostic(layout: &Layout, settings: &crate::settings::Settings, 
     }
     let info = crate::client::from_settings(layout, settings);
     let mut state_txt = format!(
-        "HomeRPG ArchLord {}\nracine : {}\nétat : {state}\nclient : {} (ArchRust.exe {}, {}), données du jeu : {} (manquant : {})\n",
+        "ArchHome {}\nracine : {}\nétat : {state}\nclient : {} (ArchRust.exe {}, {}), données du jeu : {} (manquant : {})\n",
         Layout::version(),
         layout.root.display(),
         info.dir.display(),

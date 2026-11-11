@@ -1,8 +1,8 @@
-# HomeRPG ArchLord — Manuel d'utilisation
+# ArchHome — Manuel d'utilisation
 
 *English version: [User-Manual.md](User-Manual.md).*
 
-HomeRPG ArchLord fait tourner ArchLord en solo sur votre PC : un serveur ArchCore local, une base MariaDB
+ArchHome fait tourner ArchLord en solo sur votre PC : un serveur ArchCore local, une base MariaDB
 portable et un launcher qui s'occupe de tout. Vous jouez avec le client ArchRust.
 
 ## Sommaire
@@ -27,7 +27,7 @@ portable et un launcher qui s'occupe de tout. Vous jouez avec le client ArchRust
 - Windows 10 ou 11, 64 bits, 8 Go de mémoire.
 - L'exécutable **ArchRust** (`Client\ArchRust.exe`, fourni dans le package) et les données du client ArchLord
   64 bits (`character\`, `ini\`, `world\`, `texture\`, `object\`, `effect\`, `sound\`…), que vous fournissez.
-  HomeRPG ne distribue aucune donnée du jeu. Le client d'origine n'est pas pris en charge.
+  ArchHome ne distribue aucune donnée du jeu. Le client d'origine n'est pas pris en charge.
 - Les **tables du serveur ArchLord d'origine** (valeurs du jeu de l'épisode 8 : compétences, objets, options,
   monstres, régions, boutiques, portails, expérience ; apparitions des monstres, butin, IA, raffinage,
   `world\node_data`) sont incluses dans `Server\Data\server-ini\`. L'import du monde les exige : ne supprimez
@@ -36,7 +36,7 @@ portable et un launcher qui s'occupe de tout. Vous jouez avec le client ArchRust
 
 ## 2. Installation
 
-1. Décompressez l'archive dans un dossier de votre disque, par exemple `C:\Jeux\HomeRPG ArchLord\` (pas dans
+1. Décompressez l'archive dans un dossier de votre disque, par exemple `C:\Jeux\ArchHome\` (pas dans
    Program Files, pas dans un dossier synchronisé en nuage).
 2. Placez vos données du jeu dans `Client\` à côté d'`ArchRust.exe`, ou indiquez leur dossier dans
    **Paramètres** > « Données du jeu ». Le launcher détecte l'exécutable fourni dans `Client\`.
@@ -46,7 +46,7 @@ portable et un launcher qui s'occupe de tout. Vous jouez avec le client ArchRust
    prêt à jouer.
 3. Les tables du serveur d'origine sont déjà dans `Server\Data\server-ini\` ; **Paramètres** permet d'en indiquer
    d'autres.
-4. Ouvrez `HomeRPG ArchLord.exe`. Si Windows affiche « Windows a protégé votre ordinateur » : « Informations
+4. Ouvrez `ArchHome.exe`. Si Windows affiche « Windows a protégé votre ordinateur » : « Informations
    complémentaires » puis « Exécuter quand même ».
 
 Si le dossier est en lecture seule (DVD, Program Files), le launcher propose de le copier sur le disque.
@@ -75,7 +75,7 @@ Cliquez sur **JOUER**. Le launcher enchaîne :
    secondes (36 000 monstres environ), puis les **bots** d'ArchBot entrent en jeu un par un (voir Monde).
 6. **ArchRust** : `realmlist.wtf` pointe sur le serveur local, la langue du jeu est appliquée, puis le jeu
    s'ouvre sur le panneau de connexion d'ArchRust : identifiant et mot de passe, serveur local déjà rempli,
-   case « Enregistrer le compte » pour ne plus les saisir (le premier monde, « HomeRPG », est pris d'office).
+   case « Enregistrer le compte » pour ne plus les saisir (le premier monde, « ArchHome », est pris d'office).
 
 Avant de vous connecter, créez votre compte dans l'onglet **Comptes** (le serveur n'a pas besoin de tourner).
 

@@ -1,6 +1,6 @@
-# Launcher — HomeRPG ArchLord (Rust)
+# Launcher — ArchHome (Rust)
 
-Licence propriétaire HomeRPG (voir `../LICENCE.txt`) ; les bibliothèques Rust utilisées restent sous leurs
+Licence propriétaire ArchHome (voir `../LICENCE.txt`) ; les bibliothèques Rust utilisées restent sous leurs
 licences MIT/Apache-2.0 et assimilées. Un seul exécutable, 100 % Rust, CRT liée statiquement (aucun
 « Visual C++ Redistributable » requis).
 

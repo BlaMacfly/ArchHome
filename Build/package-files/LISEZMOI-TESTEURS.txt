@@ -1,7 +1,7 @@
-HomeRPG ArchLord v0.3.4 — LISEZMOI pour les testeurs
-====================================================
+ArchHome v0.3.4 — LISEZMOI pour les testeurs
+============================================
 
-Merci de tester ! HomeRPG ArchLord fait tourner ArchLord en solo, hors ligne, sur votre PC :
+Merci de tester ! ArchHome fait tourner ArchLord en solo, hors ligne, sur votre PC :
 un serveur ArchCore local, sa propre base MariaDB et le client ArchRust, lancés par un seul
 bouton JOUER. Rien ne sort de votre PC (tout écoute sur 127.0.0.1).
 
@@ -37,7 +37,7 @@ simulateur, à vous de le jouer pour de vrai. Chaque retour compte.
    - copiez-les dans Client\, à côté d'ArchRust.exe ;
    - ou laissez-les où elles sont et indiquez leur dossier dans le launcher :
      Paramètres > « Données du jeu ArchLord ».
-3. Ouvrez « HomeRPG ArchLord.exe ». Le launcher n'est pas signé : si Windows affiche
+3. Ouvrez « ArchHome.exe ». Le launcher n'est pas signé : si Windows affiche
    « Windows a protégé votre ordinateur », cliquez sur « Informations complémentaires »
    puis « Exécuter quand même ».
 4. Langue : le launcher s'ouvre en français si Windows est en français, sinon en anglais.
@@ -79,6 +79,9 @@ les masque, n'y touchez pas.
 5. VOUS AVIEZ UNE VERSION PRÉCÉDENTE ?
 --------------------------------------
 
+Le programme s'appelle maintenant ArchHome.exe (avant : HomeRPG ArchLord.exe) : refaites
+vos raccourcis. Le dossier UserData\ et vos réglages se reprennent comme avant.
+
 Depuis la v0.3.3 ou avant : deux possibilités.
   * Pour les quêtes, titres, maîtrises et l'expérience d'origine (conseillé) : gardez le
     UserData\ fourni avec la v0.3.4 ; vos anciens personnages ne sont pas repris.
@@ -105,6 +108,8 @@ réversible) et l'oubli des compétences vous est offert, leurs coûts ayant cha
 -------------------------------------
 
 Nouveau dans la v0.3.4
+  * le launcher s'appelle désormais ArchHome (ArchHome.exe) et a un nouveau fond ; le
+    monde s'appelle « ArchHome » dans la liste des serveurs ;
   * quêtes et titres traduits dans toutes les langues du jeu (les textes d'origine
     manquants sont complétés par les traductions d'ArchCore) ;
   * marques de quête au-dessus des PNJ et des objets du décor ;

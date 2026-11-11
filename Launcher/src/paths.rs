@@ -8,7 +8,7 @@ pub const MARIADB_PORT: u16 = 3316;
 /// Ports d'ArchCore par défaut (ceux du client ArchLord) ; modifiables dans Paramètres.
 pub const DEFAULT_LOGIN_PORT: u16 = 11002;
 pub const DEFAULT_WORLD_PORT: u16 = 11008;
-pub const WORLD_NAME: &str = "HomeRPG";
+pub const WORLD_NAME: &str = "ArchHome";
 
 /// Bases d'ArchCore, dans l'ordre de création.
 pub const DB_AUTH: &str = "archcore_auth";

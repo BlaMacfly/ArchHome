@@ -7,11 +7,11 @@ fn main() {
     if std::env::var("CARGO_CFG_TARGET_OS").as_deref() == Ok("windows") {
         let mut res = winresource::WindowsResource::new();
         res.set_icon("assets/homerpg.ico");
-        res.set("ProductName", "HomeRPG ArchLord");
-        res.set("FileDescription", "HomeRPG ArchLord");
+        res.set("ProductName", "ArchHome");
+        res.set("FileDescription", "ArchHome");
         res.set("CompanyName", "BlaMacfly");
         res.set("LegalCopyright", "© 2026 BlaMacfly. Tous droits réservés / All rights reserved.");
-        res.set("OriginalFilename", "HomeRPG ArchLord.exe");
+        res.set("OriginalFilename", "ArchHome.exe");
         res.set_language(0x040c); // français (France)
         res.compile().expect("ressources Windows (winresource : rc.exe du SDK Windows requis)");
     }

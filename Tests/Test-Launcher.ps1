@@ -11,7 +11,7 @@ $ErrorActionPreference = 'Stop'
 
 if (-not $Exe) { $Exe = Get-ProjectPath 'Launcher\target\release\homerpg-archlord-launcher.exe' }
 if (-not (Test-Path $Exe)) { throw "Launcher non compilé : $Exe" }
-if (Get-Process -Name 'homerpg-archlord-launcher', 'HomeRPG ArchLord' -ErrorAction SilentlyContinue) { throw "Un launcher HomeRPG est déjà ouvert : le fermer d'abord" }
+if (Get-Process -Name 'homerpg-archlord-launcher', 'HomeRPG ArchLord', 'ArchHome' -ErrorAction SilentlyContinue) { throw "Un launcher ArchHome est déjà ouvert : le fermer d'abord" }
 foreach ($p in $Layout.MariaDbPort, $Layout.LoginPort, $Layout.WorldPort) { if (Test-Port $p) { throw "Port $p déjà occupé : arrêter le serveur qui l'utilise" } }
 
 $log = Get-ProjectPath 'Logs\launcher.log'

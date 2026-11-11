@@ -13,6 +13,12 @@ ArchCore Admin 1.4.0.
 - ArchBot d06afc8 : les bots en trop sortent quand on baisse leur nombre ; expérience sur 64 bits.
 - Launcher : réglage « Traductions d'ArchCore » (Paramètres, facultatif, avec les données de Webzen) passé à
   l'import (`--traductions`) ; son ajout déclenche un réimport. `New-TesterPackage.ps1 -TranslationsDir`.
+- Le produit s'appelle **ArchHome** (HomeRPG est le projet plus large qui regroupe plusieurs MMO) : titre de la
+  fenêtre, textes, `ArchHome.exe`, package `ArchHome-v<version>`, monde « ArchHome » dans la liste des serveurs,
+  documentation, licence. Un dossier d'installation reste reconnu sous son ancien nom ; aucune clé de registre ni
+  aucun chemin de données ne dépend du nom.
+- Nouveau fond du launcher : image d'ArchHome (taverne) en recouvrement centré, voile sombre en haut et en bas
+  pour la lisibilité.
 
 ## 0.3.3 — 9 novembre 2026
 

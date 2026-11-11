@@ -1,6 +1,6 @@
 ﻿<#
 .SYNOPSIS
-    Lance un outil d'ArchCore sur les bases de HomeRPG (MariaDB démarrée, configuration générée par le launcher).
+    Lance un outil d'ArchCore sur les bases de ArchHome (MariaDB démarrée, configuration générée par le launcher).
 
 .EXAMPLE
     Tools\Invoke-ArchCoreTool.ps1 db-check

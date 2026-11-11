@@ -18,7 +18,7 @@ param(
     [string]$Thumbprint,
     [string]$File = (Join-Path (Split-Path -Parent $PSScriptRoot) 'Launcher\target\release\homerpg-archlord-launcher.exe'),
     [string]$TimestampUrl = 'http://timestamp.digicert.com',
-    [string]$Description = 'HomeRPG ArchLord'
+    [string]$Description = 'ArchHome'
 )
 $ErrorActionPreference = 'Stop'
 
@@ -47,6 +47,6 @@ $sig = Get-AuthenticodeSignature $File
 "Horodatage : $(if ($sig.TimeStamperCertificate) { $sig.TimeStamperCertificate.Subject } else { 'absent' })"
 if (-not $chainOk) { "Chaîne non approuvée par Windows (certificat auto-signé ou autorité inconnue) : Windows affichera « éditeur inconnu »." }
 # Copie à la racine du projet sous le nom définitif (le launcher détecte la racine par la présence de Server/ et Tools/).
-$deploy = Join-Path (Split-Path -Parent $PSScriptRoot) 'HomeRPG ArchLord.exe'
+$deploy = Join-Path (Split-Path -Parent $PSScriptRoot) 'ArchHome.exe'
 try { Copy-Item $File $deploy -Force -ErrorAction Stop; "Déployé : $deploy" } catch { "Déploiement impossible (launcher en cours d'exécution ?) : $($_.Exception.Message) — fermer le launcher puis relancer ce script." }
 exit 0

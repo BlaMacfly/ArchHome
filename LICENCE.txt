@@ -19,17 +19,17 @@ adresse électronique de contact.]
 1.2 L'« Utilisateur » désigne toute personne physique qui installe ou utilise le
 Logiciel.
 
-1.3 Le « Logiciel » désigne HomeRPG ArchLord, c'est-à-dire l'ensemble des
-éléments créés par le Titulaire et livrés dans le dossier HomeRPG ArchLord, et
+1.3 Le « Logiciel » désigne ArchHome, c'est-à-dire l'ensemble des
+éléments créés par le Titulaire et livrés dans le dossier ArchHome, et
 notamment :
-  a) le programme « HomeRPG ArchLord.exe » (le launcher), sous forme
+  a) le programme « ArchHome.exe » (le launcher), sous forme
      exécutable, et son code source lorsqu'il est fourni (dossier
      Sources\Launcher) ;
   b) les scripts d'exploitation, de construction et de test (dossiers Tools,
      Sources\Build, Tests) ;
   c) la documentation, le manuel d'utilisation, les fichiers LISEZMOI ;
-  d) les éléments graphiques et l'identité visuelle : le nom « HomeRPG »,
-     le nom « HomeRPG ArchLord », le logo et l'icône ;
+  d) les éléments graphiques et l'identité visuelle : le nom « ArchHome »,
+     le nom « HomeRPG », le logo et l'icône ;
   e) la structure, l'organisation et l'assemblage du dossier livré.
 
 1.4 Les « Composants Tiers » désignent les logiciels et bibliothèques d'autres
@@ -64,7 +64,7 @@ n'est pas vendu : il est concédé en licence. Le Titulaire conserve l'intégral
 des droits de propriété intellectuelle sur le Logiciel, y compris sur toute
 copie, quelle qu'en soit la forme.
 
-2.2 Les noms « HomeRPG » et « HomeRPG ArchLord », le logo et l'identité
+2.2 Les noms « ArchHome » et « HomeRPG », le logo et l'identité
 visuelle sont la propriété du Titulaire. Aucun droit d'utilisation sur ces
 signes n'est accordé, en dehors de leur affichage par le Logiciel lui-même.
 
@@ -287,7 +287,7 @@ contrat, est à adresser au Titulaire aux coordonnées indiquées à l'article 1
 
 ENGLISH SUMMARY (for information only; the French text above prevails)
 
-HomeRPG ArchLord (launcher, scripts, documentation, name, logo) is proprietary
+ArchHome (launcher, scripts, documentation, name, logo) is proprietary
 software by BlaMacfly, licensed, not sold. You may install and use it for
 personal, non-commercial, single-player use; read its source code; keep a
 backup copy; and view or fork the public GitHub repository as GitHub's terms
@@ -301,5 +301,5 @@ without warranty. French law applies.
 
 
 © 2026 BlaMacfly. Tous droits réservés / All rights reserved.
-HomeRPG ArchLord est une création indépendante, sans lien avec les titulaires
+ArchHome est une création indépendante, sans lien avec les titulaires
 des droits sur ArchLord.
