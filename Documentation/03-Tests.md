@@ -15,6 +15,17 @@ Une installation d'essai à part (copie du package, `UserData\settings.json` ave
 monde, par exemple 11102 / 11108) laisse libres les ports 11002 / 11008 d'un serveur de développement ; MariaDB
 garde le port 3316 de ArchHome (celle de développement, 3306, n'est jamais touchée).
 
+## Résultats du 2026-11-18 (version 0.3.5, ArchCore 7fa20a0 + ArchBot d06afc8, ArchRust d2e6ee1)
+
+- Patch d'ArchBot appliqué tel quel ; aucune migration ni table du serveur exigée en plus. Deux avertissements de
+  compilation dans ArchCore lui-même (`item_info.rs` : constantes `CHAT_LINK` et `TEMPLATE` inutilisées).
+- Mise à jour de l'installation d'essai 0.3.4 : réimport avec Webzen et les traductions (3 235 quêtes, 2 768
+  titres), `db-check` sans anomalie, empreinte de `server-data` `sha256:7eba6c30…` (inchangée).
+- `migrate-ep8` : rien à migrer ; `sim client` : OK ; `sim bots` : 16/16 ; `sim questobject`, `sim questgather` :
+  OK ; `sim scroll` avec un personnage neuf : « parchemins : OK » (op 31 → op 32, aller-retour, abandon op 8 ;
+  avec l'ancien personnage d'essai, arrêt à l'aller-retour) ; `ArchRust.exe play --connect` (d2e6ee1) : en jeu à
+  Anchorville, empreinte conforme, 3 AddOns, pas de cube à damier.
+
 ## Résultats du 2026-11-10 (version 0.3.4, ArchCore 23c2ced + ArchBot d06afc8, ArchRust 2f82448)
 
 - Patch d'ArchBot d06afc8 appliqué tel quel ; mêmes tables du serveur exigées.

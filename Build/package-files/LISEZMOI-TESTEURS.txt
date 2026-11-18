@@ -1,12 +1,12 @@
-ArchHome v0.3.4 — LISEZMOI pour les testeurs
+ArchHome v0.3.5 — LISEZMOI pour les testeurs
 ============================================
 
 Merci de tester ! ArchHome fait tourner ArchLord en solo, hors ligne, sur votre PC :
 un serveur ArchCore local, sa propre base MariaDB et le client ArchRust, lancés par un seul
 bouton JOUER. Rien ne sort de votre PC (tout écoute sur 127.0.0.1).
 
-Cette version : ArchCore 23c2ced (branche Core du 10 novembre 2026) avec le module ArchBot
-(bots), ArchRust 2f82448 (10 novembre 2026), ArchCore Admin 1.4.0. Le monde fourni est
+Cette version : ArchCore 7fa20a0 (branche Core du 18 novembre 2026) avec le module ArchBot
+(bots), ArchRust d2e6ee1 (18 novembre 2026), ArchCore Admin 1.4.0. Le monde fourni est
 importé avec les quêtes, titres, maîtrises et la courbe d'expérience d'origine, traduits
 dans toutes les langues.
 
@@ -82,9 +82,9 @@ les masque, n'y touchez pas.
 Le programme s'appelle maintenant ArchHome.exe (avant : HomeRPG ArchLord.exe) : refaites
 vos raccourcis. Le dossier UserData\ et vos réglages se reprennent comme avant.
 
-Depuis la v0.3.3 ou avant : deux possibilités.
+Depuis la v0.3.4 ou avant : deux possibilités.
   * Pour les quêtes, titres, maîtrises et l'expérience d'origine (conseillé) : gardez le
-    UserData\ fourni avec la v0.3.4 ; vos anciens personnages ne sont pas repris.
+    UserData\ fourni avec la v0.3.5 ; vos anciens personnages ne sont pas repris.
   * Pour garder vos personnages : copiez votre ancien UserData\ dans la nouvelle version ;
     le monde est alors réimporté SANS les données d'origine de Webzen (quêtes, titres,
     maîtrises et expérience du client, comme en v0.3.1, et sans les quêtes des objets).
@@ -106,6 +106,15 @@ réversible) et l'oubli des compétences vous est offert, leurs coûts ayant cha
 
 6. NOUVEAUTÉS — CE QU'IL FAUT ESSAYER
 -------------------------------------
+
+Nouveau dans la v0.3.5
+  * infobulle d'un objet que vous n'avez pas : lien d'objet dans la discussion, bouton
+    d'objet d'une fenêtre ;
+  * un aller-retour (parchemin, portail) peut être abandonné ; le retour refusé en combat
+    est expliqué ;
+  * plus de cube à damier : les packs d'exemple d'ArchRust sont désactivés par défaut ;
+  * les fenêtres de dialogue et de banque d'un PNJ se ferment quand on s'en éloigne
+    (150 unités) ; la fenêtre des quêtes reste ouverte.
 
 Nouveau dans la v0.3.4
   * le launcher s'appelle désormais ArchHome (ArchHome.exe) et a un nouveau fond ; le

@@ -1,5 +1,18 @@
 # Journal des versions / Changelog
 
+## 0.3.5 — 18 novembre 2026
+
+Version pour les testeurs / Tester build. ArchCore 7fa20a0 (branche Core) avec ArchBot d06afc8, ArchRust d2e6ee1,
+ArchCore Admin 1.4.0.
+
+- ArchCore 7fa20a0 : renseignements sur un objet (infobulle d'un objet que le joueur ne détient pas : lien de la
+  discussion, bouton d'objet d'une fenêtre) ; un aller-retour
+  peut être abandonné, et le retour refusé en combat est expliqué.
+- ArchRust d2e6ee1 : les packs d'exemple (glTF, texture, son) sont désactivés par défaut, ce qui supprime le cube
+  à damier ; les fenêtres de dialogue et de banque d'un PNJ se ferment à 150 unités, la fenêtre des quêtes ne se
+  ferme plus à distance ; les fenêtres d'Archonia sont pilotables par les AddOns.
+- Base du paquet réimportée avec Webzen et les traductions d'ArchCore, `db-check` sans anomalie.
+
 ## 0.3.4 — 10 novembre 2026
 
 Version pour les testeurs / Tester build. ArchCore 23c2ced (branche Core) avec ArchBot d06afc8, ArchRust 2f82448,
