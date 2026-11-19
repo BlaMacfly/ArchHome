@@ -15,6 +15,18 @@ Une installation d'essai à part (copie du package, `UserData\settings.json` ave
 monde, par exemple 11102 / 11108) laisse libres les ports 11002 / 11008 d'un serveur de développement ; MariaDB
 garde le port 3316 de ArchHome (celle de développement, 3306, n'est jamais touchée).
 
+## Résultats du 2026-11-19 (version 0.3.7, ArchCore 5cbde83 + ArchBot d06afc8, ArchRust 256888e)
+
+- Serveur inchangé (ArchCore ad280a6 ne touche que la documentation) : l'installation d'essai garde sa base, sans
+  réimport ; `cargo test --release` du launcher : OK.
+- Liens d'objet, en jeu à deux clients ArchRust (SimRetour, MJ, amène SimQuete à côté par `/move`) : un message de
+  SimRetour contenant `<ITEM::298::Small Life Potion>` (envoyé par `--exec`) s'affiche chez SimQuete
+  « [SimRetour] Regarde <Small Life Potion> ! », le lien sur fond bleu (capture). La saisie s'ouvre par Entrée.
+- Non vérifié ici : le Ctrl + clic dans le sac et le clic sur le lien (infobulle). Des clics envoyés par messages à
+  une fenêtre en arrière-plan n'atteignent pas l'interface (Windows signale aussitôt que la souris a quitté la
+  fenêtre), et la vraie souris n'a pas été prise. L'échange réseau (op 31 genre 8 → op 32) passe avec l'exemple
+  `item_link` d'ArchRust.
+
 ## Résultats du 2026-11-19 (version 0.3.6, ArchCore 5cbde83 + ArchBot d06afc8, ArchRust fd73c30, puis 1f23b66 et 19e1c30)
 
 - Patch d'ArchBot appliqué tel quel ; aucune migration en plus ; `cashmall.txt` lu s'il est là (dans le package).

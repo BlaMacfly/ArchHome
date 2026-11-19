@@ -1,4 +1,4 @@
-ArchHome v0.3.6 — LISEZMOI pour les testeurs
+ArchHome v0.3.7 — LISEZMOI pour les testeurs
 ============================================
 
 Merci de tester ! ArchHome fait tourner ArchLord en solo, hors ligne, sur votre PC :
@@ -6,7 +6,7 @@ un serveur ArchCore local, sa propre base MariaDB et le client ArchRust, lancés
 bouton JOUER. Rien ne sort de votre PC (tout écoute sur 127.0.0.1).
 
 Cette version : ArchCore 5cbde83 (branche Core du 19 novembre 2026) avec le module ArchBot
-(bots), ArchRust 19e1c30 (19 novembre 2026), ArchCore Admin 1.4.0. Le monde fourni est
+(bots), ArchRust 256888e (19 novembre 2026), ArchCore Admin 1.4.0. Le monde fourni est
 importé avec les quêtes, titres, maîtrises et la courbe d'expérience d'origine, traduits
 dans toutes les langues.
 
@@ -82,9 +82,12 @@ les masque, n'y touchez pas.
 Le programme s'appelle maintenant ArchHome.exe (avant : HomeRPG ArchLord.exe) : refaites
 vos raccourcis. Le dossier UserData\ et vos réglages se reprennent comme avant.
 
+Depuis la v0.3.6 : launcher fermé, copiez le dossier UserData\ de l'ancienne version dans
+la nouvelle ; tout est repris tel quel (même serveur, même base).
+
 Depuis la v0.3.5 ou avant : deux possibilités.
   * Pour les quêtes, titres, maîtrises et l'expérience d'origine (conseillé) : gardez le
-    UserData\ fourni avec la v0.3.6 ; vos anciens personnages ne sont pas repris.
+    UserData\ fourni avec la v0.3.7 ; vos anciens personnages ne sont pas repris.
   * Pour garder vos personnages : copiez votre ancien UserData\ dans la nouvelle version ;
     le monde est alors réimporté SANS les données d'origine de Webzen (quêtes, titres,
     maîtrises et expérience du client, comme en v0.3.1, et sans les quêtes des objets).
@@ -106,6 +109,11 @@ réversible) et l'oubli des compétences vous est offert, leurs coûts ayant cha
 
 6. NOUVEAUTÉS — CE QU'IL FAUT ESSAYER
 -------------------------------------
+
+Nouveau dans la v0.3.7
+  * liens d'objet dans la discussion : saisie de discussion ouverte (Entrée), Ctrl + clic
+    sur un objet du sac ajoute son lien <nom> ; dans les messages reçus, le lien s'affiche
+    sur fond bleu et un clic montre l'infobulle de l'objet. Essayez-le à deux personnages.
 
 Nouveau dans la v0.3.6
   * boutique Cash : menu Chantra > boutique, ou /boutiquecash dans la discussion ; achat

@@ -1,5 +1,16 @@
 # Journal des versions / Changelog
 
+## 0.3.7 — 19 novembre 2026
+
+Version pour les testeurs / Tester build. ArchCore 5cbde83 (branche Core) avec ArchBot d06afc8, ArchRust 256888e,
+ArchCore Admin 1.4.0.
+
+- Liens d'objet dans la discussion (ArchRust 256888e) : Ctrl + clic sur un objet du sac, saisie de discussion
+  ouverte, ajoute la balise `<ITEM::IID::nom>` ; dans les lignes reçues, le lien s'affiche `<nom>` sur fond bleu et
+  un clic montre l'infobulle de l'objet (AgpmItem op 31 genre 8, réponse op 32).
+- ArchCore inchangé : ad280a6 ne change que la documentation, le serveur de 5cbde83 et la base du paquet 0.3.6
+  restent valables ; un UserData de la 0.3.6 se reprend tel quel.
+
 ## 0.3.6 — 19 novembre 2026
 
 Version pour les testeurs / Tester build. ArchCore 5cbde83 (branche Core) avec ArchBot d06afc8, ArchRust 19e1c30,
