@@ -15,6 +15,22 @@ Une installation d'essai à part (copie du package, `UserData\settings.json` ave
 monde, par exemple 11102 / 11108) laisse libres les ports 11002 / 11008 d'un serveur de développement ; MariaDB
 garde le port 3316 de ArchHome (celle de développement, 3306, n'est jamais touchée).
 
+## Résultats du 2026-11-19 (version 0.3.6, ArchCore 5cbde83 + ArchBot d06afc8, ArchRust fd73c30, puis 1f23b66 et 19e1c30)
+
+- Patch d'ArchBot appliqué tel quel ; aucune migration en plus ; `cashmall.txt` lu s'il est là (dans le package).
+- Mise à jour de l'installation d'essai 0.3.5 : réimport avec Webzen et les traductions (`cashmall.txt` rangé dans
+  `client_table`), `db-check` sans anomalie, empreinte `sha256:7eba6c30…` inchangée ; journal du serveur :
+  « boutique Cash : 7 onglet(s), 486 produit(s) ».
+- `migrate-ep8` : rien à migrer ; `sim client` : OK ; `sim bots` : 16/16 ; `sim cashmall` : « boutique Cash et
+  recrutement : OK » ; `sim admin` (avec un second compte SimA) : « outil MJ, console de développement et
+  KillGameServer : OK » ; `sim scroll` : OK ; client en jeu, empreinte conforme.
+- Constaté avec ArchRust fd73c30 : `/boutique` était pris d'abord par la commande des PNJ et ouvrait la boutique d'un
+  marchand. Corrigé dans ArchRust 1f23b66 (`/boutiquecash`, `/cashmall`) : la fenêtre « CHANTRA SHOP » s'ouvre en
+  jeu (7 onglets, 12 produits par page, capture) ; la grille des produits débordait du cadre à droite et en bas, et le
+  solde et la page chevauchaient les prix de la dernière rangée. Corrigé dans ArchRust 19e1c30 (décalage compté deux
+  fois) : en jeu, `/boutiquecash` ouvre la fenêtre avec les 12 produits (4 × 3) dans le cadre, les pages et le solde
+  sous la grille, sans chevauchement (capture). Le menu Chantra n'a pas été essayé à la souris.
+
 ## Résultats du 2026-11-18 (version 0.3.5, ArchCore 7fa20a0 + ArchBot d06afc8, ArchRust d2e6ee1)
 
 - Patch d'ArchBot appliqué tel quel ; aucune migration ni table du serveur exigée en plus. Deux avertissements de

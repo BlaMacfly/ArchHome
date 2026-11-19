@@ -53,7 +53,7 @@ powershell -ExecutionPolicy Bypass -File Build\Sign-Launcher.ps1 -Thumbprint <em
 # Paquet des testeurs prêt à jouer (dossier + .7z + SHA256SUMS, sur le Bureau, jamais dans un dépôt) : le package
 # ci-dessus, les données du jeu d'un client complet dans Client\ et, avec -InitDatabase, la base déjà initialisée et
 # importée aux valeurs de l'épisode 8 avec Client\server-data (diffusion privée aux testeurs, comme le paquet 0.2.0).
-& .\Build\New-TesterPackage.ps1 -GameData "C:\…\Client ArchRust" -OutDir "C:\…\Bureau\ArchHome v0.3.5" -HardLinks -InitDatabase `
+& .\Build\New-TesterPackage.ps1 -GameData "C:\…\Client ArchRust" -OutDir "C:\…\Bureau\ArchHome v0.3.6" -HardLinks -InitDatabase `
     -WebzenDir "C:\…\client-webzen-2017\app\ini" -TranslationsDir "C:\…\data\traductions"   # données d'origine et traductions ; seule la base va dans le paquet
 # -HardLinks : données du jeu en liens physiques vers -GameData (même disque, aucun espace en plus ; n'y rien modifier).
 ```

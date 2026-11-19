@@ -1,12 +1,12 @@
-ArchHome v0.3.5 — README for testers
+ArchHome v0.3.6 — README for testers
 ====================================
 
 Thank you for testing! ArchHome runs ArchLord single-player and offline on your PC:
 a local ArchCore server, its own MariaDB database and the ArchRust client, all started by a
 single PLAY button. Nothing leaves your PC (everything listens on 127.0.0.1).
 
-This build: ArchCore 7fa20a0 (Core branch, November 18, 2026) with the ArchBot module
-(bots), ArchRust d2e6ee1 (November 18, 2026), ArchCore Admin 1.4.0. The included world is
+This build: ArchCore 5cbde83 (Core branch, November 19, 2026) with the ArchBot module
+(bots), ArchRust 19e1c30 (November 19, 2026), ArchCore Admin 1.4.0. The included world is
 imported with the original quests, titles, masteries and experience curve, translated
 into every language.
 
@@ -80,9 +80,9 @@ alone.
 The program is now called ArchHome.exe (before: HomeRPG ArchLord.exe): recreate your
 shortcuts. The UserData\ folder and your settings carry over as before.
 
-From v0.3.4 or earlier: two choices.
+From v0.3.5 or earlier: two choices.
   * For the original quests, titles, masteries and experience (recommended): keep the
-    UserData\ shipped with v0.3.5; your earlier characters are not carried over.
+    UserData\ shipped with v0.3.6; your earlier characters are not carried over.
   * To keep your characters: copy your earlier UserData\ into the new version; the world
     is then reimported WITHOUT the original Webzen data (the client's quests, titles,
     masteries and experience, as in v0.3.1, and no world object quests).
@@ -104,6 +104,13 @@ skill reset is offered, since skill costs changed.
 
 6. WHAT'S NEW — WHAT TO TRY
 ---------------------------
+
+New in v0.3.6
+  * Cash shop: Chantra menu > shop, or /boutiquecash in chat; purchases are paid with the
+    character's Cash (no real payment); /boutique stays an NPC's shop. Cash starts at 0: a GM gives some with
+    /cash <amount> "name". Brand-new windows: tell us anything wrong (display, prices,
+    purchase, full inventory);
+  * GM: the client's administration tool, /search and /disconnect commands.
 
 New in v0.3.5
   * tooltip of an item you do not hold: item links in chat, item buttons in windows;

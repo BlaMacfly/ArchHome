@@ -1,5 +1,20 @@
 # Journal des versions / Changelog
 
+## 0.3.6 — 19 novembre 2026
+
+Version pour les testeurs / Tester build. ArchCore 5cbde83 (branche Core) avec ArchBot d06afc8, ArchRust 19e1c30,
+ArchCore Admin 1.4.0.
+
+- Boutique Cash (ArchCore 5cbde83, ArchRust 19e1c30) : produits de `cashmall.txt` des tables du serveur d'origine,
+  achat débité sur le Cash du personnage, sans aucun paiement réel ; fenêtres d'origine `UI_CashMall` et
+  `UI_CashMallBuy`, ouvertes par le menu Chantra (`MenuBtnRoniMall`), `/boutiquecash` ou `/cashmall` ; `/boutique`
+  reste la boutique d'un PNJ. Le Cash part de 0 : un MJ en
+  donne avec `/cash <montant> "nom"`.
+- Outil MJ (AgpmAdmin) et commandes `/search` et `/disconnect` ; derniers types de paquets de l'épisode 8 acceptés
+  par le serveur (recrutement, Casper, scripts de la console de développement).
+- Base du paquet réimportée avec Webzen et les traductions d'ArchCore (sans réimport, la boutique serait vide),
+  `db-check` sans anomalie.
+
 ## 0.3.5 — 18 novembre 2026
 
 Version pour les testeurs / Tester build. ArchCore 7fa20a0 (branche Core) avec ArchBot d06afc8, ArchRust d2e6ee1,
