@@ -1,5 +1,23 @@
 # Journal des versions / Changelog
 
+## 0.3.8 — 22 novembre 2026
+
+Version pour les testeurs / Tester build. ArchCore a8610ef (branche Core) avec ArchBot 109071c, ArchRust 87b4a45,
+ArchCore Admin 1.4.0.
+
+- Arrêt propre du serveur (ArchCore 1d3c785) : au Ctrl+C envoyé par le launcher, plus aucune entrée en jeu, annonce
+  « Arrêt du serveur. », chaque joueur quitte le monde avec sa position enregistrée, taxes et journaux enregistrés,
+  bases fermées, code de sortie 0 ; sans joueur, arrêt immédiat.
+- Liens d'objet (ArchCore a8610ef, ArchRust 87b4a45) : après l'op 32 d'un objet renforcé ou serti, le serveur envoie
+  son AGPMITEMCONVERT op 0 ; l'infobulle du lien montre le renforcement, les sockets et les pierres.
+- Ramassage (ArchRust 87b4a45) : ligne SYSTEM dans la discussion comme dans Archonia, « Gained nom N Item(s) » pour un
+  objet qui s'empile, sinon « Gained <nom + N [a/b]> Item » en couleur avec lien d'objet ; l'or et les refus gardent
+  les messages de l'[EventMap].
+- ArchBot 109071c : patch adapté à l'arrêt propre d'ArchCore ; à l'arrêt, les bots sortent avant les joueurs et la
+  population visée passe à 0 (aucun bot ne rentre pendant l'annonce).
+- Aucune migration ; ArchCore change, donc un UserData d'une version précédente fait réimporter le monde (sans
+  Webzen chez les testeurs) : garder le UserData fourni.
+
 ## 0.3.7 — 19 novembre 2026
 
 Version pour les testeurs / Tester build. ArchCore 5cbde83 (branche Core) avec ArchBot d06afc8, ArchRust 256888e,

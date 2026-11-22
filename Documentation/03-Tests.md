@@ -15,6 +15,21 @@ Une installation d'essai à part (copie du package, `UserData\settings.json` ave
 monde, par exemple 11102 / 11108) laisse libres les ports 11002 / 11008 d'un serveur de développement ; MariaDB
 garde le port 3316 de ArchHome (celle de développement, 3306, n'est jamais touchée).
 
+## Résultats du 2026-11-22 (version 0.3.8, ArchCore a8610ef + ArchBot 109071c, ArchRust 87b4a45)
+
+- Le patch d'ArchBot ne s'appliquait plus (`server.rs` : arrêt propre d'ArchCore 1d3c785) : adapté et publié dans
+  ArchBot 109071c (mêmes 12 fichiers), `archbot::shutdown()` avant `world::shutdown::run`. ArchCore patché :
+  384 tests ; ArchBot : 48 tests ; launcher : `cargo test --release` OK.
+- Installation d'essai mise à jour : réimport avec Webzen et les traductions, `db-check` sans anomalie.
+- Arrêt par le launcher, SimRetour en jeu et 15 bots : « ArchCore arrêté proprement » (`stop()` vrai) en 1 à 2 s ;
+  journal du serveur : 15 bots sortis, annonce « Arrêt du serveur. » (reçue par le client, capture), joueur sorti avec
+  sa position, « arrêt terminé » en dernière ligne ; ports libérés. Un premier essai montrait un bot rentré pendant la
+  seconde d'annonce : corrigé dans ArchBot 109071c (population visée à 0 à l'arrêt), plus aucun au second essai.
+- Constaté : après l'annonce, le client affiche aussi « The trade has been cancelled » sans échange en cours
+  (message d'ArchCore à la sortie du joueur).
+- Les ports 11102 / 11108 étant pris par un serveur de test d'une autre session, l'installation d'essai et le premier
+  lancement du paquet (`New-TesterPackage.ps1 -InitPorts 11202,11208`) ont utilisé 11202 / 11208.
+
 ## Résultats du 2026-11-19 (version 0.3.7, ArchCore 5cbde83 + ArchBot d06afc8, ArchRust 256888e)
 
 - Serveur inchangé (ArchCore ad280a6 ne touche que la documentation) : l'installation d'essai garde sa base, sans
