@@ -1,5 +1,19 @@
 # Journal des versions / Changelog
 
+## 0.3.9 — 24 novembre 2026
+
+Version pour les testeurs / Tester build. ArchCore 7b94e5b (branche Core) avec ArchBot 7a11dbb, ArchRust 87b4a45,
+ArchCore Admin 1.4.0.
+
+- Règles de l'épisode 8 (ArchCore 7b94e5b) : PV, PM, AR et DR tirés de CON, SAG et AGI ; précision et esquive en
+  chances directes, esquive à distance ou au corps à corps ; pénalité de défense selon l'écart de niveau ; effets
+  plus faibles refusés, une famille à la fois ; potions en pour cent, options fixes, niveau plafond des objets ;
+  PV, PM, mort et rattachement enregistrés (migration `202611231000_points_et_mort`, appliquée au démarrage).
+- ArchCore 3dd6fe1 : réglage World.CreatureSpeed (vitesse des animaux, 1 par défaut) ; plus de fausse annulation
+  d'échange à la sortie du jeu.
+- ArchBot 7a11dbb : patch adapté à ArchCore 7b94e5b (mêmes 12 fichiers).
+- ArchRust inchangé (87b4a45 ; 184108b n'ajoute qu'un outil de mesure).
+
 ## 0.3.8 — 22 novembre 2026
 
 Version pour les testeurs / Tester build. ArchCore a8610ef (branche Core) avec ArchBot 109071c, ArchRust 87b4a45,

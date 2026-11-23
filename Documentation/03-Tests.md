@@ -15,6 +15,17 @@ Une installation d'essai à part (copie du package, `UserData\settings.json` ave
 monde, par exemple 11102 / 11108) laisse libres les ports 11002 / 11008 d'un serveur de développement ; MariaDB
 garde le port 3316 de ArchHome (celle de développement, 3306, n'est jamais touchée).
 
+## Résultats du 2026-11-24 (version 0.3.9, ArchCore 7b94e5b + ArchBot 7a11dbb, ArchRust 87b4a45)
+
+- Patch d'ArchBot adapté à 3dd6fe1 (ArchBot c5bfa7c) puis à 7b94e5b (ArchBot 7a11dbb) : contexte seulement, mêmes
+  12 fichiers. ArchCore patché : 385 puis 388 tests ; ArchBot : 48 tests.
+- 3dd6fe1, installation d'essai (11202 / 11208) : arrêt par le launcher avec 15 bots et SimRetour en jeu, plus de
+  « The trade has been cancelled » chez le client, « arrêt terminé ».
+- 7b94e5b, installation d'essai, 2 min : migration `202611231000_points_et_mort` appliquée au démarrage, 15 bots qui
+  chassent, 0 erreur et 0 avertissement dans le journal du serveur, arrêt propre.
+- Mesure de vitesse (ArchCore a8610ef + ArchBot, outil `speeds` d'ArchRust) : bots et joueur reçus avec marche 2000
+  et course 6000, déplacements côté serveur à 600 u/s ; les bots courent seulement en longs trajets d'un seul ordre.
+
 ## Résultats du 2026-11-22 (version 0.3.8, ArchCore a8610ef + ArchBot 109071c, ArchRust 87b4a45)
 
 - Le patch d'ArchBot ne s'appliquait plus (`server.rs` : arrêt propre d'ArchCore 1d3c785) : adapté et publié dans
