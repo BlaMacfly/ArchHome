@@ -1,11 +1,11 @@
-ArchHome v0.3.9 — LISEZMOI pour les testeurs
-============================================
+ArchHome v0.3.10 — LISEZMOI pour les testeurs
+=============================================
 
 Merci de tester ! ArchHome fait tourner ArchLord en solo, hors ligne, sur votre PC :
 un serveur ArchCore local, sa propre base MariaDB et le client ArchRust, lancés par un seul
 bouton JOUER. Rien ne sort de votre PC (tout écoute sur 127.0.0.1).
 
-Cette version : ArchCore 7b94e5b (branche Core du 23 novembre 2026) avec le module ArchBot
+Cette version : ArchCore 70fb81c (branche Core du 25 novembre 2026) avec le module ArchBot
 (bots), ArchRust 87b4a45 (22 novembre 2026), ArchCore Admin 1.4.0. Le monde fourni est
 importé avec les quêtes, titres, maîtrises et la courbe d'expérience d'origine, traduits
 dans toutes les langues.
@@ -82,9 +82,9 @@ les masque, n'y touchez pas.
 Le programme s'appelle maintenant ArchHome.exe (avant : HomeRPG ArchLord.exe) : refaites
 vos raccourcis. Le dossier UserData\ et vos réglages se reprennent comme avant.
 
-Depuis la v0.3.8 ou avant : deux possibilités.
+Depuis la v0.3.9 ou avant : deux possibilités.
   * Pour les quêtes, titres, maîtrises et l'expérience d'origine (conseillé) : gardez le
-    UserData\ fourni avec la v0.3.9 ; vos anciens personnages ne sont pas repris.
+    UserData\ fourni avec la v0.3.10 ; vos anciens personnages ne sont pas repris.
   * Pour garder vos personnages : copiez votre ancien UserData\ dans la nouvelle version ;
     le monde est alors réimporté SANS les données d'origine de Webzen (quêtes, titres,
     maîtrises et expérience du client, comme en v0.3.1, et sans les quêtes des objets).
@@ -106,6 +106,17 @@ réversible) et l'oubli des compétences vous est offert, leurs coûts ayant cha
 
 6. NOUVEAUTÉS — CE QU'IL FAUT ESSAYER
 -------------------------------------
+
+Nouveau dans la v0.3.10
+  * corrige la v0.3.9, dont les formules d'attaque (AR), de défense (DR) et de pénalité de
+    défense étaient FAUSSES : l'agilité comptait deux fois à l'affichage. N'utilisez plus
+    la v0.3.9. AR = (niveau + AGI) × 0,6 + 12 et DR = (niveau + AGI) × 0,4 + 8, plus les
+    bonus ; pas de pénalité à 1 niveau d'écart ni à 20 exactement, ni sur les résistances
+    héroïques ;
+  * PAS ENCORE VÉRIFIÉ, votre avis compte : rien de ces règles n'a été essayé dans le vrai
+    client. Les PV (constitution × 8), les PM (sagesse × 5,38), la pénalité sur les coups
+    critiques, l'écart de niveau des compétences et le refus des effets plus faibles ne
+    sont pas confirmés par le jeu d'origine.
 
 Nouveau dans la v0.3.9
   * règles de l'épisode 8 : PV, PM, attaque et défense tirés de la constitution, de la

@@ -1,11 +1,11 @@
-ArchHome v0.3.9 — README for testers
-====================================
+ArchHome v0.3.10 — README for testers
+=====================================
 
 Thank you for testing! ArchHome runs ArchLord single-player and offline on your PC:
 a local ArchCore server, its own MariaDB database and the ArchRust client, all started by a
 single PLAY button. Nothing leaves your PC (everything listens on 127.0.0.1).
 
-This build: ArchCore 7b94e5b (Core branch, November 23, 2026) with the ArchBot module
+This build: ArchCore 70fb81c (Core branch, November 25, 2026) with the ArchBot module
 (bots), ArchRust 87b4a45 (November 22, 2026), ArchCore Admin 1.4.0. The included world is
 imported with the original quests, titles, masteries and experience curve, translated
 into every language.
@@ -80,9 +80,9 @@ alone.
 The program is now called ArchHome.exe (before: HomeRPG ArchLord.exe): recreate your
 shortcuts. The UserData\ folder and your settings carry over as before.
 
-From v0.3.8 or earlier: two choices.
+From v0.3.9 or earlier: two choices.
   * For the original quests, titles, masteries and experience (recommended): keep the
-    UserData\ shipped with v0.3.9; your earlier characters are not carried over.
+    UserData\ shipped with v0.3.10; your earlier characters are not carried over.
   * To keep your characters: copy your earlier UserData\ into the new version; the world
     is then reimported WITHOUT the original Webzen data (the client's quests, titles,
     masteries and experience, as in v0.3.1, and no world object quests).
@@ -104,6 +104,16 @@ skill reset is offered, since skill costs changed.
 
 6. WHAT'S NEW — WHAT TO TRY
 ---------------------------
+
+New in v0.3.10
+  * fixes v0.3.9, whose attack rating (AR), defense rating (DR) and defense penalty formulas
+    were WRONG: agility was displayed twice. Please stop using v0.3.9.
+    AR = (level + AGI) x 0.6 + 12 and DR = (level + AGI) x 0.4 + 8, plus bonuses; no
+    penalty at 1 level apart nor at exactly 20, nor on heroic resistances;
+  * NOT VERIFIED YET, your feedback matters: none of these rules has been tried in the real
+    client. HP (constitution x 8), MP (wisdom x 5.38), the penalty on critical hits, the
+    skill level gap and the refusal of weaker effects are not confirmed by the original
+    game.
 
 New in v0.3.9
   * Episode 8 rules: HP, MP, attack and defense derived from constitution, wisdom and

@@ -1,5 +1,19 @@
 # Journal des versions / Changelog
 
+## 0.3.10 — 25 novembre 2026
+
+Version pour les testeurs / Tester build. ArchCore 70fb81c (branche Core) avec ArchBot 7a11dbb, ArchRust 87b4a45,
+ArchCore Admin 1.4.0. Remplace la 0.3.9, à ne pas diffuser / Replaces 0.3.9, not to be distributed.
+
+- Corrige la 0.3.9 (ArchCore 7b94e5b) : les formules d'AR, de DR et de pénalité de défense y étaient fausses (AGI
+  comptée deux fois à l'affichage). AR = (niveau + AGI) × 0,6 + 12, DR = (niveau + AGI) × 0,4 + 8, plus les bonus ;
+  pénalité nulle à 1 niveau d'écart et à 20 exactement, pas sur les résistances héroïques (ArchCore 70fb81c).
+- Fixes 0.3.9: its AR, DR and defense penalty formulas were wrong (AGI displayed twice).
+- Non vérifié / Not verified : rien n'a été essayé dans le vrai client ; PV = CON × 8, PM = SAG × 5,38, la pénalité
+  sur les critiques, l'écart de niveau des compétences et le refus des effets plus faibles ne sont pas confirmés par
+  Archonia ; les échecs de `sim aggro` et `sim pk` dans la suite complète d'ArchCore sont inexpliqués.
+- Aucune migration ni réglage en plus ; ArchBot 7a11dbb s'applique tel quel, ArchRust inchangé.
+
 ## 0.3.9 — 24 novembre 2026
 
 Version pour les testeurs / Tester build. ArchCore 7b94e5b (branche Core) avec ArchBot 7a11dbb, ArchRust 87b4a45,

@@ -15,6 +15,17 @@ Une installation d'essai à part (copie du package, `UserData\settings.json` ave
 monde, par exemple 11102 / 11108) laisse libres les ports 11002 / 11008 d'un serveur de développement ; MariaDB
 garde le port 3316 de ArchHome (celle de développement, 3306, n'est jamais touchée).
 
+## Résultats du 2026-11-25 (version 0.3.10, ArchCore 70fb81c + ArchBot 7a11dbb, ArchRust 87b4a45)
+
+- Remplace la 0.3.9 (ArchCore 7b94e5b), dont les formules d'AR, de DR et de pénalité de défense étaient fausses.
+- ArchBot 7a11dbb s'applique tel quel (seuls des numéros de ligne diffèrent) ; l'adaptateur ne lit que les PV et PM
+  maximaux. ArchCore patché : 389 tests ; ArchBot : 48 tests.
+- Installation d'essai (11202 / 11208), 3 min avec 15 bots : `sim bots` 16/16, 14 monstres tués, aucune erreur, un
+  avertissement attendu (GmTest entré deux fois par les deux scénarios), arrêt propre. `sim fixedoptions` : échec avec
+  GmTest (125 objets, sacs pleins), OK avec SimRetour (4 équipements, options exactes).
+- Pas vérifié : aucun essai des formules dans le vrai client ; voir le CHANGELOG pour les règles non confirmées et les
+  échecs inexpliqués de `sim aggro` et `sim pk` (signalés par la session ArchCore, pas rejoués ici).
+
 ## Résultats du 2026-11-24 (version 0.3.9, ArchCore 7b94e5b + ArchBot 7a11dbb, ArchRust 87b4a45)
 
 - Patch d'ArchBot adapté à 3dd6fe1 (ArchBot c5bfa7c) puis à 7b94e5b (ArchBot 7a11dbb) : contexte seulement, mêmes
@@ -23,8 +34,11 @@ garde le port 3316 de ArchHome (celle de développement, 3306, n'est jamais touc
   « The trade has been cancelled » chez le client, « arrêt terminé ».
 - 7b94e5b, installation d'essai, 2 min : migration `202611231000_points_et_mort` appliquée au démarrage, 15 bots qui
   chassent, 0 erreur et 0 avertissement dans le journal du serveur, arrêt propre.
-- Mesure de vitesse (ArchCore a8610ef + ArchBot, outil `speeds` d'ArchRust) : bots et joueur reçus avec marche 2000
-  et course 6000, déplacements côté serveur à 600 u/s ; les bots courent seulement en longs trajets d'un seul ordre.
+- Mesure de vitesse (ArchCore a8610ef + ArchBot, outil `speeds` d'ArchRust, 60 s) : bots et joueur reçus par le client
+  avec marche 2000 et course 6000. Bots en mouvement côté serveur : 594 à 621 u/s sur 6 enchaînements d'ordres ; 2 autres
+  sur 14 ne retombent pas sur la position prévue (bot arrêté entre-temps, non affiché par l'outil). Le déplacement du
+  joueur n'a pas été mesuré côté serveur (ses positions viennent de l'outil). (Corrigé le 25 : la première rédaction
+  disait que tous les déplacements concordaient et que les bots ne couraient qu'en longs trajets.)
 
 ## Résultats du 2026-11-22 (version 0.3.8, ArchCore a8610ef + ArchBot 109071c, ArchRust 87b4a45)
 

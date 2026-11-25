@@ -1,17 +1,17 @@
 {
   "$schema_note": "Manifeste des composants gérés par le projet. Les sha256 vides sont remplis par Get-Components.ps1 -Pin lors du premier téléchargement, puis figés : toute différence ultérieure est une erreur. ArchCore n'est pas téléchargé : Build-ArchCore.ps1 le compile depuis ses sources au commit indiqué, avec le module ArchBot (patch d'ArchBot appliqué sur une copie).",
-  "version": "0.3.9",
-  "updated": "2026-11-24",
+  "version": "0.3.10",
+  "updated": "2026-11-25",
   "archcore": {
     "description": "ArchCore, émulateur de serveur ArchLord (connexion + monde) en Rust, branche Core, valeurs de l'épisode 8. Compilé par Build\\Build-ArchCore.ps1 sur une copie clonée de -Source (copie locale du dépôt) ou du dépôt, au commit indiqué, avec ArchBot dans modules/ArchBot et son patch.",
     "source": "https://github.com/BlaMacfly/ArchCore",
     "branch": "Core",
     "license": "GPL-3.0-or-later",
-    "commit": "7b94e5b",
+    "commit": "70fb81c",
     "install_to": "Server/ArchCore"
   },
   "archbot": {
-    "description": "ArchBot, module PlayerBots d'ArchCore (bots autonomes et compagnons) : cloné dans modules/ArchBot de la copie d'ArchCore, patches/archcore-archbot.patch appliqué (12 fichiers, adapté à ArchCore 7b94e5b), compilé dans archcore.exe (feature archbot). Réglages : Server/Config/archbot.conf, généré par le launcher depuis config/archbot.conf.dist.",
+    "description": "ArchBot, module PlayerBots d'ArchCore (bots autonomes et compagnons) : cloné dans modules/ArchBot de la copie d'ArchCore, patches/archcore-archbot.patch appliqué (12 fichiers, adapté à ArchCore 7b94e5b, appliqué tel quel à 70fb81c), compilé dans archcore.exe (feature archbot). Réglages : Server/Config/archbot.conf, généré par le launcher depuis config/archbot.conf.dist.",
     "source": "https://github.com/BlaMacfly/ArchBot",
     "branch": "main",
     "license": "GPL-3.0-or-later",
